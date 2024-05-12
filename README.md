@@ -1,3 +1,4 @@
+![image](https://github.com/atticus-cummings/social-fitness/assets/167959057/e715509e-8431-4c7e-8ef7-4a1e399b9cc3)
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
