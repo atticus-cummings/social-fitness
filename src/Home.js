@@ -7,6 +7,7 @@ const supabase = createClient('https://lrklhdizqhzzuqntsdnn.supabase.co', 'eyJhb
 
 export default function Home() {
     const [signedURL, setSignedURL] = useState('');
+    const [selectedFile, setSelectedFile] = useState(null);
 
     useEffect(() => {
         async function fetchSignedURL() {
@@ -26,7 +27,12 @@ export default function Home() {
     const handleFileUpload = async (event) => {
         const file = event.target.files[0]; 
         if (!file) return; 
-        await uploadFile(file);
+        setSelectedFile(file);
+    }
+
+    const handleSubmit = async () => {
+        if (!selectedFile) return;
+        await uploadFile(selectedFile);
     }
     
     async function uploadFile(file) {
@@ -43,10 +49,12 @@ export default function Home() {
             <label>
                 File Upload: <input type="file" name="fileUpload" onChange={handleFileUpload} />
             </label>
+            <br></br>
+            <button onClick={handleSubmit}>Submit</button>
             <PhotoProvider>
                 <PhotoView src={JSON.stringify(signedURL)} />
                 <br></br>
-                <img src={signedURL} alt="Uploaded Image" width="468"/>
+                <img src={signedURL} alt="Uploaded Image" width="468"/ >
             </PhotoProvider>
         </div>
     );
