@@ -45,7 +45,8 @@ export default function Home() {
             </label>
             <PhotoProvider>
                 <PhotoView src={JSON.stringify(signedURL)} />
-                <img src={signedURL} alt="Uploaded Image" />
+                <br></br>
+                <img src={signedURL} alt="Uploaded Image" width="468"/>
             </PhotoProvider>
         </div>
     );
