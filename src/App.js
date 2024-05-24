@@ -28,7 +28,6 @@ export default function App() {
     return (<Auth supabaseClient={supabase} appearance={{ theme: ThemeSupa }} />)
   }
   else {
-    console.log("SESSION:", session)
     return (<Home session={session} supabase={supabase}></Home>)
   }
 }

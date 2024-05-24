@@ -3,51 +3,49 @@ import useSWR from 'swr';
 import { createClient } from '@supabase/supabase-js';
 import { PhotoProvider, PhotoView } from 'react-photo-view';
 import 'react-photo-view/dist/react-photo-view.css';
-import PhotoViewer from './PhotoViewer';
+//import PhotoViewer from './PhotoViewer';
 import { v4 as uuidv4 } from 'uuid';
 
 
 
 export default function Home({supabase, session}) {
-    // useEffect(() => {
-    //     supabase.auth.getSession().then((session) => {
-    //       console.log("HERE:", session)
-    //     });
-    //   }, [])
-    // const supabase = createClient(
-    //     'https://lrklhdizqhzzuqntsdnn.supabase.co', 
-    //     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxya2xoZGl6cWh6enVxbnRzZG5uIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTcxNTQ4MjcxNSwiZXhwIjoyMDMxMDU4NzE1fQ.-ezHc7WAEJ7QGZdILEXIYwN9omfm60Lxu2nX7BWNjo',
-    //     {
-    //     auth: { persistSession: false },
-    //     },
-    //     );
+
     const userId = session.user.id
     console.log("USER ID:", userId)
-    const [signedURL, setSignedURL] = useState('');
+
     const [selectedFile, setSelectedFile] = useState(null);
-    const [images, setImages] = useState([]);
 
-    // const user = supabase.auth.getSession()
-    // const userId = user.id
-    // console.log("HERE!!!!!", user)
-    // console.log(userId)
-
-    console.log(JSON.stringify(supabase.auth))
-    const {data} = useSWR(`image-${userId}`,
-        async() => await fetchSignedURL()
+    const {data, mutate} = useSWR(`image-${userId}`,
+        async() => await fetchData()
     );
     
-    async function fetchSignedURL() {
+    async function fetchData() {
+        const {data: followingUserIds} = await supabase
+            .from('followers')
+            .select('following_user_id')
+            .eq('user_id', userId)
+//           .sort() TODO
+            .throwOnError();
 
+        followingUserIds.push(userId)
+    
+        //console.log("following_user_ids_array:", following_user_ids_array);
+        console.log("followingUserIds:", followingUserIds);
+        const {data:fileIdArray} = await supabase
+            .from('file_upload_metadata')
+            .select('id')
+            .in('user_id', followingUserIds)
+            .throwOnError();
+        const ids = fileIdArray.map(file => file.id);
         const { data, error } = await supabase
             .storage
             .from('media')
-            .createSignedUrl('test-image.jpeg', 60); // Adjust file name and expiry time as needed
+            .createSignedUrls(ids, 60); // Adjust file name and expiry time as needed
         if (data) {
-            setSignedURL(data.signedUrl);
-            setImages([JSON.stringify(data.signedUrl)]);
-            return data;
-        } else {
+            const signedURLs = data.map(item => item.signedUrl);
+            return signedURLs;
+        } 
+        else {
             return error;
         }
     }
@@ -64,11 +62,13 @@ export default function Home({supabase, session}) {
     
     async function uploadFile(file) {
         const file_id = uuidv4();
-
         const { data, error } = await supabase.storage
             .from('media')
-            .upload(file_id, file);
-
+            .upload(file_id, file, {
+                contentType: file.contentType
+            }
+            );
+        
         if (error) {
             console.error('Error uploading file:', error.message);
         } else {
@@ -79,10 +79,10 @@ export default function Home({supabase, session}) {
             .from('file_upload_metadata')
             .insert({ id: file_id, user_id: userId})
             .throwOnError()
-        console.log(`${userId} \nvariable ${JSON.stringify(variable)}`)
-
+        setSelectedFile(null)
+        mutate();
     }
-    console.log("data:", data)
+    console.log("DATA HERE", data)
     return (
         <div>
             <label>
@@ -90,11 +90,9 @@ export default function Home({supabase, session}) {
             </label>
             <br></br>
             <button onClick={handleSubmit}>Submit</button>
-            <PhotoProvider>
-                <PhotoView src={signedURL} />
-                <br></br>
-                <img src={signedURL} alt="Uploaded Image" width="468" />
-            </PhotoProvider>
+                {data?.map((item, index) => (
+                    <img key={index} src={item} style={{ width: '468px' }}/>
+                ))}
         </div>
     );
 }
