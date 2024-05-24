@@ -4,6 +4,7 @@ import { createClient } from '@supabase/supabase-js';
 import { PhotoProvider, PhotoView } from 'react-photo-view';
 import 'react-photo-view/dist/react-photo-view.css';
 import PhotoViewer from './PhotoViewer';
+import { v4 as uuidv4 } from 'uuid';
 
 const supabase = createClient('https://lrklhdizqhzzuqntsdnn.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxya2xoZGl6cWh6enVxbnRzZG5uIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTU0ODI3MTUsImV4cCI6MjAzMTA1ODcxNX0.KZNvqVyxzqePjb9OTlQUIKwf5922oCLXSHDc_YqA87M')
 
@@ -15,7 +16,6 @@ export default function Home() {
     const [images, setImages] = useState([]);
 
     const user = supabase.auth.getUser()
-
     const userId = user.id
 
     const {data} = useSWR(`image-${userId}`,
@@ -47,7 +47,8 @@ export default function Home() {
     }
     
     async function uploadFile(file) {
-        const { data, error } = await supabase.storage.from('media').upload(file.name, file);
+        const file_id = uuidv4();
+        const { data, error } = await supabase.storage.from('media').upload(file_id, file);
         if (error) {
             console.error('Error uploading file:', error.message);
         } else {
