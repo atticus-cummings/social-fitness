@@ -9,7 +9,7 @@ const supabase = createClient('https://lrklhdizqhzzuqntsdnn.supabase.co', 'eyJhb
 
 export default function App() {
   const [session, setSession] = useState(null)
-
+  
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session)

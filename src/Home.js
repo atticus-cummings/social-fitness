@@ -1,29 +1,40 @@
 import React, { useEffect, useState } from 'react';
+import useSWR from 'swr';
 import { createClient } from '@supabase/supabase-js';
 import { PhotoProvider, PhotoView } from 'react-photo-view';
 import 'react-photo-view/dist/react-photo-view.css';
+import PhotoViewer from './PhotoViewer';
 
 const supabase = createClient('https://lrklhdizqhzzuqntsdnn.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxya2xoZGl6cWh6enVxbnRzZG5uIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTU0ODI3MTUsImV4cCI6MjAzMTA1ODcxNX0.KZNvqVyxzqePjb9OTlQUIKwf5922oCLXSHDc_YqA87M')
 
 export default function Home() {
+    //console.log(JSON.stringify(supabase))
+    
     const [signedURL, setSignedURL] = useState('');
     const [selectedFile, setSelectedFile] = useState(null);
+    const [images, setImages] = useState([]);
 
-    useEffect(() => {
-        async function fetchSignedURL() {
-            const { data, error } = await supabase
-                .storage
-                .from('media')
-                .createSignedUrl('test-image.jpeg', 60); // Adjust file name and expiry time as needed
-            if (data) {
-                setSignedURL(data.signedUrl);
-            } else {
-                console.error('Error fetching signed URL:', error.message);
-            }
+    const user = supabase.auth.getUser()
+
+    const userId = user.id
+
+    const {data} = useSWR(`image-${userId}`,
+        async() => await fetchSignedURL()
+    );
+
+    async function fetchSignedURL() {
+        const { data, error } = await supabase
+            .storage
+            .from('media')
+            .createSignedUrl('test-image.jpeg', 60); // Adjust file name and expiry time as needed
+        if (data) {
+            setSignedURL(data.signedUrl);
+            setImages([JSON.stringify(data.signedUrl)]);
+            return data;
+        } else {
+            return error;
         }
-        fetchSignedURL();
-    }, []);
-
+    }
     const handleFileUpload = async (event) => {
         const file = event.target.files[0]; 
         if (!file) return; 
@@ -43,7 +54,7 @@ export default function Home() {
             console.log("File Upload Successful");
         }
     }
-
+    console.log("data:", data)
     return (
         <div>
             <label>
@@ -52,9 +63,9 @@ export default function Home() {
             <br></br>
             <button onClick={handleSubmit}>Submit</button>
             <PhotoProvider>
-                <PhotoView src={JSON.stringify(signedURL)} />
+                <PhotoView src={signedURL} />
                 <br></br>
-                <img src={signedURL} alt="Uploaded Image" width="468"/ >
+                <img src={signedURL} alt="Uploaded Image" width="468" />
             </PhotoProvider>
         </div>
     );
