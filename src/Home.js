@@ -1,25 +1,27 @@
 import React, { useEffect, useState } from 'react';
 import useSWR from 'swr';
 import { createClient } from '@supabase/supabase-js';
-import { PhotoProvider, PhotoView } from 'react-photo-view';
 import 'react-photo-view/dist/react-photo-view.css';
-//import PhotoViewer from './PhotoViewer';
+import Feed from './components/feed';
 import { v4 as uuidv4 } from 'uuid';
-
-
 
 export default function Home({supabase, session}) {
 
+    //get the current user id
     const userId = session.user.id
     console.log("USER ID:", userId)
 
+
     const [selectedFile, setSelectedFile] = useState(null);
 
+    //on certain events (not all), the homepage feed will update in real time 
     const {data, mutate} = useSWR(`image-${userId}`,
         async() => await fetchData()
     );
     
+    //gets all the data needed for a relevant feed
     async function fetchData() {
+        //gets all the uuids of all of a users following
         const {data: followingUserIds} = await supabase
             .from('followers')
             .select('following_user_id')
@@ -29,7 +31,6 @@ export default function Home({supabase, session}) {
 
         followingUserIds.push(userId)
     
-        //console.log("following_user_ids_array:", following_user_ids_array);
         console.log("followingUserIds:", followingUserIds);
         const {data:fileIdArray} = await supabase
             .from('file_upload_metadata')
@@ -85,6 +86,7 @@ export default function Home({supabase, session}) {
     console.log("DATA HERE", data)
     return (
         <div>
+            <Feed/>
             <label>
                 File Upload: <input type="file" name="fileUpload" onChange={handleFileUpload} />
             </label>

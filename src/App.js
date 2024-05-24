@@ -1,4 +1,4 @@
-import './index.css'
+import './input.css'
 import { useState, useEffect } from 'react'
 import { createClient } from '@supabase/supabase-js'
 import { Auth } from '@supabase/auth-ui-react'
