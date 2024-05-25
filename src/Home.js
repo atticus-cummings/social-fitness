@@ -3,6 +3,8 @@ import useSWR from 'swr';
 import { createClient } from '@supabase/supabase-js';
 import 'react-photo-view/dist/react-photo-view.css';
 import Feed from './components/feed';
+import Taskbar from "./components/Taskbar";
+import Header from "./components/Header";
 import { v4 as uuidv4 } from 'uuid';
 
 export default function Home({supabase, session}) {
@@ -87,6 +89,8 @@ export default function Home({supabase, session}) {
     console.log("DATA HERE", data)
     return (
         <div>
+            <Header/>
+            <Taskbar/>
             <Feed/>
             <label>
                 File Upload: <input type="file" name="fileUpload" onChange={handleFileUpload} />
