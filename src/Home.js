@@ -47,6 +47,7 @@ export default function Home({supabase, session}) {
             return signedURLs;
         } 
         else {
+            return null;
             return error;
         }
     }
@@ -92,7 +93,7 @@ export default function Home({supabase, session}) {
             </label>
             <br></br>
             <button onClick={handleSubmit}>Submit</button>
-                {data?.map((item, index) => (
+                {data === null ? <>You have no data to show!</> :data?.map((item, index) => (
                     <img key={index} src={item} style={{ width: '468px' }}/>
                 ))}
         </div>
