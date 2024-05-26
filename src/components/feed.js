@@ -4,6 +4,7 @@ import React from 'react';
 import useSWR from 'swr';
 import 'react-photo-view/dist/react-photo-view.css';
 import "./feed.css"
+
 export default function Feed({ supabase, session }) {
     //get the current user id
     const userId = session.user.id
