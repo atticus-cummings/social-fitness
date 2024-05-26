@@ -3,6 +3,7 @@ import useSWR from 'swr';
 import { createClient } from '@supabase/supabase-js';
 import 'react-photo-view/dist/react-photo-view.css';
 import {Taskbar} from "../components/taskbar"
+import "./uploadPage.css";
 import { v4 as uuidv4 } from 'uuid';
 
 export default function Upload({supabase, session}) {
@@ -87,11 +88,19 @@ export default function Upload({supabase, session}) {
     console.log("DATA HERE", data)
     return (
         <div>
+            <h1>Post your latest workout</h1>
+          <div className="spacer"></div>
+          <div className="inside">
+          <div className="uploadContent">
             <label>
                 File Upload: <input type="file" name="fileUpload" onChange={handleFileUpload} />
             </label>
+            </div>
             <br></br>
-            <button onClick={handleSubmit}>Submit</button>
+            <div className='submitButton'>
+            <button onClick={handleSubmit}>Post</button>
+            </div>
+            </div>
         <Taskbar></Taskbar>
         </div>
 

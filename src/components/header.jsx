@@ -5,6 +5,7 @@ import React from "react"
 export const Header = () => {
     return(
         <>
+        <div className="Spacing"></div>
         <div classname="logo">
             <a href = "#">
                 <img src = {logo} alt="logo" />

@@ -1,0 +1,48 @@
+h1{
+    font-size:50px;
+    display:block;
+    text-align: center;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    justify-content: center;
+    background-color: lightgreen;
+
+}
+.spacer{
+    width: 100%;
+    height: 10px;
+    background-color: black;
+
+}
+.inside{
+    width:100%;
+    height:100%;
+
+}
+.uploadContent{
+    width:100%;
+    font-size: 30px;
+    text-align: center;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    justify-content: center;
+
+}
+
+.submitButton {
+    font-size: 30px;
+
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    bottom: 70px; 
+    position:fixed;
+    width: 200px;
+    border: none;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: lightgreen;
+    color: rgb(0, 0, 0);
+    border-radius: 5px; 
+    text-align: center;
+}
+.submitButton:hover{
+    color: seagreen; 
+    transform-origin: center;
+}
