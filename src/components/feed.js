@@ -80,7 +80,7 @@ export default function Feed({ supabase, session }) {
         <div className='socialFeed'>
             {data === null ? <>You have no data to show!</> : data?.map((item, index) => (
                 <div className='post' key={index}>
-                    <img src={item.signedUrl} style={{ width: '468px' } } class="center"/>
+                    <img src={item.signedUrl} style={{ width: '600px' } } className='center' />
                     <div className="caption">{item.caption}</div>
                 </div>
             ))}
