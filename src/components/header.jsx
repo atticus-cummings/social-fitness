@@ -1,5 +1,5 @@
 
-import "./HeaderStyles.css";
+import "./headerStyles.css";
 import logo from '../images/social-fitness-logo.jpg';
 import React from "react"
 export const Header = () => {
@@ -10,6 +10,7 @@ export const Header = () => {
                 <img src = {logo} alt="logo" />
             </a>
         </div>
+        <div className="Spacing"></div>
         </>
     )
 }

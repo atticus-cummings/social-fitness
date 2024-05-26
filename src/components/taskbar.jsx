@@ -5,18 +5,18 @@ import {Link} from "react-router-dom"
 
 export const Taskbar = () => {
     return <nav>
-                <ul>
-                    <li>
+                <ul className="navList">
+                    <li className="navItem">
                     <Link to ="/">Home</Link>
                     </li>
-                    <li>
-                    <Link to ="./webpages/profile">Profile</Link>
+                    <li className ="navItem">
+                    <Link to ="/webpages/profile">Profile</Link>
                     </li>
-                    <li>
-                    <Link to ="./webpages/followers">Followers</Link>
+                    <li className ="navItem">
+                    <Link to ="/webpages/followers">Followers</Link>
                     </li>
-                    <li>
-                    <Link to ="./webpages/upload">Upload</Link>
+                    <li className="navItem">
+                    <Link to ="/webpages/upload">Upload</Link>
                     </li>
                 </ul>
     </nav>;

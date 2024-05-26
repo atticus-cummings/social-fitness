@@ -2,14 +2,10 @@ import React, { useEffect, useState } from 'react';
 import useSWR from 'swr';
 import { createClient } from '@supabase/supabase-js';
 import 'react-photo-view/dist/react-photo-view.css';
-import Feed from './components/feed';
-import {Taskbar} from "./components/taskbar";
-import {Header} from "./components/header";
-
-
+import {Taskbar} from "../components/taskbar"
 import { v4 as uuidv4 } from 'uuid';
 
-export default function Home({supabase, session}) {
+export default function Upload({supabase, session}) {
 
     //get the current user id
     const userId = session.user.id
@@ -91,17 +87,13 @@ export default function Home({supabase, session}) {
     console.log("DATA HERE", data)
     return (
         <div>
-            <Header/>
-            <Taskbar/>
-            <Feed/>
             <label>
                 File Upload: <input type="file" name="fileUpload" onChange={handleFileUpload} />
             </label>
             <br></br>
             <button onClick={handleSubmit}>Submit</button>
-                {data === null ? <>You have no data to show!</> :data?.map((item, index) => (
-                    <img key={index} src={item} style={{ width: '468px' }}/>
-                ))}
+        <Taskbar></Taskbar>
         </div>
+
     );
 }
