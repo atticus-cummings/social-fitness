@@ -5,7 +5,7 @@ import 'react-photo-view/dist/react-photo-view.css';
 import Feed from './components/feed';
 import {Taskbar} from "./components/taskbar";
 import {Header} from "./components/header";
-
+import "./Home.css"
 
 import { v4 as uuidv4 } from 'uuid';
 
@@ -98,9 +98,10 @@ export default function Home({supabase, session}) {
                 File Upload: <input type="file" name="fileUpload" onChange={handleFileUpload} />
             </label>
             <br></br>
+
             <button onClick={handleSubmit}>Submit</button>
                 {data === null ? <>You have no data to show!</> :data?.map((item, index) => (
-                    <img key={index} src={item} style={{ width: '468px' }}/>
+                    <img key={index} className='post' src={item} style={{ width: '468px' }}/>
                 ))}
         </div>
     );

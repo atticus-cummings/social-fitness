@@ -3,3 +3,11 @@
     height: 10px;
     background-color:black;
 }
+.logo{
+justify-content: center;
+}
+.logoImage{
+    max-width: 750px;
+    width: 100%; 
+    height: auto; 
+}
