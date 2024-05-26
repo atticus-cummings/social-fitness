@@ -1,5 +1,5 @@
 
-import "./headerStyles.css";
+import "./HeaderStyles.css";
 import logo from '../images/social-fitness-logo.jpg';
 import React from "react"
 export const Header = () => {

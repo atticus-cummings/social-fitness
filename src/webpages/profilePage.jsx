@@ -1,11 +1,14 @@
 import React from "react"
 import {Taskbar} from "../components/taskbar"
-export const Profile = () => {
+import  Profile from "../Profile"
+
+export const ProfilePage = () => {
     return(
         <>
         <div>
             <h1>PROFILE PAGE</h1>
         </div>
+        <Profile></Profile>
         <Taskbar></Taskbar>
         </>
 

@@ -4,6 +4,7 @@ import React from 'react';
 import useSWR from 'swr';
 import 'react-photo-view/dist/react-photo-view.css';
 import "./feed.css"
+
 export default function Feed({ supabase, session }) {
     //get the current user id
     const userId = session.user.id
@@ -79,13 +80,13 @@ export default function Feed({ supabase, session }) {
     }
     console.log("DATA HERE", data)
     return (
-        <div className='socialFeed'>
-            {data === null ? <>You have no data to show!</> : data?.map((item, index) => (
-                <div className='post' key={index}>
-                    <img src={item.signedUrl} style={{ width: '468px' }} />
-                    <div className="caption">{item.caption}</div>
-                </div>
-            ))}
+        <div>
+            {data === null ? <>You have no data to show!</> :data?.map((item, index) => (
+                    <div className='post'>
+                    <img key={index}  src={item} style={{ width: '468px' }}/>
+                    <p></p>
+                    </div>
+                ))}
         </div>
     );
 }

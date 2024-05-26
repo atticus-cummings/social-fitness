@@ -5,7 +5,7 @@ import { createClient } from '@supabase/supabase-js'
 import { Auth } from '@supabase/auth-ui-react'
 import { ThemeSupa } from '@supabase/auth-ui-shared'
 import Home from './Home'
-import {Profile} from './webpages/profilePage';
+import {ProfilePage} from './webpages/profilePage';
 import {Followers} from './webpages/followersPage';
 import Upload from './webpages/uploadPage';
 import Feed from './components/feed';
@@ -37,7 +37,7 @@ export default function App() {
       <Router>
         <Routes>
           <Route path="/" element={<Home session={session} supabase={supabase} />} />
-          <Route path="/webpages/profile" element={<Profile session={session} supabase={supabase} />} />
+          <Route path="/webpages/profile" element={<ProfilePage session={session} supabase={supabase} />} />
           <Route path="/webpages/upload" element={<Upload session={session} supabase={supabase} />} />
           <Route path="/webpages/followers" element={<Followers session={session} supabase={supabase} />} />
           <Route path="/components/feed" element={<Feed session={session} supabase={supabase} />} />
