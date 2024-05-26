@@ -17,7 +17,7 @@ export default function Home({supabase, session}) {
 
 
     const [selectedFile, setSelectedFile] = useState(null);
-
+/*
     //on certain events (not all), the homepage feed will update in real time 
     const {data, mutate} = useSWR(`image-${userId}`,
         async() => await fetchData()
@@ -55,6 +55,7 @@ export default function Home({supabase, session}) {
             return error;
         }
     }
+*/
     const handleFileUpload = async (event) => {
         const file = event.target.files[0]; 
         if (!file) return; 
@@ -86,23 +87,20 @@ export default function Home({supabase, session}) {
             .insert({ id: file_id, user_id: userId})
             .throwOnError()
         setSelectedFile(null)
-        mutate();
+        //mutate();
     }
-    console.log("DATA HERE", data)
+  //  console.log("DATA HERE", data)
     return (
         <div>
             <Header/>
             <Taskbar/>
-            <Feed/>
             <label>
                 File Upload: <input type="file" name="fileUpload" onChange={handleFileUpload} />
             </label>
             <br></br>
-
             <button onClick={handleSubmit}>Submit</button>
-                {data === null ? <>You have no data to show!</> :data?.map((item, index) => (
-                    <img key={index} className='post' src={item} style={{ width: '468px' }}/>
-                ))}
+            <Feed session={session} supabase={supabase} />
+
         </div>
     );
 }

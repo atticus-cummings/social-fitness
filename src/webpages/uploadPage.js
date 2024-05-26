@@ -1,108 +1,119 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import useSWR from 'swr';
-import { createClient } from '@supabase/supabase-js';
 import 'react-photo-view/dist/react-photo-view.css';
-import {Taskbar} from "../components/taskbar"
+import { Taskbar } from "../components/taskbar";
 import "./uploadPage.css";
 import { v4 as uuidv4 } from 'uuid';
+import Home from "../Home";
 
-export default function Upload({supabase, session}) {
-
-    //get the current user id
-    const userId = session.user.id
-    console.log("USER ID:", userId)
-
+export default function Upload({ supabase, session }) {
+    const userId = session.user.id;
+    console.log("USER ID:", userId);
 
     const [selectedFile, setSelectedFile] = useState(null);
+    const [caption, setCaption] = useState('');
 
-    //on certain events (not all), the homepage feed will update in real time 
-    const {data, mutate} = useSWR(`image-${userId}`,
-        async() => await fetchData()
-    );
-    
-    //gets all the data needed for a relevant feed
+    const { data, mutate } = useSWR(`image-${userId}`, async () => await fetchData());
+
     async function fetchData() {
-        //gets all the uuids of all of a users following
-        const {data: followingUserIds} = await supabase
+        const { data: followingUserIds } = await supabase
             .from('followers')
             .select('following_user_id')
             .eq('user_id', userId)
-//           .sort() TODO
             .throwOnError();
 
-        followingUserIds.push(userId)
-    
+        followingUserIds.push(userId);
         console.log("followingUserIds:", followingUserIds);
-        const {data:fileIdArray} = await supabase
+
+        const { data: fileIdArray } = await supabase
             .from('file_upload_metadata')
             .select('id')
             .in('user_id', followingUserIds)
             .throwOnError();
+
         const ids = fileIdArray.map(file => file.id);
         const { data, error } = await supabase
             .storage
             .from('media')
             .createSignedUrls(ids, 60); // Adjust file name and expiry time as needed
+
         if (data) {
             const signedURLs = data.map(item => item.signedUrl);
             return signedURLs;
-        } 
-        else {
+        } else {
             return null;
-            return error;
         }
     }
-    const handleFileUpload = async (event) => {
-        const file = event.target.files[0]; 
-        if (!file) return; 
-        setSelectedFile(file);
-    }
+
+    const handleFileUpload = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            setSelectedFile(file);
+        }
+    };
+
+    const handleCaptionInput = (event) => {
+        setCaption(event.target.value);
+    };
 
     const handleSubmit = async () => {
-        if (!selectedFile) return;
-        await uploadFile(selectedFile);
-    }
-    
-    async function uploadFile(file) {
+        if (selectedFile) {
+            await uploadFile(selectedFile, caption);
+        }
+    };
+
+    async function uploadFile(file, caption) {
         const file_id = uuidv4();
         const { data, error } = await supabase.storage
             .from('media')
             .upload(file_id, file, {
-                contentType: file.contentType
-            }
-            );
-        
+                contentType: file.type
+            });
+
         if (error) {
             console.error('Error uploading file:', error.message);
-        } else {
-            console.log("File Upload Successful");
+            return;
         }
-        
-        const variable = await supabase
+
+        console.log("File Upload Successful");
+
+        await supabase
             .from('file_upload_metadata')
-            .insert({ id: file_id, user_id: userId})
-            .throwOnError()
-        setSelectedFile(null)
+            .insert({ id: file_id, user_id: userId, caption_text: caption })
+            .throwOnError();
+
+        setSelectedFile(null);
+        setCaption('');
         mutate();
     }
-    console.log("DATA HERE", data)
+
+    console.log("DATA HERE", data);
+
     return (
         <div>
             <h1>Post your latest workout</h1>
-          <div className="spacer"></div>
-          <div className="inside">
-          <div className="uploadContent">
-            <label>
-                File Upload: <input type="file" name="fileUpload" onChange={handleFileUpload} />
-            </label>
+            <div className="spacer"></div>
+            <div className="inside">
+                <div className="uploadContent">
+                    <label>
+                        File Upload: <input type="file" name="fileUpload" onChange={handleFileUpload} />
+                    </label>
+                </div>
+                <div >
+                    <textarea className="captionInput"
+                        type="text"
+                        id="textInput"
+                        name="caption"
+                        value={caption}
+                        onChange={handleCaptionInput}
+                    />
+                </div>
+                <br />
+                <div className="submitButton">
+                    <button onClick={handleSubmit}>Post</button>
+                </div>
             </div>
-            <br></br>
-            <div className='submitButton'>
-            <button onClick={handleSubmit}>Post</button>
-            </div>
-            </div>
-        <Taskbar></Taskbar>
+            <Taskbar />
         </div>
-
     );
 }

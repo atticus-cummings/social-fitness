@@ -13,6 +13,7 @@ h1{
     background-color: black;
 
 }
+
 .inside{
     width:100%;
     height:100%;
@@ -45,4 +46,21 @@ h1{
 .submitButton:hover{
     color: seagreen; 
     transform-origin: center;
+}
+
+.captionInput{
+    padding: 2px;
+    border:2px;
+    border-color: black;
+    background-color: lightblue;
+    border-radius: 5px;
+    position:absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width:500px;
+    height: 100px;
+    bottom: 120px;
+    display:flex;
+    text-wrap:wrap;
+
 }
