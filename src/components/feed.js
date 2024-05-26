@@ -53,7 +53,7 @@ export default function Feed({ supabase, session }) {
         <div>
             {data === null ? <>You have no data to show!</> :data?.map((item, index) => (
                     <div className='post'>
-                    <img key={index}  src={item} style={{ width: '468px' }}/>
+                    <img key={index}  src={item} style={{ width: '468px' }} class="center"/>
                     <p></p>
                     </div>
                 ))}
