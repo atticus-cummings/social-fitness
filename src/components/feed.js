@@ -2,6 +2,7 @@ import React from 'react';
 import useSWR from 'swr';
 import 'react-photo-view/dist/react-photo-view.css';
 import "./feed.css"
+import { FaDumbbell } from "react-icons/fa";
 export default function Feed({ supabase, session }) {
     //get the current user id
     const userId = session.user.id
@@ -19,41 +20,47 @@ export default function Feed({ supabase, session }) {
             .select('following_user_id')
             .eq('user_id', userId)
         //           .sort() TODO
+
         if (followingError) throw followingError;
 
         const followingUserIds = followingUserIdsData.map(user => user.following_user_id);
         followingUserIds.push(userId);
-
         console.log("followingUserIds:", followingUserIds);
 
-        //get file IDS
-        const { data: fileIdArray, error: fileIdError} = await supabase
+        //get file Metadata
+        const { data: fileMetadata, error: fileIdError} = await supabase
             .from('file_upload_metadata')
-            .select('id, user_id')
+            .select('id, user_id, caption_text, like_count, created_at')
             .in('user_id', followingUserIds)
-    
-        if(fileIdError) throw fileIdError;
-        const ids = fileIdArray.map(file => file.id);
-        console.log("FileID Array:", ids);
 
-        const fileIdUserId = fileIdArray.reduce((map, item) => {
+        if(fileIdError) throw fileIdError;
+        console.log("Metadata:", fileMetadata);
+
+        const sortedMetadata = fileMetadata.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+        console.log("Sorted Metadata:", sortedMetadata);
+
+        const ids = sortedMetadata.map(item=>item.id);
+        console.log("Ids:",ids);
+
+
+        const fileIdUserId = fileMetadata.reduce((map, item) => {
             map[item.id] = item.user_id;
             return map;
         }, {});
-
+ 
         console.log("fileIdtoUserId", fileIdUserId);
 
 // get captions
-        const { data: captionArray, error: captionError } = await supabase
+   /*     const { data: captionArray, error: captionError } = await supabase
             .from('file_upload_metadata')
             .select('id, caption_text')
-            .in('id', ids)
+            .in('id', ids)*/
 
-        if (captionError) throw captionError;
+//        if (captionError) throw captionError;
 
-        console.log("captions array: ", captionArray)
+  //      console.log("captions array: ", captionArray)
 
-        const captionsMap = captionArray.reduce((map, item) => {
+        const captionsMap = fileMetadata.reduce((map, item) => {
             map[item.id] = item.caption_text;
             return map;
         }, {});
@@ -83,7 +90,7 @@ export default function Feed({ supabase, session }) {
                 id: file.id,
                 signedUrl: file.signedUrl,
                 username: usernamesMap[fileIdUserId[[ids[index]]]] || '',
-                caption: captionsMap[[ids[index]]] || '',
+                caption: captionsMap[fileIdUserId[[ids[index]]]] || '',
             }));
             console.log("Combined Data:",combinedData);
 
@@ -100,6 +107,7 @@ export default function Feed({ supabase, session }) {
                 <div className='post' key={index}>
                     <div className="username">User: {item.username}</div>
                     <img src={item.signedUrl} style={{ width: '600px' } } className='center' />
+                    <button type="button"><FaDumbbell /></button> 
                     <div className="caption">{item.caption}</div>
                 </div>
             ))}
