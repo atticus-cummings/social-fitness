@@ -37,9 +37,10 @@ export default function Feed({ supabase, session }) {
         if (comment) {
             await supabase
             .from('comments')
-            .insert({ file_id: fileId, author_id: userId, comment_text: comment })
+            .insert({file_id: fileId, author_id: userId, comment_text: comment })
             .throwOnError();
         }
+        setComment(null);
     };
 
 
@@ -144,7 +145,7 @@ export default function Feed({ supabase, session }) {
                 <div className='post' key={index}>
                     <div className="username">User: {item.username}</div>
                     <img src={item.signedUrl} style={{ width: '600px' } } className='center' />
-                    <button className="likeButton" onClick={() => handleLike(item.likes, item.id)} ><FaDumbbell /> &nbsp; {item.likes}</button> 
+                    <button className="likeButton" onClick={() => handleLike(item.likes, item.id)} ><FaDumbbell /> &nbsp; {item.likes}</button>
                     <div className="caption">{item.caption}</div>
                     <div>Comment:
                     <input className="commentInput"
@@ -155,7 +156,7 @@ export default function Feed({ supabase, session }) {
                             onChange={handleCommentInput}
                         />
                     </div>
-                    <button onClick={handleCommentSubmit}>Post Comment</button>
+                    <button onClick={() => handleCommentSubmit(item.id)}>Post Comment</button>
                 </div>
             ))}
         </div>
