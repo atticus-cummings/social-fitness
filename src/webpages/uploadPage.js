@@ -51,7 +51,7 @@ export default function Upload({ supabase, session }) {
     const handleFileUpload = (event) => {
         const file = event.target.files[0];
         if (file) {
-            if(file.size > 10000000){
+            if (file.size > 10000000) {
                 setErrorMessage('Try a smaller file! (limit 10 MB)');
                 setSelectedFile(null);
                 return
@@ -59,6 +59,10 @@ export default function Upload({ supabase, session }) {
             setSelectedFile(file);
             setErrorMessage(''); // Clear any previous error messages
         }
+    };
+
+    const triggerFileInput = () => {
+        document.getElementById('fileInput').click();
     };
 
     const handleCaptionInput = (event) => {
@@ -105,28 +109,26 @@ export default function Upload({ supabase, session }) {
             <div className="spacer"></div>
             <div className="inside">
                 <div className="uploadContent">
-                    <label>
-                        File Upload: <input type="file" accept="image/*" name="fileUpload" onChange={handleFileUpload} />
-                    </label>
-                    {errorMessage && <div style={{ color: 'red' }}>{errorMessage}</div>}
-                    {selectedFile && <div>Selected file: {selectedFile.name}</div>} 
-                </div>
-                <div >
-                    <textarea className="captionInput"
-                        type="text"
-                        id="textInput"
-                        name="caption"
-                        value={caption}
-                        onChange={handleCaptionInput}
+                    <button onClick={triggerFileInput}>
+                        Choose images to upload (PNG, JPG)
+                    </button>
+                    <input
+                        id="fileInput"
+                        hidden
+                        type="file"
+                        accept="image/*"
+                        name="fileUpload"
+                        onChange={handleFileUpload}
                     />
+                    {errorMessage && <div style={{ color: 'red' }}>{errorMessage}</div>}
+                    {selectedFile && <div>Selected file: {selectedFile.name}</div>}
                 </div>
                 <br />
                 <div className="submitButton">
                     <button onClick={handleSubmit}>Post</button>
                 </div>
-
+                <Taskbar />
             </div>
-            <Taskbar />
         </div>
     );
 }

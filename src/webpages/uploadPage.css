@@ -20,13 +20,25 @@ h1{
 
 }
 .uploadContent{
-    width:100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: fit-content;
     font-size: 30px;
     text-align: center;
     font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
-    justify-content: center;
+    padding: 10px;
+    background-color: lightgreen;
+    color: rgb(0, 0, 0);
+    border-radius:5px;
+    margin:auto;
+    margin-top:10px;
 
 }
+.uploadContent:hover{
+    color: seagreen; ;
+}
+
 
 .submitButton {
     font-size: 30px;
