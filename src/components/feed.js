@@ -1,9 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import useSWR from 'swr';
 import 'react-photo-view/dist/react-photo-view.css';
 import "./feed.css"
 import { FaDumbbell } from "react-icons/fa";
+
+
+
 export default function Feed({ supabase, session }) {
+    const [comment, setComment] = useState('');
+
+
     //get the current user id
     const userId = session.user.id
     console.log("USER ID:", userId)
@@ -23,6 +29,19 @@ export default function Feed({ supabase, session }) {
         //modify so it can only be liked once. 
         console.log("Liked!");
     }
+
+    const handleCommentInput = (event) => {
+        setComment(event.target.value);
+    };
+    const handleCommentSubmit = async (fileId) => {
+        if (comment) {
+            await supabase
+            .from('comments')
+            .insert({ file_id: fileId, author_id: userId, comment_text: comment })
+            .throwOnError();
+        }
+    };
+
 
     async function fetchData() {
         try {
@@ -127,6 +146,16 @@ export default function Feed({ supabase, session }) {
                     <img src={item.signedUrl} style={{ width: '600px' } } className='center' />
                     <button className="likeButton" onClick={() => handleLike(item.likes, item.id)} ><FaDumbbell /> &nbsp; {item.likes}</button> 
                     <div className="caption">{item.caption}</div>
+                    <div>Comment:
+                    <input className="commentInput"
+                            type="text"
+                            id="textInput"
+                            name="comment"
+                            value={comment}
+                            onChange={handleCommentInput}
+                        />
+                    </div>
+                    <button onClick={handleCommentSubmit}>Post Comment</button>
                 </div>
             ))}
         </div>
