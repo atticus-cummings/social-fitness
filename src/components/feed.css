@@ -44,3 +44,23 @@
   font-size: 20px;
   vertical-align: auto;
 }
+.commentSubmission{
+  background-color: lightgreen;
+  width:fit-content;
+  padding: 5px;
+  border-radius: 5px;
+
+}
+.commentInput{
+  width: fit-content;
+  border-radius: 4px;
+}
+.postComment{
+ background-color: greenyellow;
+ margin-left: 3px;
+ padding:2px;
+ border-radius:3px;
+}
+.postComment:hover{
+  color:blue;
+}
