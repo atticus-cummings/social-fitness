@@ -45,10 +45,19 @@ export default function Upload({ supabase, session }) {
         }
     }
 
+
+    const [errorMessage, setErrorMessage] = useState('');
+
     const handleFileUpload = (event) => {
         const file = event.target.files[0];
         if (file) {
+            if(file.size > 10000000){
+                setErrorMessage('Try a smaller file! (limit 10 MB)');
+                setSelectedFile(null);
+                return
+            }
             setSelectedFile(file);
+            setErrorMessage(''); // Clear any previous error messages
         }
     };
 
@@ -64,6 +73,7 @@ export default function Upload({ supabase, session }) {
 
     async function uploadFile(file, caption) {
         const file_id = uuidv4();
+
         const { data, error } = await supabase.storage
             .from('media')
             .upload(file_id, file, {
@@ -96,8 +106,10 @@ export default function Upload({ supabase, session }) {
             <div className="inside">
                 <div className="uploadContent">
                     <label>
-                        File Upload: <input type="file" name="fileUpload" onChange={handleFileUpload} />
+                        File Upload: <input type="file" accept="image/*" name="fileUpload" onChange={handleFileUpload} />
                     </label>
+                    {errorMessage && <div style={{ color: 'red' }}>{errorMessage}</div>}
+                    {selectedFile && <div>Selected file: {selectedFile.name}</div>} 
                 </div>
                 <div >
                     <textarea className="captionInput"
@@ -112,6 +124,7 @@ export default function Upload({ supabase, session }) {
                 <div className="submitButton">
                     <button onClick={handleSubmit}>Post</button>
                 </div>
+
             </div>
             <Taskbar />
         </div>
