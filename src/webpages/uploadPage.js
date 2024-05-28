@@ -12,9 +12,9 @@ export default function Upload({ supabase, session }) {
 
     const [selectedFile, setSelectedFile] = useState(null);
     const [caption, setCaption] = useState('');
-
     const { data, mutate } = useSWR(`image-${userId}`, async () => await fetchData());
-
+    const [errorMessage, setErrorMessage] = useState('');
+    const [previewUrl, setPreviewUrl] = useState(null);
     async function fetchData() {
         const { data: followingUserIds } = await supabase
             .from('followers')
@@ -45,9 +45,6 @@ export default function Upload({ supabase, session }) {
         }
     }
 
-
-    const [errorMessage, setErrorMessage] = useState('');
-
     const handleFileUpload = (event) => {
         const file = event.target.files[0];
         if (file) {
@@ -58,6 +55,9 @@ export default function Upload({ supabase, session }) {
             }
             setSelectedFile(file);
             setErrorMessage(''); // Clear any previous error messages
+
+            const fileUrl = URL.createObjectURL(file);
+            setPreviewUrl(fileUrl);
         }
     };
 
@@ -106,26 +106,41 @@ export default function Upload({ supabase, session }) {
     return (
         <div>
             <h1>Post your latest workout</h1>
-            <div className="spacer"></div>
-            <div className="inside">
-                <div className="uploadContent">
-                    <button onClick={triggerFileInput}>
-                        Choose images to upload (PNG, JPG)
-                    </button>
-                    <input
-                        id="fileInput"
-                        hidden
-                        type="file"
-                        accept="image/*"
-                        name="fileUpload"
-                        onChange={handleFileUpload}
-                    />
-                    {errorMessage && <div style={{ color: 'red' }}>{errorMessage}</div>}
-                    {selectedFile && <div>Selected file: {selectedFile.name}</div>}
-                </div>
-                <br />
-                <div className="submitButton">
-                    <button onClick={handleSubmit}>Post</button>
+            <div className="pageContent">
+                <div className="spacer"></div>
+                <div className="inside">
+                    <div className="uploadContent">
+                        <button onClick={triggerFileInput}>
+                            Choose images to upload (PNG, JPG)
+                        </button>
+                        <input
+                            id="fileInput"
+                            hidden
+                            type="file"
+                            accept="image/*"
+                            name="fileUpload"
+                            onChange={handleFileUpload}
+                        />
+                        {errorMessage && <div style={{ color: 'red' }}>{errorMessage}</div>}
+                        {selectedFile && <div>Selected file: {selectedFile.name}</div>}
+                    </div>
+
+                    <br />
+                    <div className="imagePreview">
+                        {previewUrl && <img src={previewUrl} alt="Image Preview" style={{ maxHeight:"200px", marginTop: '10px' }} />}
+                    </div>
+                    <div >
+                        <textarea className="captionInput"
+                            type="text"
+                            id="textInput"
+                            name="caption"
+                            value={caption}
+                            onChange={handleCaptionInput}
+                        />
+                    </div>
+                    <div className="submitButton">
+                        <button onClick={handleSubmit}>Post</button>
+                    </div>
                 </div>
                 <Taskbar />
             </div>

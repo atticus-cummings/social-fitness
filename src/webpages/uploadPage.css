@@ -33,18 +33,39 @@ h1{
     border-radius:5px;
     margin:auto;
     margin-top:10px;
-
+}
+.imagePreview{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: fit-content;
+    padding: 5px;
+    margin-bottom: 5px;
+    background-color: lightblue;
+    border-radius: 10px;
+    margin: auto; 
+ 
+}
+.imagePreview img {
+    max-width: 100%;
+    margin: 5px;
+    display: block;
 }
 .uploadContent:hover{
     color: seagreen; ;
 }
 
+.pageContent{
+    max-width: 100%;
+    
+}
 
 .submitButton {
     font-size: 30px;
 
     font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
-    bottom: 70px; 
+    bottom: 60px; 
     position:fixed;
     width: 200px;
     border: none;
@@ -71,7 +92,7 @@ h1{
     transform: translateX(-50%);
     width:500px;
     height: 100px;
-    bottom: 120px;
+    bottom: 110px;
     display:flex;
     text-wrap:wrap;
 
