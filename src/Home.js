@@ -94,11 +94,6 @@ export default function Home({supabase, session}) {
         <div>
             <Header/>
             <Taskbar/>
-            <label>
-                File Upload: <input type="file" name="fileUpload" onChange={handleFileUpload} />
-            </label>
-            <br></br>
-            <button onClick={handleSubmit}>Submit</button>
             <Feed session={session} supabase={supabase} />
 
         </div>

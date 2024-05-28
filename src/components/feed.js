@@ -21,20 +21,27 @@ export default function Feed({ supabase, session }) {
         //           .sort() TODO
         if (followingError) throw followingError;
 
-
         const followingUserIds = followingUserIdsData.map(user => user.following_user_id);
         followingUserIds.push(userId);
 
         console.log("followingUserIds:", followingUserIds);
-       
+
         //get file IDS
         const { data: fileIdArray, error: fileIdError} = await supabase
             .from('file_upload_metadata')
-            .select('id')
+            .select('id, user_id')
             .in('user_id', followingUserIds)
     
         if(fileIdError) throw fileIdError;
-         const ids = fileIdArray.map(file => file.id);
+        const ids = fileIdArray.map(file => file.id);
+        console.log("FileID Array:", ids);
+
+        const fileIdUserId = fileIdArray.reduce((map, item) => {
+            map[item.id] = item.user_id;
+            return map;
+        }, {});
+
+        console.log("fileIdtoUserId", fileIdUserId);
 
 // get captions
         const { data: captionArray, error: captionError } = await supabase
@@ -50,21 +57,32 @@ export default function Feed({ supabase, session }) {
             map[item.id] = item.caption_text;
             return map;
         }, {});
+        console.log("Captions Map:", captionsMap);
 
+        const { data: usernameArray, error: usernameError } = await supabase
+            .from('profiles')
+            .select('id, username')
+            .in('id', followingUserIds)
+
+        const usernamesMap = usernameArray.reduce((map, item) => {
+            map[item.id] = item.username;
+            return map;
+        }, {});
+
+        console.log("Usernames:",usernamesMap )
         //get urls
         const { data, error: urlError } = await supabase
             .storage
             .from('media')
             .createSignedUrls(ids, 60); // Adjust file name and expiry time as needed
 
-            if(urlError) throw urlError;
-
-        console.log("Captions Map:", captionsMap);
+        if(urlError) throw urlError;
 
         if (data) {
             const combinedData = data.map((file,index) => ({
                 id: file.id,
                 signedUrl: file.signedUrl,
+                username: usernamesMap[fileIdUserId[[ids[index]]]] || '',
                 caption: captionsMap[[ids[index]]] || '',
             }));
             console.log("Combined Data:",combinedData);
@@ -80,6 +98,7 @@ export default function Feed({ supabase, session }) {
         <div className='socialFeed'>
             {data === null ? <>You have no data to show!</> : data?.map((item, index) => (
                 <div className='post' key={index}>
+                    <div className="username">User: {item.username}</div>
                     <img src={item.signedUrl} style={{ width: '600px' } } className='center' />
                     <div className="caption">{item.caption}</div>
                 </div>
