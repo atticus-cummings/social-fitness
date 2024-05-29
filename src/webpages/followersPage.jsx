@@ -2,10 +2,12 @@ import React from "react"
 import {Taskbar} from "../components/taskbar"
 import SearchBar from 'react-search-bar';
 import useSWR from 'swr';
+import { useState } from 'react';
 
 export default function Followers({supabase, session}) {
 
     const userId = session.user.id
+    const [followers, setFollowers] = useState([]);
 
     const {data, mutate} = useSWR(`follower-${userId}`,
         async() => await fetchData()
@@ -19,15 +21,16 @@ export default function Followers({supabase, session}) {
 //           .sort() TODO
             .throwOnError();
 
-        followingUserIds.push(userId)
+        //followingUserIds.push(userId)
     
         console.log("followingUserIds:", followingUserIds);
+        setFollowers(followingUserIds);
     }
 
     return(
         <>
         <div>
-            <h1>YOU HAVE NO FOLLOWERS, LOSER </h1>
+            {followers.length === 0 ? <h1>YOU HAVE NO FOLLOWERS, LOSER </h1> : <span>hi</span>}
             <Taskbar></Taskbar>
         </div>
         </>
