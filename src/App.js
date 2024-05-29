@@ -6,7 +6,7 @@ import { Auth } from '@supabase/auth-ui-react'
 import { ThemeSupa } from '@supabase/auth-ui-shared'
 import Home from './Home'
 import {ProfilePage} from './webpages/profilePage';
-import {Followers} from './webpages/followersPage';
+import Followers from './webpages/followersPage';
 import Upload from './webpages/uploadPage';
 import Feed from './components/feed';
 
