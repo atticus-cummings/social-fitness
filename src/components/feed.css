@@ -64,3 +64,11 @@
 .postComment:hover{
   color:blue;
 }
+
+.comment{
+  background-color: cadetblue;
+  margin: 4px;
+  text-wrap:wrap;
+  border-radius: 3px;
+
+}

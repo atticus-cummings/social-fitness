@@ -43,13 +43,15 @@ export default function Feed({ supabase, session }) {
                 .insert({ file_id: fileId, author_id: userId, comment_text: comment })
                 .throwOnError();
         }
-        setComment(null);
+        setComment('');
+
     };
 
 
     async function fetchData() {
         try {
             // Fetch all the UUIDs of users the current user is following
+/* #####################    Fetch User's Following List  ##################### */
             const { data: followingUserIdsData, error: followingError } = await supabase
                 .from('followers')
                 .select('following_user_id')
@@ -62,6 +64,8 @@ export default function Feed({ supabase, session }) {
             // console.log("followingUserIds:", followingUserIds);
 
             // Fetch file metadata
+
+/* #####################    Fetch file Metadata  ##################### */ 
             const { data: fileMetadata, error: fileIdError } = await supabase
                 .from('file_upload_metadata')
                 .select('id, user_id, caption_text, like_count, created_at')
@@ -73,7 +77,7 @@ export default function Feed({ supabase, session }) {
             // Sort metadata by creation date (latest first)
             const sortedMetadata = fileMetadata.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
                 //  console.log("Sorted Metadata:", sortedMetadata);
-
+/* =================    Define Array of File ids   ================= */ 
             const ids = sortedMetadata.map(item => item.id);
                 // console.log("Ids:", ids);
 
@@ -83,13 +87,14 @@ export default function Feed({ supabase, session }) {
             }, {});
                 //  console.log("fileIdtoUserId", fileIdUserIdMap);
 
+/* =================    Define Array of captions   ================= */  
             const captionsMap = sortedMetadata.reduce((map, item) => {
                 map[item.id] = item.caption_text;
                 return map;
             }, {});
             //  console.log("Captions Map:", captionsMap);
 
-            // Fetch usernames
+/* #####################    Fetch Usernames  ##################### */ 
             const [{ data: usernameArray, error: usernameError }] = await Promise.all([
                 supabase
                     .from('profiles')
@@ -97,6 +102,7 @@ export default function Feed({ supabase, session }) {
                     .in('id', followingUserIds)
             ]);
 
+            
             if (usernameError) throw usernameError;
 
             const usernamesMap = usernameArray.reduce((map, item) => {
@@ -104,8 +110,25 @@ export default function Feed({ supabase, session }) {
                 return map;
             }, {});
             //  console.log("Usernames:", usernamesMap);
+/* #####################    Fetch Comments  ##################### */ 
+            //Fetch Comments
+            const { data: commentsArray, error: commentsError } = await supabase
+                .from('comments')
+                .select('file_id, comment_text, author_id')
+                .in('file_id', ids)
+            const commentsMap = {};
+            for (const com of commentsArray) {
+                const { file_id, comment_text, author_id } = com;
+                const authorName = usernamesMap[author_id];
+                if (!commentsMap[file_id]) {
+                    commentsMap[file_id] = [];
+                }
+                commentsMap[file_id].push([comment_text, authorName]);
+            }
+            console.log("File-->comment map", commentsMap)
 
-            // Fetch signed URLs
+
+/* #####################    Fetch Signed URLS  ##################### */
             const { data: urlData, error: urlError } = await supabase
                 .storage
                 .from('media')
@@ -122,14 +145,16 @@ export default function Feed({ supabase, session }) {
                 })
                 //  console.log("urlMap", urlMap);
 
+/* #####################    Combine and Send Data  ##################### */
                 const combinedData = sortedMetadata.map((item, index) => ({
                     id: item.id,
                     signedUrl: urlMap[item.id],
                     username: usernamesMap[item.user_id] || '',
                     caption: item.caption_text,
                     likes: item.like_count,
+                    comments: commentsMap[item.id] || [],
                 }));
-                // console.log("Combined Data:", combinedData);
+                 console.log("Combined Data:", combinedData);
 
                 return combinedData;
             } else {
@@ -150,7 +175,15 @@ export default function Feed({ supabase, session }) {
                     <img src={item.signedUrl} style={{ width: '600px' }} className='center' />
                     <button className="likeButton" onClick={() => handleLike(item.likes, item.id)} ><FaDumbbell /> &nbsp; {item.likes}</button>
                     <div className="caption">{item.caption}</div>
-                    <div className='commentSubmission'>Comment: &nbsp;
+
+                        {item.comments === null ? ( <>Be the first to comment!</>) : (item.comments.map((commentItem, commentIndex) => (
+                            <div className="comment" key={commentIndex}>
+                                <div>{commentItem[1]}: {commentItem[0]}</div> 
+
+                            </div>
+                            ))
+                        )}
+                                            <div className='commentSubmission'>Comment: &nbsp;
                         <input className="commentInput"
                             type="text"
                             id="textInput"
@@ -158,7 +191,7 @@ export default function Feed({ supabase, session }) {
                             value={comment}
                             onChange={handleCommentInput}
                         />
-                          <button className="postComment" onClick={() => handleCommentSubmit(item.id)}>Post Comment</button>
+                        <button className="postComment" onClick={() => handleCommentSubmit(item.id)}>Post Comment</button>
                     </div>
                   
                 </div>
