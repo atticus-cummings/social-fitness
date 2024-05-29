@@ -161,11 +161,8 @@ export default function Feed({ supabase, session }) {
             //format url data into map 
             if (urlData) {
                 console.log("urlData", urlData);
-                const urlMap = urlData.reduce((map, item) => {
-                    map[item.path] = item.signedUrl;
-                    return map;
-                })
-                //  console.log("urlMap", urlMap);
+                const urlMap = Object.fromEntries(urlData.map(item => [item.path, item.signedUrl]));
+                  console.log("urlMap", urlMap);
 
 /* #####################    Combine and Send Data  ##################### */
                 const combinedData = sortedMetadata.map((item, index) => ({

@@ -93,7 +93,7 @@ export default function Upload({ supabase, session }) {
 
         await supabase
             .from('file_upload_metadata')
-            .insert({ id: file_id, user_id: userId, caption_text: caption })
+            .insert({ id: file_id, user_id: userId, caption_text: caption})
             .throwOnError();
 
         setSelectedFile(null);
