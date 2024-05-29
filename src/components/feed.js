@@ -2,6 +2,7 @@ import React from 'react';
 import useSWR from 'swr';
 import 'react-photo-view/dist/react-photo-view.css';
 import "./feed.css"
+
 export default function Feed({ supabase, session }) {
     //get the current user id
     const userId = session.user.id
@@ -41,6 +42,7 @@ export default function Feed({ supabase, session }) {
             .from('file_upload_metadata')
             .select('id, caption_text')
             .in('id', ids)
+   
 
         if (captionError) throw captionError;
 

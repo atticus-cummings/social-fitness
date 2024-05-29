@@ -87,6 +87,7 @@ export default function Home({supabase, session}) {
             .insert({ id: file_id, user_id: userId})
             .throwOnError()
         setSelectedFile(null)
+        console.log("here")
         //mutate();
     }
   //  console.log("DATA HERE", data)
@@ -94,11 +95,7 @@ export default function Home({supabase, session}) {
         <div>
             <Header/>
             <Taskbar/>
-            <label>
-                File Upload: <input type="file" name="fileUpload" onChange={handleFileUpload} />
-            </label>
-            <br></br>
-            <button onClick={handleSubmit}>Submit</button>
+
             <Feed session={session} supabase={supabase} />
 
         </div>
