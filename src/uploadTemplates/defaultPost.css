@@ -1,0 +1,99 @@
+h1{
+    font-size:50px;
+    display:block;
+    text-align: center;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    justify-content: center;
+    background-color: lightgreen;
+
+}
+.spacer{
+    width: 100%;
+    height: 10px;
+    background-color: black;
+
+}
+
+.inside{
+    width:100%;
+    height:100%;
+
+}
+.uploadContent{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: fit-content;
+    font-size: 30px;
+    text-align: center;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    padding: 10px;
+    background-color: lightgreen;
+    color: rgb(0, 0, 0);
+    border-radius:5px;
+    margin:auto;
+    margin-top:10px;
+}
+.imagePreview{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: fit-content;
+    padding: 5px;
+    margin-bottom: 5px;
+    background-color: lightblue;
+    border-radius: 10px;
+    margin: auto; 
+ 
+}
+.imagePreview img {
+    max-width: 100%;
+    margin: 5px;
+    display: block;
+}
+.uploadContent:hover{
+    color: seagreen; ;
+}
+
+.pageContent{
+    max-width: 100%;
+    
+}
+
+.submitButton {
+    font-size: 30px;
+
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    bottom: 60px; 
+    position:fixed;
+    width: 200px;
+    border: none;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: lightgreen;
+    color: rgb(0, 0, 0);
+    border-radius: 5px; 
+    text-align: center;
+}
+.submitButton:hover{
+    color: seagreen; 
+    transform-origin: center;
+}
+
+.captionInput{
+    padding: 2px;
+    border:2px;
+    border-color: black;
+    background-color: lightblue;
+    border-radius: 5px;
+    position:absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width:500px;
+    height: 100px;
+    bottom: 110px;
+    display:flex;
+    text-wrap:wrap;
+
+}
