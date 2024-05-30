@@ -15,6 +15,9 @@ export const Taskbar = () => {
                     <li className ="navItem">
                     <Link to ="/webpages/followers">Followers</Link>
                     </li>
+                    <li className ="navItem">
+                    <Link to ="/webpages/leaderboard">Leaderboard</Link>
+                    </li>
                     <li className="navItem">
                     <Link to ="/webpages/upload">Upload</Link>
                     </li>

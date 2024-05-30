@@ -11,10 +11,10 @@ import DisplayComments from "./displayComments";
 export default function TextPostDisplay({ supabase, session, item, index }) {
     const [comment, setComment] = useState('');
     const userId = session.user.id
-    
 
-        //TODO: modify so it can only be liked once. 
-        //TODO: Make it so new like-count displays (semi-optional)
+
+    //TODO: modify so it can only be liked once. 
+    //TODO: Make it so new like-count displays (semi-optional)
     //Set comment value
 
 
@@ -26,11 +26,9 @@ export default function TextPostDisplay({ supabase, session, item, index }) {
                 <div className="rpeDisplay">{item.rpe !== null && item.rpe}</div>
             </div>
 
-
             <div className="textPostCaption">{item.caption}</div>
-            <DisplayLikes session={session} supabase={supabase} item={item} index={index}/>
-            <DisplayComments session={session} supabase={supabase} item={item} index={index}/>
-
+            <DisplayLikes session={session} supabase={supabase} item={item} index={index} />
+            <DisplayComments session={session} supabase={supabase} item={item} index={index} />
         </div>
     )
 }
