@@ -42,6 +42,7 @@ export default function Followers({ supabase, session }) {
                     <Taskbar />
                 </>
             )}
+            <input id="search" type="search" placeholder="&#x1F50D; Start Typing to Search"></input>
         </>
     );
 }
