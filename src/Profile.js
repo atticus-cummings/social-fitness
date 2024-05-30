@@ -86,7 +86,7 @@ function Profile({ session, supabase }) {
       .from('avatars')
       .select('file_name') 
       .throwOnError()
-    console.log("FILE NAME:", file_name[0].file_name)
+    //console.log("FILE NAME:", file_name[0].file_name)
 
     if (file_name){
       const { data, error } = await supabase
@@ -94,8 +94,8 @@ function Profile({ session, supabase }) {
         .from('media')
         .createSignedUrl(`/avatars/${file_name[0].file_name}`, 60) // Adjust file name and expiry time as needed
         //.throwOnError();
-        console.log(data)
-        setProfileUrl(file_name[0].file_name)
+        setProfileUrl(data.signedUrl)
+        //console.log(data)
     }
   }
   console.log(profileUrl)
@@ -115,7 +115,7 @@ function Profile({ session, supabase }) {
       </div>
       {profileUrl && (
         <div>
-          <img src={profileUrl.signedUrl} alt="Profile" style={{ width: '100px', height: '100px' }} />
+          <img src={profileUrl} alt="Profile" style={{ width: '100px', height: '100px' }} />
           <p>Profile image uploaded successfully!</p>
         </div>
       )}
