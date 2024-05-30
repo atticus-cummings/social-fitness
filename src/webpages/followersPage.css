@@ -2,4 +2,10 @@
     display: flex;
     width: auto;
     justify-content: center;
+    /*flex-direction: column;*/
+}
+
+#search-container {
+    display: flex;
+    justify-content: center;
 }

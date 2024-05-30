@@ -52,10 +52,14 @@ function Profile({ session, supabase }) {
     const filePath = `avatars/${fileName}`;
 
     setMessage('Uploading image...');
-    let { error: uploadError, data: uploadData } = await supabase.storage.from('media').upload(filePath, file);
+    let { error: uploadError, data: uploadData } = await supabase
+      .storage
+      .from('media')
+      .upload(filePath, file, { upsert: true, });
 
     if (uploadError) {
       setMessage('Failed to upload image: ' + uploadError.message);
+      console.error(uploadError)
       return;
     }
 
@@ -76,7 +80,7 @@ function Profile({ session, supabase }) {
 
     const {data, error: fileNameError} = await supabase
       .from('avatars')
-      .insert({user_id: userId, file_name: fileName})
+      .upsert({user_id: userId, file_name: fileName})
       .throwOnError()
 
   };

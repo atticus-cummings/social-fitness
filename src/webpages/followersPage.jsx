@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { Taskbar } from "../components/taskbar";
-//import SearchBar from 'react-search-bar';
 import useSWR from 'swr';
 import "./followersPage.css"
 
 export default function Followers({ supabase, session }) {
     const userId = session.user.id;
+    
     const [followers, setFollowers] = useState([]);
+    const [searchQuery, setSearchQuery] = useState('');
 
     const { data, mutate } = useSWR(`follower-${userId}`, fetchData);
 
@@ -19,11 +20,19 @@ export default function Followers({ supabase, session }) {
                 .throwOnError();
 
             setFollowers(followingUserIds);
-            //followingUserIds.push(userId);
         } catch (error) {
             console.error("Error fetching data:", error);
         }
     }
+
+    const handleInputChange = (event) => {
+        setSearchQuery(event.target.value);
+    };
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        console.log("Search query:", searchQuery);
+    };
 
     return (
         <>
@@ -43,8 +52,19 @@ export default function Followers({ supabase, session }) {
                     <Taskbar />
                 </>
             )}
-            <div id="search">
-                <input id="searchbar" type="search" placeholder="&#x1F50D; Start Typing to Search"></input>
+            <div id="search-container">
+                <form onSubmit={handleSubmit}>
+                    <div id="search">
+                        <input
+                            id="searchbar"
+                            type="search"
+                            placeholder="&#x1F50D; Start Typing to Search"
+                            value={searchQuery}
+                            onChange={handleInputChange}
+                        />
+                        <button type="submit">Submit</button>
+                    </div>
+                </form>
             </div>
         </>
     );
