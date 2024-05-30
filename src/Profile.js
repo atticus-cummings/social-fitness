@@ -7,23 +7,31 @@ function Profile({ session, supabase }) {
   const [profileUrl, setProfileUrl] = useState('');
   const [previewUrl, setPreviewUrl] = useState('');
   const [message, setMessage] = useState('');
-  const [userName, setUserName] = useState('')
-  
+  const [userName, setUserName] = useState('');
+  const [username, setUsername] = useState('');
+  const [currentUsername, setCurrentUsername] = useState('');
+  const [loading, setLoading] = useState(false);
+
   const userId = session.user.id;
 
   useEffect(() => {
     if (session && session.user) {
       setCurrentEmail(session.user.email);
       setProfileUrl(session.user.user_metadata.avatar_url || '');
+      setCurrentUsername(session.user.user_metadata.username || 'No username set');
     }
   }, [session]);
 
-  const {data, mutate} = useSWR(`image-${userId}`,
-        async() => await fetchData()
+  const { data, mutate } = useSWR(`image-${userId}`,
+    async () => await fetchData()
   );
 
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
+  };
+
+  const handleUsernameChange = (event) => {
+    setUsername(event.target.value);
   };
 
   const updateEmail = async () => {
@@ -35,6 +43,33 @@ function Profile({ session, supabase }) {
     } else {
       setMessage('Email updated successfully. Please check your inbox to verify your new email.');
       setCurrentEmail(email);
+    }
+  };
+
+  const updateUsername = async () => {
+    setLoading(true);
+    setMessage('');
+
+    const { data, error } = await supabase
+      .from('profiles')
+      .update({ username: username })
+      .match({ id: userId });
+
+    if (error) {
+      setMessage(`Failed to update username: ${error.message}`);
+    } else {
+      setMessage('Username updated successfully!');
+      setCurrentUsername(username);
+    }
+    setLoading(false);
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    if (session) {
+      updateUsername();
+    } else {
+      setMessage('No user is logged in.');
     }
   };
 
@@ -82,7 +117,6 @@ function Profile({ session, supabase }) {
       .from('avatars')
       .upsert({user_id: userId, file_name: fileName})
       .throwOnError()
-
   };
 
   async function fetchData(){
@@ -90,25 +124,20 @@ function Profile({ session, supabase }) {
       .from('avatars')
       .select('file_name') 
       .throwOnError()
-    //console.log("FILE NAME:", file_name[0].file_name)
-
     if (file_name){
       const { data, error } = await supabase
         .storage
         .from('media')
-        .createSignedUrl(`/avatars/${file_name[0].file_name}`, 60) // Adjust file name and expiry time as needed
-        //.throwOnError();
+        .createSignedUrl(`/avatars/${file_name[0].file_name}`, 60) 
         setProfileUrl(data.signedUrl)
-        //console.log(data)
     }
   }
-  console.log(profileUrl)
+
   return (
     <div className="profile">
       <h2>Update Profile</h2>
       <p>Current Email: {currentEmail}</p>
       <div>
-
         <input
           type="email"
           value={email}
@@ -117,6 +146,21 @@ function Profile({ session, supabase }) {
         />
         <button onClick={updateEmail}>Update Email</button>
       </div>
+      <h2>Update Username</h2>
+      <p>Current Username: {currentUsername}</p>
+      <form onSubmit={handleSubmit}>
+        <label htmlFor="username">Username:</label>
+        <input
+          type="text"
+          id="username"
+          value={username}
+          onChange={handleUsernameChange}
+          disabled={loading}
+        />
+        <button type="submit" disabled={loading || !username.trim()}>
+          Update Username
+        </button>
+      </form>
       {profileUrl && (
         <div>
           <img src={profileUrl} alt="Profile" style={{ width: '100px', height: '100px' }} />
