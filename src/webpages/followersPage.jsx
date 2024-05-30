@@ -55,7 +55,7 @@ export default function Followers({ supabase, session }) {
         event.preventDefault();
         console.log("Search query:", searchQuery);
     };
-    console.log(searchedUserID[0].id)
+    console.log(searchedUserID)
     return (
         <>
             {followers.length === 0 ? (
@@ -89,7 +89,7 @@ export default function Followers({ supabase, session }) {
                 </form>
             </div>
             <div>
-                {searchedUserID[0].id}
+                {searchedUserID.length === 0 ? <>No Data to Show</> : searchedUserID[0].id}
             </div>
         </>
     );
