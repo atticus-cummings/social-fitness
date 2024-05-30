@@ -8,9 +8,12 @@ export default function Followers({ supabase, session }) {
 
     const [followers, setFollowers] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
+    const [searchedUserID, setSearchedUserID] = useState('')
+    const [searchedUserName, setSearchedUserName] = useState('')
 
     const { data, mutate } = useSWR(`follower-${userId}`, fetchData);
 
+    //gets the users that are currently being followed
     async function fetchData() {
         try {
             const { data: followingUserIds } = await supabase
@@ -24,6 +27,8 @@ export default function Followers({ supabase, session }) {
             console.error("Error fetching data:", error);
         }
     }
+
+    //finds users by username
     async function searchUser() {
         try{
             const { data: searchedUser, error: searchError } = await supabase
@@ -32,11 +37,15 @@ export default function Followers({ supabase, session }) {
                 .eq('username', searchQuery)
                 .throwOnError()
                 console.log(searchedUser)
+            setSearchedUserID(searchedUser)
+            setSearchedUserName(searchQuery)
+
         } catch (searchError) {
             console.error("Error in searching the user:", searchError);
         }
 
     }
+    
     const handleInputChange = (event) => {
         setSearchQuery(event.target.value);
         searchUser();
@@ -46,7 +55,7 @@ export default function Followers({ supabase, session }) {
         event.preventDefault();
         console.log("Search query:", searchQuery);
     };
-
+    console.log(searchedUserID[0].id)
     return (
         <>
             {followers.length === 0 ? (
@@ -78,6 +87,9 @@ export default function Followers({ supabase, session }) {
                         <button type="submit">Submit</button>
                     </div>
                 </form>
+            </div>
+            <div>
+                {searchedUserID[0].id}
             </div>
         </>
     );
