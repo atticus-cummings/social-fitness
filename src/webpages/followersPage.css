@@ -13,11 +13,17 @@
 #search-result {
     display: flex;
     justify-content: center;
-    white-space: pre-line;
+    white-space: pre-wrap;
 }
 
 #user-info {
     display: flex;
     justify-content: center;
     flex-direction: column;
+    white-space: pre-wrap;
+}
+
+#caption {
+    display: flex;
+    justify-content: center;
 }

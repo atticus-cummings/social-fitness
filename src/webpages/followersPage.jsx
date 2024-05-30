@@ -124,8 +124,11 @@ export default function Followers({ supabase, session }) {
             </div>
             <div id="search-result">
                 <div id="user-info">
+                    <p> </p>
                     <img src={ppUrl} alt="" width="100" ></img>
-                    {searchedUserID.length === 0 ? <>No Data to Show</> : searchedUserName}
+                    <div id="caption">
+                        {searchedUserID.length === 0 ? <>No Data to Show</> : searchedUserName}
+                    </div>
                 </div>
             </div>
         </>
