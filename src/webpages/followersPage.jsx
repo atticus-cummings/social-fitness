@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Taskbar } from "../components/taskbar";
 //import SearchBar from 'react-search-bar';
 import useSWR from 'swr';
+import "./followersPage.css"
 
 export default function Followers({ supabase, session }) {
     const userId = session.user.id;
@@ -42,6 +43,9 @@ export default function Followers({ supabase, session }) {
                     <Taskbar />
                 </>
             )}
+            <div id="search">
+                <input id="searchbar" type="search" placeholder="&#x1F50D; Start Typing to Search"></input>
+            </div>
         </>
     );
 }
