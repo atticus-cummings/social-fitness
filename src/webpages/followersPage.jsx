@@ -43,17 +43,27 @@ export default function Followers({ supabase, session }) {
         } catch (searchError) {
             console.error("Error in searching the user:", searchError);
         }
-
+        if (searchedUserID != ""){
+            console.log("HERE:", searchedUserID)
+            const {data: ppUrl, error: ppurlError} = await supabase
+                .from('avatars')
+                .select('file_name')
+                .eq('user_id', searchedUserID[0].id)
+                .throwOnError()
+            console.log("PPURL:", ppUrl)
+        }
     }
-    
+
+    //document.getElementById("myBtn").addEventListener("click", searchUser); 
+
     const handleInputChange = (event) => {
         setSearchQuery(event.target.value);
-        searchUser();
     };
 
     const handleSubmit = (event) => {
         event.preventDefault();
         console.log("Search query:", searchQuery);
+        searchUser();
     };
     console.log(searchedUserID)
     return (
@@ -84,7 +94,7 @@ export default function Followers({ supabase, session }) {
                             value={searchQuery}
                             onChange={handleInputChange}
                         />
-                        <button type="submit">Submit</button>
+                        <button id="myBtn" type="submit">Submit</button>
                     </div>
                 </form>
             </div>
