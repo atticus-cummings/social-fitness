@@ -5,7 +5,7 @@ import "./followersPage.css"
 
 export default function Followers({ supabase, session }) {
     const userId = session.user.id;
-    
+
     const [followers, setFollowers] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
 
@@ -24,9 +24,22 @@ export default function Followers({ supabase, session }) {
             console.error("Error fetching data:", error);
         }
     }
+    async function searchUser() {
+        try{
+            const { data: searchedUser, error: searchError } = await supabase
+                .from('profiles')
+                .select('id')
+                .eq('username', searchQuery)
+                .throwOnError()
+                console.log(searchedUser)
+        } catch (searchError) {
+            console.error("Error in searching the user:", searchError);
+        }
 
+    }
     const handleInputChange = (event) => {
         setSearchQuery(event.target.value);
+        searchUser();
     };
 
     const handleSubmit = (event) => {
@@ -58,7 +71,7 @@ export default function Followers({ supabase, session }) {
                         <input
                             id="searchbar"
                             type="search"
-                            placeholder="&#x1F50D; Start Typing to Search"
+                            placeholder="&#x1F50D; Enter username"
                             value={searchQuery}
                             onChange={handleInputChange}
                         />
