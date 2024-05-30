@@ -1,6 +1,6 @@
 import React from 'react';
 import { formatDistanceToNow, parseISO, isValid } from 'date-fns';
-import "./feed.css";
+import "./post.css";
 
 export default function TimeAgo({ timestamp }) {
 

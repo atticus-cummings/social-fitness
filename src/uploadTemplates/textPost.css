@@ -108,3 +108,11 @@ h1{
     padding: 3px;
     border-radius: 5px;
 }
+.rpeInput{
+    left: 50%;
+    transform: translateX(-50%);
+    position:absolute;
+    align-items: center;
+    display:inline-flex; 
+    margin:2px;
+}

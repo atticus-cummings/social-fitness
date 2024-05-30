@@ -98,7 +98,7 @@ export default function DefaultPost({ supabase, session }) {
         </div>
         <div className="rpeInput">
             <input type="range" id="rpe" name="rpe" min="0" max="11" onChange={handleRpeInput} />
-            <label for="rpe">RPE Value</label>
+            <label for="rpe">RPE Value: {rpeValue}</label>
         </div>
         <br />
         <div className="imagePreview">

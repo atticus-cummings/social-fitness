@@ -48,12 +48,14 @@
   }
   
   .likeButton {
-  
     align-items: center;
+    display:inline-flex;
+    background-color: aquamarine;
     margin: auto;
-    padding: 3px;
-    font-size: 20px;
-    vertical-align: auto;
+    border-radius: 5px;
+    padding: 2px;
+    margin:3px;
+    font-size: 15px;
   }
   
   .commentSubmission {
