@@ -10,7 +10,7 @@ export default function DefaultPost({ supabase, session }) {
     console.log("USER ID:", userId);
 
     const [selectedFile, setSelectedFile] = useState(null);
-    const [caption, setCaption] = useState('');
+    const [caption, setCaption] = useState('Write a caption...');
     //const { data, mutate } = useSWR(`image-${userId}`, async () => await fetchData());
     const [errorMessage, setErrorMessage] = useState('');
     const [previewUrl, setPreviewUrl] = useState(null);
@@ -61,7 +61,6 @@ export default function DefaultPost({ supabase, session }) {
         }
 
         console.log("File Upload Successful");
-
         await supabase
             .from('file_upload_metadata')
             .insert({ id: file_id, post_id: post_id, user_id: userId, caption_text: caption})
