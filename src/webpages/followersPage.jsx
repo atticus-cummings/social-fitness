@@ -122,9 +122,11 @@ export default function Followers({ supabase, session }) {
                     </div>
                 </form>
             </div>
-            <div>
-                {searchedUserID.length === 0 ? <>No Data to Show</> : searchedUserName}
-                <img src={ppUrl} alt="" width="100" ></img>
+            <div id="search-result">
+                <div id="user-info">
+                    <img src={ppUrl} alt="" width="100" ></img>
+                    {searchedUserID.length === 0 ? <>No Data to Show</> : searchedUserName}
+                </div>
             </div>
         </>
     );

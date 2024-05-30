@@ -9,3 +9,15 @@
     display: flex;
     justify-content: center;
 }
+
+#search-result {
+    display: flex;
+    justify-content: center;
+    white-space: pre-line;
+}
+
+#user-info {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
