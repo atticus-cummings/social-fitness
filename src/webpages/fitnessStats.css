@@ -1,0 +1,15 @@
+.fitnessCategory{
+    margin:5px;
+
+}
+
+.statsPage {
+
+    
+    height: 100vh; /* Optional: to make the container full height */
+    background-color: lightcyan;
+    border-width: 3px;
+    border-color:black;
+  }
+  
+ 
