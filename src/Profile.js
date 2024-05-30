@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import useSWR from 'swr';
 
 function Profile({ session, supabase }) {
   const [email, setEmail] = useState('');
@@ -6,6 +7,9 @@ function Profile({ session, supabase }) {
   const [profileUrl, setProfileUrl] = useState('');
   const [previewUrl, setPreviewUrl] = useState('');
   const [message, setMessage] = useState('');
+  const [userName, setUserName] = useState('')
+  
+  const userId = session.user.id;
 
   useEffect(() => {
     if (session && session.user) {
@@ -13,6 +17,10 @@ function Profile({ session, supabase }) {
       setProfileUrl(session.user.user_metadata.avatar_url || '');
     }
   }, [session]);
+
+  const {data, mutate} = useSWR(`image-${userId}`,
+        async() => await fetchData()
+  );
 
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
@@ -39,9 +47,8 @@ function Profile({ session, supabase }) {
       };
       reader.readAsDataURL(file);
     }
-
     const fileExt = file.name.split('.').pop();
-    const fileName = `${Math.random()}.${fileExt}`;
+    const fileName = `${userId}.${fileExt}`;
     const filePath = `avatars/${fileName}`;
 
     setMessage('Uploading image...');
@@ -52,7 +59,7 @@ function Profile({ session, supabase }) {
       return;
     }
 
-    const { publicURL, error: urlError } = supabase.storage.from('media').getPublicUrl(filePath);
+    const { publicURL, error: urlError } = await supabase.storage.from('media').getPublicUrl(filePath);
 
     if (urlError) {
       setMessage('Failed to get image URL: ' + urlError.message);
@@ -66,13 +73,38 @@ function Profile({ session, supabase }) {
       data: { avatar_url: publicURL }
     });
     await supabase.auth.refreshSession();
+
+    const {data, error: fileNameError} = await supabase
+      .from('avatars')
+      .insert({user_id: userId, file_name: fileName})
+      .throwOnError()
+
   };
 
+  async function fetchData(){
+    const { data: file_name, error: fileError } = await supabase
+      .from('avatars')
+      .select('file_name') 
+      .throwOnError()
+    console.log("FILE NAME:", file_name[0].file_name)
+
+    if (file_name){
+      const { data, error } = await supabase
+        .storage
+        .from('media')
+        .createSignedUrl(`/avatars/${file_name[0].file_name}`, 60) // Adjust file name and expiry time as needed
+        //.throwOnError();
+        console.log(data)
+        setProfileUrl(file_name[0].file_name)
+    }
+  }
+  console.log(profileUrl)
   return (
     <div className="profile">
       <h2>Update Profile</h2>
       <p>Current Email: {currentEmail}</p>
       <div>
+
         <input
           type="email"
           value={email}
@@ -83,7 +115,7 @@ function Profile({ session, supabase }) {
       </div>
       {profileUrl && (
         <div>
-          <img src={profileUrl} alt="Profile" style={{ width: '100px', height: '100px' }} />
+          <img src={profileUrl.signedUrl} alt="Profile" style={{ width: '100px', height: '100px' }} />
           <p>Profile image uploaded successfully!</p>
         </div>
       )}
