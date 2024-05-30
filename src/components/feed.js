@@ -20,25 +20,25 @@ export default function Feed({ supabase, session }) {
     //gets all the data needed for a relevant feed
 
     //Increment like 
-    const handleLike = async (likeCount, fileId, liked, likedPostsArray) => {
+    const handleLike = async (likeCount, postId, liked, likedPostsArray) => {
         let updatedLikedArray;
         if(liked){
             likeCount= likeCount -1;
-            updatedLikedArray = likedPostsArray.filter(id => id !== fileId);
+            updatedLikedArray = likedPostsArray.filter(id => id !== postId);
             console.log("Liked!");
         }
         else if(!liked){
             likeCount = likeCount + 1;
-            updatedLikedArray =[...likedPostsArray, fileId]; 
+            updatedLikedArray =[...likedPostsArray, postId]; 
             console.log("Removed Like :(");
         }
         await supabase
-            .from('file_upload_metadata')
+            .from('posts')
             .update({ like_count: likeCount })
-            .eq('id', fileId);
+            .eq('post_id', postId);
         await supabase 
             .from('profiles')
-            .update({liked_post_file_id:updatedLikedArray})
+            .update({liked_post_id:updatedLikedArray})
             .eq('id',userId)
 
         //TODO: modify so it can only be liked once. 
@@ -50,11 +50,11 @@ export default function Feed({ supabase, session }) {
     };
 
     //submit Comment to data base
-    const handleCommentSubmit = async (fileId) => {
+    const handleCommentSubmit = async (post_id) => {
         if (comment) {
             await supabase
                 .from('comments')
-                .insert({ file_id: fileId, author_id: userId, comment_text: comment })
+                .insert({ post_id: post_id, author_id: userId, comment_text: comment })
                 .throwOnError();
         }
         setComment('');
@@ -81,40 +81,48 @@ export default function Feed({ supabase, session }) {
 /* #####################    Fetch User's Liked Post list  ##################### */ 
             const { data: likedPostsArray, error: likedPostsError } = await supabase
                 .from('profiles')
-                .select('liked_post_file_id')
+                .select('liked_post_id')
                 .eq('id',userId)
                 const likedPosts = likedPostsArray.reduce((acc, item) => {
-                    if (item.liked_post_file_id) {
-                        return acc.concat(item.liked_post_file_id);
+                    if (item.liked_post_id) {
+                        return acc.concat(item.liked_post_id);
                     }
                     return acc;
                 }, []);
             console.log("liked posts", likedPostsArray);
 
-/* #####################    Fetch file Metadata  ##################### */ 
-            const { data: fileMetadata, error: fileIdError } = await supabase
-                .from('file_upload_metadata')
-                .select('id, user_id, caption_text, like_count, created_at')
+/* #####################    Fetch Post Metadata  ##################### */ 
+            const { data: postMetadata, error: postMetadataError } = await supabase
+                .from('posts')
+                .select('post_id, file_id, user_id, caption_text, like_count, created_at')
                 .in('user_id', followingUserIds);
 
-            if (fileIdError) throw fileIdError;
+            if (postMetadataError) throw postMetadataError;
                 //   console.log("Metadata:", fileMetadata)
             // Sort metadata by creation date (latest first)
-            const sortedMetadata = fileMetadata.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+            const sortedMetadata = postMetadata.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
                 //  console.log("Sorted Metadata:", sortedMetadata);
-/* =================    Define Array of File ids   ================= */ 
-            const ids = sortedMetadata.map(item => item.id);
-                // console.log("Ids:", ids);
 
-            const fileIdUserIdMap = sortedMetadata.reduce((map, item) => {
-                map[item.id] = item.user_id;
+
+/* =================    Define Array of Post ids   ================= */ 
+            const ids = sortedMetadata.map(item => item.post_id);
+
+            const postIdUserIdMap = sortedMetadata.reduce((map, item) => {
+                map[item.post_id] = item.user_id;
                 return map;
             }, {});
-                //  console.log("fileIdtoUserId", fileIdUserIdMap);
 
+                //  console.log("fileIdtoUserId", fileIdUserIdMap);
+                
+            const postIdFileIdMap = sortedMetadata.reduce((map, item) => {
+                map[item.post_id] = item.file_id;
+                return map;
+            }, {});
+
+            const fileIds = sortedMetadata.map(item => item.file_id);
 /* =================    Define Array of captions   ================= */  
             const captionsMap = sortedMetadata.reduce((map, item) => {
-                map[item.id] = item.caption_text;
+                map[item.post_id] = item.caption_text;
                 return map;
             }, {});
             //  console.log("Captions Map:", captionsMap);
@@ -123,7 +131,7 @@ export default function Feed({ supabase, session }) {
             const [{ data: usernameArray, error: usernameError }] = await Promise.all([
                 supabase
                     .from('profiles')
-                    .select('id, username, liked_post_file_id')
+                    .select('id, username, liked_post_id')
                     .in('id', followingUserIds)
             ]);
             if (usernameError) throw usernameError;
@@ -137,16 +145,16 @@ export default function Feed({ supabase, session }) {
             //Fetch Comments
             const { data: commentsArray, error: commentsError } = await supabase
                 .from('comments')
-                .select('file_id, comment_text, author_id')
-                .in('file_id', ids)
+                .select('post_id, comment_text, author_id')
+                .in('post_id', ids)
             const commentsMap = {};
             for (const com of commentsArray) {
-                const { file_id, comment_text, author_id } = com;
+                const { post_id, comment_text, author_id } = com;
                 const authorName = usernamesMap[author_id];
-                if (!commentsMap[file_id]) {
-                    commentsMap[file_id] = [];
+                if (!commentsMap[post_id]) {
+                    commentsMap[post_id] = [];
                 }
-                commentsMap[file_id].push([comment_text, authorName]);
+                commentsMap[post_id].push([comment_text, authorName]);
             }
             console.log("File-->comment map", commentsMap)
 
@@ -155,7 +163,7 @@ export default function Feed({ supabase, session }) {
             const { data: urlData, error: urlError } = await supabase
                 .storage
                 .from('media')
-                .createSignedUrls(ids, 60);
+                .createSignedUrls(fileIds, 60);
 
             if (urlError) throw urlError;
             //format url data into map 
@@ -166,13 +174,14 @@ export default function Feed({ supabase, session }) {
 
 /* #####################    Combine and Send Data  ##################### */
                 const combinedData = sortedMetadata.map((item, index) => ({
-                    id: item.id,
-                    signedUrl: urlMap[item.id],
+                    user_id: item.user_id,
+                    post_id: item.post_id,
+                    signedUrl: urlMap[item.file_id],
                     username: usernamesMap[item.user_id] || '',
                     caption: item.caption_text,
                     likes: item.like_count,
-                    liked: likedPosts.includes(item.id),
-                    comments: commentsMap[item.id] || [],
+                    liked: likedPosts.includes(item.post_id),
+                    comments: commentsMap[item.post_id] || [],
                     likedPosts: likedPosts || [],
                 }));
                  console.log("Combined Data:", combinedData);
@@ -193,7 +202,7 @@ export default function Feed({ supabase, session }) {
                 <div className='post' key={index}>
                     <div className="username">User: {item.username}</div>
                     <img src={item.signedUrl} style={{ width: '600px' }} className='center' />
-                    <button className="likeButton" onClick={() => handleLike(item.likes, item.id, item.liked, item.likedPosts)} ><FaDumbbell /> &nbsp; {item.likes}</button>
+                    <button className="likeButton" onClick={() => handleLike(item.likes, item.post_id, item.liked, item.likedPosts)} ><FaDumbbell /> &nbsp; {item.likes}</button>
                     <div className="caption">{item.caption}</div>
 
                         {item.comments === null ? ( <>Be the first to comment!</>) : (item.comments.map((commentItem, commentIndex) => (
@@ -211,7 +220,7 @@ export default function Feed({ supabase, session }) {
                             value={comment}
                             onChange={handleCommentInput}
                         />
-                        <button className="postComment" onClick={() => handleCommentSubmit(item.id)}>Post Comment</button>
+                        <button className="postComment" onClick={() => handleCommentSubmit(item.post_id)}>Post Comment</button>
                     </div>
                   
                 </div>

@@ -11,38 +11,9 @@ export default function DefaultPost({ supabase, session }) {
 
     const [selectedFile, setSelectedFile] = useState(null);
     const [caption, setCaption] = useState('');
-    const { data, mutate } = useSWR(`image-${userId}`, async () => await fetchData());
+    //const { data, mutate } = useSWR(`image-${userId}`, async () => await fetchData());
     const [errorMessage, setErrorMessage] = useState('');
     const [previewUrl, setPreviewUrl] = useState(null);
-    async function fetchData() {
-        const { data: followingUserIds } = await supabase
-            .from('followers')
-            .select('following_user_id')
-            .eq('user_id', userId)
-            .throwOnError();
-
-        followingUserIds.push(userId);
-        console.log("followingUserIds:", followingUserIds);
-
-        const { data: fileIdArray } = await supabase
-            .from('file_upload_metadata')
-            .select('id')
-            .in('user_id', followingUserIds)
-            .throwOnError();
-
-        const ids = fileIdArray.map(file => file.id);
-        const { data, error } = await supabase
-            .storage
-            .from('media')
-            .createSignedUrls(ids, 60); // Adjust file name and expiry time as needed
-
-        if (data) {
-            const signedURLs = data.map(item => item.signedUrl);
-            return signedURLs;
-        } else {
-            return null;
-        }
-    }
 
     const handleFileUpload = (event) => {
         const file = event.target.files[0];
@@ -70,12 +41,13 @@ export default function DefaultPost({ supabase, session }) {
 
     const handleSubmit = async () => {
         if (selectedFile) {
-            await uploadFile(selectedFile, caption);
+            await uploadPost(selectedFile, caption);
         }
     };
 
-    async function uploadFile(file, caption) {
+    async function uploadPost(file, caption) {
         const file_id = uuidv4();
+        const post_id = uuidv4();
 
         const { data, error } = await supabase.storage
             .from('media')
@@ -92,15 +64,16 @@ export default function DefaultPost({ supabase, session }) {
 
         await supabase
             .from('file_upload_metadata')
-            .insert({ id: file_id, user_id: userId, caption_text: caption})
+            .insert({ id: file_id, post_id: post_id, user_id: userId, caption_text: caption})
+            .throwOnError();
+        await supabase
+            .from('posts')
+            .insert({ post_id: post_id, file_id: file_id, user_id: userId, post_type:1, caption_text: caption})
             .throwOnError();
 
         setSelectedFile(null);
         setCaption('');
-        mutate();
     }
-
-    console.log("DATA HERE", data);
 
 
     return(

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Taskbar } from "../components/taskbar";
-import SearchBar from 'react-search-bar';
+//import SearchBar from 'react-search-bar';
 import useSWR from 'swr';
 
 export default function Followers({ supabase, session }) {
