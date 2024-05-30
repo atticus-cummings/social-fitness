@@ -48,6 +48,7 @@ export default function Followers({ supabase, session }) {
             console.error("Error in searching the user:", searchError);
             //if its null, just set it to the empty string 
             setSearchedUserID("")
+            setFile('default.png')
         }
         //if the user exists, get their profile picture (pp) :)
         if (searchedUserID != ""){
@@ -127,7 +128,7 @@ export default function Followers({ supabase, session }) {
                     <p> </p>
                     <img src={ppUrl} alt="" width="100" ></img>
                     <div id="caption">
-                        {searchedUserID.length === 0 ? <>No Data to Show</> : searchedUserName}
+                        {searchedUserID.length === 0 ? <>No Data</> : searchedUserName}
                     </div>
                 </div>
             </div>
