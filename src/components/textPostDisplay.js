@@ -55,6 +55,7 @@ export default function TextPostDisplay({ supabase, session, item, index }) {
             <div className='postHeader'>
                 <div className="username">User: {item.username} <TimeAgo timestamp={item.timestamp} /></div>
                 <div className="postTitle">{item.title}</div>
+                <div className="rpeDisplay">{item.rpe !== null && item.rpe}</div>
             </div>
 
 
@@ -64,7 +65,7 @@ export default function TextPostDisplay({ supabase, session, item, index }) {
             </button>
             {item.comments === null ? (<>Be the first to comment!</>) : (item.comments.map((commentItem, commentIndex) => (
                 <div className="comment" key={commentIndex}>
-                    <div>{commentItem[1]}: {commentItem[0]}</div>
+                    <div>{commentItem[1]}: {commentItem[0]}<TimeAgo timestamp={commentItem[2]} /> </div>
 
                 </div>
             ))

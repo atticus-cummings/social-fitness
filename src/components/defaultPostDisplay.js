@@ -51,7 +51,10 @@ export default function DefaultPostDisplay({ supabase, session, item, index }) {
 
     return (
         <div className='post' key={index}>
+            <div className="postHeader">
             <div className="username">User: {item.username} <TimeAgo timestamp={item.timestamp} /></div>
+            <div className="rpeDisplay">{item.rpe !== null && item.rpe}</div>
+            </div>
             <img src={item.signedUrl} style={{ width: '600px' }} className='image' />
             <button className="likeButton" onClick={() => handleLike(item.likes, item.post_id, item.liked, item.likedPosts)}>
                 <FaDumbbell /> &nbsp; {item.likes === 0 ? 'Give this post a PUMP' : (item.likes > 0 && item.likes)}

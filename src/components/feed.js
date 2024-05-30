@@ -57,7 +57,7 @@ export default function Feed({ supabase, session }) {
             /* #####################    Fetch Post Metadata  ##################### */
             const { data: postMetadata, error: postMetadataError } = await supabase
                 .from('posts')
-                .select('post_id, file_id, user_id, caption_text, like_count, created_at, title_text, post_type')
+                .select('post_id, file_id, user_id, caption_text, like_count, created_at, title_text, post_type, rpe_value')
                 .in('user_id', followingUserIds);
 
             if (postMetadataError) throw postMetadataError;
@@ -144,6 +144,7 @@ export default function Feed({ supabase, session }) {
                     caption: item.caption_text,
                     timestamp: item.created_at,
                     title: item.title_text,
+                    rpe:item.rpe_value,
                     post_type: item.post_type,
                     likes: item.like_count,
                     liked: likedPosts.includes(item.post_id),

@@ -14,6 +14,7 @@ export default function DefaultPost({ supabase, session }) {
     //const { data, mutate } = useSWR(`image-${userId}`, async () => await fetchData());
     const [errorMessage, setErrorMessage] = useState('');
     const [previewUrl, setPreviewUrl] = useState(null);
+    const [rpeValue, setRpeValue] = useState(null);
 
     const handleFileUpload = (event) => {
         const file = event.target.files[0];
@@ -30,6 +31,9 @@ export default function DefaultPost({ supabase, session }) {
             setPreviewUrl(fileUrl);
         }
     };
+    const handleRpeInput = (event) =>{
+        setRpeValue(event.target.value);
+    }
 
     const triggerFileInput = () => {
         document.getElementById('fileInput').click();
@@ -67,7 +71,7 @@ export default function DefaultPost({ supabase, session }) {
             .throwOnError();
         await supabase
             .from('posts')
-            .insert({ post_id: post_id, file_id: file_id, user_id: userId, post_type:1, caption_text: caption})
+            .insert({ post_id: post_id, file_id: file_id, user_id: userId, post_type:1, caption_text: caption, rpe_value:rpeValue})
             .throwOnError();
 
         setSelectedFile(null);
@@ -92,11 +96,15 @@ export default function DefaultPost({ supabase, session }) {
             {errorMessage && <div style={{ color: 'red' }}>{errorMessage}</div>}
             {selectedFile && <div>Selected file: {selectedFile.name}</div>}
         </div>
-
+        <div className="rpeInput">
+            <input type="range" id="rpe" name="rpe" min="0" max="11" onChange={handleRpeInput} />
+            <label for="rpe">RPE Value</label>
+        </div>
         <br />
         <div className="imagePreview">
             {previewUrl && <img src={previewUrl} alt="Image Preview" style={{ maxHeight:"200px", marginTop: '10px' }} />}
         </div>
+   
         <div >
             <textarea className="captionInput"
                 type="text"

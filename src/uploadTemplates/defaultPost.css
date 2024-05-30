@@ -97,3 +97,11 @@ h1{
     text-wrap:wrap;
 
 }
+.rpeInput{
+    left: 50%;
+    transform: translateX(-50%);
+    position:absolute;
+    align-items: center;
+    display:inline-flex; 
+    margin:2px;
+}

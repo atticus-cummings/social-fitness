@@ -12,15 +12,15 @@ export default function TextPost({ supabase, session }) {
     const [selectedFile, setSelectedFile] = useState(null);
     const [caption, setCaption] = useState('Write your post...');
     const [title, setTitle] = useState('Choose a title... ');
+    const [rpeValue, setRpeValue] = useState(null);
     //const { data, mutate } = useSWR(`image-${userId}`, async () => await fetchData());
 
 
 
 
-    const triggerFileInput = () => {
-        document.getElementById('fileInput').click();
-    };
-
+    const handleRpeInput = (event) =>{
+        setRpeValue(event.target.value);
+    }
     const handleCaptionInput = (event) => {
         setCaption(event.target.value);
     };
@@ -38,7 +38,7 @@ export default function TextPost({ supabase, session }) {
         const post_id = uuidv4();
         await supabase
             .from('posts')
-            .insert({ post_id: post_id, user_id: userId, post_type:2, caption_text: caption, title_text:title})
+            .insert({ post_id: post_id, user_id: userId, post_type:2, caption_text: caption, title_text:title, rpe_value:rpeValue})
             .throwOnError();
 
         setSelectedFile(null);
@@ -58,6 +58,10 @@ export default function TextPost({ supabase, session }) {
                 value={title}
                 onChange={handleTitleInput}
             />
+        </div>
+        <div className="rpeInput">
+            <input type="range" id="rpe" name="rpe" min="0" max="11" onChange={handleRpeInput} />
+            <label for="rpe">RPE Value</label>
         </div>
         <div >
             <textarea className="textPostTextInput"
