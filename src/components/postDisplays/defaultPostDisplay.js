@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import useSWR from 'swr';
 import 'react-photo-view/dist/react-photo-view.css';
-import "./feed.css";
+import "../feed.css";
+import "./post.css";
 import { v4 as uuidv4 } from 'uuid';
 import { FaDumbbell } from "react-icons/fa";
-import TimeAgo from "./timeAgo";
+import TimeAgo from "../timeAgo";
 export default function DefaultPostDisplay({ supabase, session, item, index }) {
     const [comment, setComment] = useState('');
     const userId = session.user.id

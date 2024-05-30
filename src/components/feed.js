@@ -3,8 +3,8 @@ import useSWR from 'swr';
 import 'react-photo-view/dist/react-photo-view.css';
 import "./feed.css"
 
-import DefaultPostDisplay from "./defaultPostDisplay";
-import TextPostDisplay from "./textPostDisplay";
+import DefaultPostDisplay from "./postDisplays/defaultPostDisplay";
+import TextPostDisplay from "./postDisplays/textPostDisplay";
 
 
 
