@@ -11,6 +11,8 @@ export default function Followers({ supabase, session }) {
     const [file, setFile] = useState('');
     const [ppUrl, setPpUrl] = useState('');
     const [isFollowing, setIsFollowing] = useState(false);
+    const [showProfile, setShowProfile] = useState(false);
+    const [fitnessStats, setFitnessStats] = useState(null);
 
     const { data, mutate } = useSWR(`follower-${userId}`, fetchData);
 
@@ -42,6 +44,8 @@ export default function Followers({ supabase, session }) {
                 setFile('');
                 setPpUrl('');
                 setIsFollowing(false);
+                setShowProfile(false);
+                setFitnessStats(null);
             } else {
                 setSearchedUserID(searchedUser[0].id);
                 setSearchedUserName(searchQuery);
@@ -106,9 +110,20 @@ export default function Followers({ supabase, session }) {
         }
     }
 
-    useEffect(() => {
-        console.log("PPURL:", ppUrl);
-    }, [ppUrl]);
+    async function fetchFitnessStats() {
+        try {
+            const { data: stats, error: statsError } = await supabase
+                .from('fitness_stats')
+                .select('*')
+                .eq('user_id', searchedUserID)
+                .single();
+            if (statsError) throw statsError;
+            setFitnessStats(stats);
+            setShowProfile(true);
+        } catch (error) {
+            console.error("Error fetching fitness stats:", error);
+        }
+    }
 
     const handleInputChange = (event) => {
         setSearchQuery(event.target.value);
@@ -157,12 +172,31 @@ export default function Followers({ supabase, session }) {
                         {searchedUserID.length === 0 ? <>No Data</> : searchedUserName}
                     </div>
                     {searchedUserID.length > 0 && (
-                        <button onClick={toggleFollow}>
-                            {isFollowing ? 'Unfollow' : 'Follow'}
-                        </button>
+                        <>
+                            <button onClick={toggleFollow}>
+                                {isFollowing ? 'Unfollow' : 'Follow'}
+                            </button>
+                            {isFollowing && (
+                                <button onClick={fetchFitnessStats}>
+                                    View Profile
+                                </button>
+                            )}
+                        </>
                     )}
                 </div>
             </div>
+            {showProfile && fitnessStats && (
+                <div id="fitness-stats">
+                    <h2>Fitness Stats for {searchedUserName}</h2>
+                    <p>Deadlift: {fitnessStats.deadlift[fitnessStats.deadlift.length - 1]}</p>
+                    <p>Bench: {fitnessStats.bench[fitnessStats.bench.length - 1]}</p>
+                    <p>Mile Time: {fitnessStats.mile_time[fitnessStats.mile_time.length - 1]}</p>
+                    <p>Pushups: {fitnessStats.pushups[fitnessStats.pushups.length - 1]}</p>
+                    <p>Pullups: {fitnessStats.pullups[fitnessStats.pullups.length - 1]}</p>
+                    <p>Weight: {fitnessStats.weight[fitnessStats.weight.length - 1]}</p>
+                    <p>Height: {fitnessStats.height[fitnessStats.height.length - 1]}</p>
+                </div>
+            )}
         </>
     );
 }
