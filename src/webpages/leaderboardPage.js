@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Taskbar } from "../components/taskbar";
 
 export default function LeaderBoard({ supabase, session }) {
     const [leaderboard, setLeaderboard] = useState({
@@ -125,6 +126,7 @@ export default function LeaderBoard({ supabase, session }) {
                 <h2>Height</h2>
                 <p>User: {leaderboard.height.user} - Value: {leaderboard.height.value}</p>
             </div>
+        <Taskbar/>
         </div>
     );
 }

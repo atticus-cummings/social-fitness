@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import useSWR from 'swr';
+import { Taskbar } from "../components/taskbar";
+import "./followersPage.css"
 
 export default function Followers({ supabase, session }) {
     const userId = session.user.id;
@@ -221,6 +223,7 @@ export default function Followers({ supabase, session }) {
                     )}
                 </div>
             )}
+            <Taskbar/>
         </>
     );
 }
