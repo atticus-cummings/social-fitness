@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Taskbar } from "../components/taskbar";
 import useSWR from 'swr';
 import "./followersPage.css"
@@ -8,14 +8,13 @@ export default function Followers({ supabase, session }) {
 
     const [followers, setFollowers] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
-    const [searchedUserID, setSearchedUserID] = useState('')
-    const [searchedUserName, setSearchedUserName] = useState('')
-    const [file, setFile] = useState('')
-    const [ppUrl, setppUrl] = useState('')
+    const [searchedUserID, setSearchedUserID] = useState('');
+    const [searchedUserName, setSearchedUserName] = useState('');
+    const [file, setFile] = useState('');
+    const [ppUrl, setPpUrl] = useState('');
 
     const { data, mutate } = useSWR(`follower-${userId}`, fetchData);
 
-    //gets the users that are currently being followed
     async function fetchData() {
         try {
             const { data: followingUserIds } = await supabase
@@ -30,56 +29,56 @@ export default function Followers({ supabase, session }) {
         }
     }
 
-    //finds users by username
     async function searchUser() {
-        //based on the users search query, search the database for any users with a given user_name
-        try{
+        try {
             const { data: searchedUser, error: searchError } = await supabase
                 .from('profiles')
                 .select('id')
                 .eq('username', searchQuery)
-                .throwOnError()
-                //console.log(searchedUser)
-            setSearchedUserID(searchedUser[0].id)
-            console.log(searchedUserID)
-            setSearchedUserName(searchQuery)
+                .throwOnError();
 
-        } catch (searchError) {
-            console.error("Error in searching the user:", searchError);
-            //if its null, just set it to the empty string 
-            setSearchedUserID("")
-            setFile('default.png')
-        }
-        //if the user exists, get their profile picture (pp) :)
-        if (searchedUserID != ""){
-            console.log("HERE:", searchedUserID)
-            const {data: ppFile, error: ppurlError} = await supabase
-                .from('avatars')
-                .select('file_name')
-                .eq('user_id', searchedUserID)
-                .throwOnError()
-            if (ppFile.length === 0) {
-                //The user has no profile photo !
-                setFile('default.png')
+            if (searchedUser.length === 0) {
+                // User not found
+                setSearchedUserID('');
+                setSearchedUserName('');
+                setFile('');
+                setPpUrl('');
+            } else {
+                setSearchedUserID(searchedUser[0].id);
+                setSearchedUserName(searchQuery);
+
+                const { data: ppFile, error: ppFileError } = await supabase
+                    .from('avatars')
+                    .select('file_name')
+                    .eq('user_id', searchedUser[0].id)
+                    .throwOnError();
+
+                if (ppFile.length === 0) {
+                    // User has no profile photo
+                    setFile('default.png');
+                    setPpUrl('');
+                } else {
+                    setFile(ppFile[0].file_name);
+                    const { data: signedUrl, error: signedUrlError } = await supabase
+                        .storage
+                        .from('media')
+                        .createSignedUrl(`/avatars/${ppFile[0].file_name}`, 60);
+
+                    if (signedUrlError) {
+                        console.error("Error creating signed URL:", signedUrlError);
+                    } else {
+                        setPpUrl(signedUrl.signedUrl);
+                    }
+                }
             }
-            else{
-                console.log(ppFile)
-                setFile(ppFile[0].file_name);
-                console.log("HERE", ppFile[0].file_name)
-            }
+        } catch (error) {
+            console.error("Error in searching the user:", error);
         }
-        console.log("FILE:", file); 
-        if (file){
-            const { data: ppUrl, error: ppUrlError } = await supabase
-                .storage
-                .from('media')
-                .createSignedUrl(`/avatars/${file}`, 60) 
-            setppUrl(ppUrl.signedUrl)
-        }
-        console.log("PPURL:", ppUrl);
     }
 
-    //document.getElementById("myBtn").addEventListener("click", searchUser); 
+    useEffect(() => {
+        console.log("PPURL:", ppUrl);
+    }, [ppUrl]);
 
     const handleInputChange = (event) => {
         setSearchQuery(event.target.value);
@@ -87,10 +86,9 @@ export default function Followers({ supabase, session }) {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        //console.log("Search query:", searchQuery);
         searchUser();
     };
-    //console.log(searchedUserID)
+
     return (
         <>
             {followers.length === 0 ? (
@@ -126,7 +124,7 @@ export default function Followers({ supabase, session }) {
             <div id="search-result">
                 <div id="user-info">
                     <p> </p>
-                    <img src={ppUrl} alt="" width="100" ></img>
+                    <img src={ppUrl} alt="" width="100" />
                     <div id="caption">
                         {searchedUserID.length === 0 ? <>No Data</> : searchedUserName}
                     </div>
