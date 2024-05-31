@@ -1,7 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Taskbar } from "../components/taskbar";
+import React, { useState, useEffect } from 'react';
 import useSWR from 'swr';
-import "./followersPage.css"
 
 export default function Followers({ supabase, session }) {
     const userId = session.user.id;
@@ -12,6 +10,7 @@ export default function Followers({ supabase, session }) {
     const [searchedUserName, setSearchedUserName] = useState('');
     const [file, setFile] = useState('');
     const [ppUrl, setPpUrl] = useState('');
+    const [isFollowing, setIsFollowing] = useState(false);
 
     const { data, mutate } = useSWR(`follower-${userId}`, fetchData);
 
@@ -23,7 +22,7 @@ export default function Followers({ supabase, session }) {
                 .eq('user_id', userId)
                 .throwOnError();
 
-            setFollowers(followingUserIds);
+            setFollowers(followingUserIds.map(follow => follow.following_user_id));
         } catch (error) {
             console.error("Error fetching data:", error);
         }
@@ -38,14 +37,15 @@ export default function Followers({ supabase, session }) {
                 .throwOnError();
             console.log(searchedUser)
             if (searchedUser.length === 0) {
-                // User not found
                 setSearchedUserID('');
                 setSearchedUserName('');
                 setFile('');
                 setPpUrl('');
+                setIsFollowing(false);
             } else {
                 setSearchedUserID(searchedUser[0].id);
                 setSearchedUserName(searchQuery);
+                setIsFollowing(followers.includes(searchedUser[0].id));
 
                 const { data: ppFile, error: ppFileError } = await supabase
                     .from('avatars')
@@ -54,7 +54,6 @@ export default function Followers({ supabase, session }) {
                     .throwOnError();
 
                 if (ppFile.length === 0) {
-                    // User has no profile photo
                     setFile('default.png');
                     const { data: signedUrl, error: signedUrlError } = await supabase
                         .storage
@@ -85,6 +84,28 @@ export default function Followers({ supabase, session }) {
         }
     }
 
+    async function toggleFollow() {
+        try {
+            if (isFollowing) {
+                await supabase
+                    .from('followers')
+                    .delete()
+                    .eq('user_id', userId)
+                    .eq('following_user_id', searchedUserID)
+                    .throwOnError();
+            } else {
+                await supabase
+                    .from('followers')
+                    .insert({ user_id: userId, following_user_id: searchedUserID })
+                    .throwOnError();
+            }
+            setIsFollowing(!isFollowing);
+            mutate();
+        } catch (error) {
+            console.error("Error in toggling follow:", error);
+        }
+    }
+
     useEffect(() => {
         console.log("PPURL:", ppUrl);
     }, [ppUrl]);
@@ -103,7 +124,6 @@ export default function Followers({ supabase, session }) {
             {followers.length === 0 ? (
                 <>
                     <h1>YOU HAVE NO FOLLOWERS, LOSER</h1>
-                    <Taskbar />
                 </>
             ) : (
                 <>
@@ -113,7 +133,6 @@ export default function Followers({ supabase, session }) {
                             <div key={index}>{elem}</div>
                         ))}
                     </div>
-                    <Taskbar />
                 </>
             )}
             <div id="search-container">
@@ -137,6 +156,11 @@ export default function Followers({ supabase, session }) {
                     <div id="caption">
                         {searchedUserID.length === 0 ? <>No Data</> : searchedUserName}
                     </div>
+                    {searchedUserID.length > 0 && (
+                        <button onClick={toggleFollow}>
+                            {isFollowing ? 'Unfollow' : 'Follow'}
+                        </button>
+                    )}
                 </div>
             </div>
         </>
