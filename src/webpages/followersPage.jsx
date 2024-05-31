@@ -13,6 +13,7 @@ export default function Followers({ supabase, session }) {
     const [isFollowing, setIsFollowing] = useState(false);
     const [showProfile, setShowProfile] = useState(false);
     const [fitnessStats, setFitnessStats] = useState(null);
+    const [userPosts, setUserPosts] = useState([]);
 
     const { data, mutate } = useSWR(`follower-${userId}`, fetchData);
 
@@ -46,6 +47,7 @@ export default function Followers({ supabase, session }) {
                 setIsFollowing(false);
                 setShowProfile(false);
                 setFitnessStats(null);
+                setUserPosts([]);
             } else {
                 setSearchedUserID(searchedUser[0].id);
                 setSearchedUserName(searchQuery);
@@ -119,9 +121,18 @@ export default function Followers({ supabase, session }) {
                 .single();
             if (statsError) throw statsError;
             setFitnessStats(stats);
+
+            const { data: posts, error: postsError } = await supabase
+                .from('posts')
+                .select('*')
+                .eq('user_id', searchedUserID)
+                .order('created_at', { ascending: false });
+            if (postsError) throw postsError;
+            setUserPosts(posts);
+
             setShowProfile(true);
         } catch (error) {
-            console.error("Error fetching fitness stats:", error);
+            console.error("Error fetching fitness stats or posts:", error);
         }
     }
 
@@ -186,7 +197,7 @@ export default function Followers({ supabase, session }) {
                 </div>
             </div>
             {showProfile && fitnessStats && (
-                <div id="fitness-stats">
+                <div id="profile">
                     <h2>Fitness Stats for {searchedUserName}</h2>
                     <p>Deadlift: {fitnessStats.deadlift[fitnessStats.deadlift.length - 1]}</p>
                     <p>Bench: {fitnessStats.bench[fitnessStats.bench.length - 1]}</p>
@@ -195,6 +206,19 @@ export default function Followers({ supabase, session }) {
                     <p>Pullups: {fitnessStats.pullups[fitnessStats.pullups.length - 1]}</p>
                     <p>Weight: {fitnessStats.weight[fitnessStats.weight.length - 1]}</p>
                     <p>Height: {fitnessStats.height[fitnessStats.height.length - 1]}</p>
+                    <h2>Recent Posts by {searchedUserName}</h2>
+                    {userPosts.length === 0 ? (
+                        <p>No posts to show.</p>
+                    ) : (
+                        userPosts.map(post => (
+                            <div key={post.post_id} className="post">
+                                <h3>{post.title_text}</h3>
+                                <p>{post.caption_text}</p>
+                                <p>Likes: {post.like_count}</p>
+                                <p>Posted on: {new Date(post.created_at).toLocaleString()}</p>
+                            </div>
+                        ))
+                    )}
                 </div>
             )}
         </>
