@@ -36,7 +36,7 @@ export default function Followers({ supabase, session }) {
                 .select('id')
                 .eq('username', searchQuery)
                 .throwOnError();
-
+            console.log(searchedUser)
             if (searchedUser.length === 0) {
                 // User not found
                 setSearchedUserID('');
@@ -56,7 +56,16 @@ export default function Followers({ supabase, session }) {
                 if (ppFile.length === 0) {
                     // User has no profile photo
                     setFile('default.png');
-                    setPpUrl('');
+                    const { data: signedUrl, error: signedUrlError } = await supabase
+                        .storage
+                        .from('media')
+                        .createSignedUrl(`/avatars/default.png`, 60);
+
+                    if (signedUrlError) {
+                        console.error("Error creating signed URL:", signedUrlError);
+                    } else {
+                        setPpUrl(signedUrl.signedUrl);
+                    }
                 } else {
                     setFile(ppFile[0].file_name);
                     const { data: signedUrl, error: signedUrlError } = await supabase
