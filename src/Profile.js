@@ -7,7 +7,6 @@ function Profile({ session, supabase }) {
   const [profileUrl, setProfileUrl] = useState('');
   const [previewUrl, setPreviewUrl] = useState('');
   const [message, setMessage] = useState('');
-  const [userName, setUserName] = useState('');
   const [username, setUsername] = useState('');
   const [currentUsername, setCurrentUsername] = useState('');
   const [loading, setLoading] = useState(false);
@@ -18,7 +17,8 @@ function Profile({ session, supabase }) {
     if (session && session.user) {
       setCurrentEmail(session.user.email);
       setProfileUrl(session.user.user_metadata.avatar_url || '');
-      setCurrentUsername(session.user.user_metadata.username || 'No username set');
+      // Fetch and set the current username
+      getUserName();
     }
   }, [session]);
 
@@ -54,7 +54,7 @@ function Profile({ session, supabase }) {
       .from('profiles')
       .update({ username: username })
       .match({ id: userId });
-
+    console.log("USERNAME:", username)
     if (error) {
       setMessage(`Failed to update username: ${error.message}`);
     } else {
@@ -63,6 +63,25 @@ function Profile({ session, supabase }) {
     }
     setLoading(false);
   };
+
+  async function getUserName() {
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('username')
+        .eq('id', userId)
+        .single();
+      if (error) {
+        console.error('Error fetching username:', error.message);
+        setCurrentUsername('No username set');
+      } else {
+        setCurrentUsername(data.username || 'No username set');
+      }
+    } catch (error) {
+      console.error('Error fetching username:', error.message);
+      setCurrentUsername('No username set');
+    }
+  }
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -119,7 +138,7 @@ function Profile({ session, supabase }) {
       .throwOnError()
   };
 
-  async function fetchData(){
+  async function fetchData() {
     const { data: file_name, error: fileError } = await supabase
       .from('avatars')
       .select('file_name') 
