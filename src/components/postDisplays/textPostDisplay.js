@@ -7,6 +7,7 @@ import { v4 as uuidv4 } from 'uuid';
 import TimeAgo from './displayTimestamp';
 import DisplayLikes from "./displayLikes";
 import DisplayComments from "./displayComments";
+import DisplayRPE from "./displayRPE";
 
 export default function TextPostDisplay({ supabase, session, item, index }) {
     const [comment, setComment] = useState('');
@@ -23,7 +24,7 @@ export default function TextPostDisplay({ supabase, session, item, index }) {
             <div className='postHeader'>
                 <div className="username">User: {item.username} <TimeAgo timestamp={item.timestamp} /></div>
                 
-                <div className="rpeDisplay">{item.rpe !== null && item.rpe}</div>
+                <DisplayRPE className="rpe" item ={item}/>
             </div>
             <div className="postTitle">{item.title}</div>
             <div className="textPostCaption">{item.caption}</div>

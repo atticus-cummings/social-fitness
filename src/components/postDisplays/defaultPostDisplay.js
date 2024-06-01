@@ -7,16 +7,17 @@ import { v4 as uuidv4 } from 'uuid';
 
 import TimeAgo from "./displayTimestamp";
 import DisplayLikes from "./displayLikes";
-import DisplayComments from "./displayComments"
+import DisplayComments from "./displayComments";
+import DisplayRPE from "./displayRPE";
 export default function DefaultPostDisplay({ session,supabase, item, index }) {
     
     return (
         <div className='post' key={index}>
             <div className="postHeader">
             <div className="username">User: {item.username} <TimeAgo timestamp={item.timestamp} /></div>
-            <div className="rpeDisplay">{item.rpe !== null && item.rpe}</div>
+                <DisplayRPE className="rpe" item ={item}/>
             </div>
-            <img src={item.signedUrl} style={{ width: '600px' }} className='image' />
+            <img src={item.signedUrl} className='image' />
             <DisplayLikes session={session} supabase={supabase} item={item} index={index}/>
             <div className="caption">{item.caption}</div>
             <DisplayComments session={session} supabase={supabase} item={item} index={index}/>
