@@ -1,0 +1,31 @@
+.leaderboard{
+    background-color: var(--green3);
+
+}
+.leaderStat{
+    display:inline-flex;
+    margin: 0px;
+    padding: 5px;
+    font-size: 25px;
+    width:100%;
+    border: 1px solid black;
+}
+.category{
+    font-weight:bold;
+    font-size: 20;
+    margin-right:5px;
+
+}
+.userdisplay{
+    position:absolute;
+    left: 150px;
+    margin:0px;
+    height:100%;
+    font-style: italic;
+
+}
+.date{
+    position:absolute;
+    left:550px;
+    font-size: 15px;
+}

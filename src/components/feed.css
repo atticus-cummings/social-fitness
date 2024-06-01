@@ -1,5 +1,15 @@
+:root {
+  --green1: #49fe7c;
+  --green2: rgb(0, 114, 0);
+  --green3: rgb(189, 251, 189);
+  --color2: #cbcbcb;
+  --color3: rgb(96, 96, 96);
+  --color4: rgb(226, 226, 226);
+}
+
+
 .socialFeed {
-  background-color: rgb(68, 220, 83);
+  background-color: var(--color3);
   padding-bottom: 80px;
   padding-top: 15px;
   display: flex;

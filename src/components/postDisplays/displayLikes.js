@@ -30,7 +30,7 @@ export default function DisplayLikes({session, supabase, item, index}) {
     return(
     <div>
         <button className="likeButton" onClick={() => handleLike(item.likes, item.post_id, item.liked, item.likedPosts)}>
-            <FaDumbbell /> &nbsp; {item.likes === 0 ? 'Give this post a PUMP' : (item.likes > 0 && item.likes)}
+            <FaDumbbell style={{ fontSize: '24px'}} /> &nbsp; {item.likes === 0 ? 'Give this post a PUMP' : (item.likes > 0 && item.likes)}
         </button>
     </div>
     );

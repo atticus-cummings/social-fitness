@@ -22,10 +22,10 @@ export default function TextPostDisplay({ supabase, session, item, index }) {
         <div className='post' key={index}>
             <div className='postHeader'>
                 <div className="username">User: {item.username} <TimeAgo timestamp={item.timestamp} /></div>
-                <div className="postTitle">{item.title}</div>
+                
                 <div className="rpeDisplay">{item.rpe !== null && item.rpe}</div>
             </div>
-
+            <div className="postTitle">{item.title}</div>
             <div className="textPostCaption">{item.caption}</div>
             <DisplayLikes session={session} supabase={supabase} item={item} index={index} />
             <DisplayComments session={session} supabase={supabase} item={item} index={index} />

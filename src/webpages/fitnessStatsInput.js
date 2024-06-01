@@ -140,7 +140,7 @@ export default function FitnessStats({ supabase, session }) {
                 Height
                 <input className="fitnessInput" type="text" id="height" name="height" value={height} onChange={(event) => setHeight(event.target.value)} />
             </div>
-            <div className="submitButton">
+            <div className="submitFitnessStats">
                 <button onClick={() => handleSubmit(userData)}>Post</button>
             </div>
         </div>
