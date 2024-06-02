@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEfect} from 'react';
 import useSWR from 'swr';
 import 'react-photo-view/dist/react-photo-view.css';
 import "./feed.css"
@@ -62,33 +62,16 @@ export default function Feed({ supabase, session }) {
 
             if (postMetadataError) throw postMetadataError;
             //   console.log("Metadata:", fileMetadata)
+          
             // Sort metadata by creation date (latest first)
             const sortedMetadata = postMetadata.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
             //  console.log("Sorted Metadata:", sortedMetadata);
 
-
             /* =================    Define Array of Post ids   ================= */
             const ids = sortedMetadata.map(item => item.post_id);
 
-            const postIdUserIdMap = sortedMetadata.reduce((map, item) => {
-                map[item.post_id] = item.user_id;
-                return map;
-            }, {});
-
-            //  console.log("fileIdtoUserId", fileIdUserIdMap);
-
-            const postIdFileIdMap = sortedMetadata.reduce((map, item) => {
-                map[item.post_id] = item.file_id;
-                return map;
-            }, {});
-
             const fileIds = sortedMetadata.map(item => item.file_id);
-            /* =================    Define Array of captions   ================= */
-            const captionsMap = sortedMetadata.reduce((map, item) => {
-                map[item.post_id] = item.caption_text;
-                return map;
-            }, {});
-            //  console.log("Captions Map:", captionsMap);
+
 
             /* #####################    Fetch Usernames  ##################### */
             const [{ data: usernameArray, error: usernameError }] = await Promise.all([
@@ -120,8 +103,6 @@ export default function Feed({ supabase, session }) {
                 commentsMap[post_id].push([comment_text, authorName, created_at]);
             }
             console.log("File-->comment map", commentsMap)
-
-
             /* #####################    Fetch Signed URLS  ##################### */
             const { data: urlData, error: urlError } = await supabase
                 .storage
