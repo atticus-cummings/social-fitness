@@ -44,6 +44,13 @@ export default function WorkoutPost({ supabase, session }) {
         }
     }, [userData]);
 
+/*
+        const js = document.querySelector('#payment');
+        const bt = document.querySelector('#bt');
+*/
+
+
+
     return (
         <div>
             <div>

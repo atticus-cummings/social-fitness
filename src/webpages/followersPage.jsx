@@ -26,8 +26,17 @@ export default function Followers({ supabase, session }) {
                 .select('following_user_id')
                 .eq('user_id', userId)
                 .throwOnError();
+            const { data: usernameArray, error: usernameError } = await supabase
+                .from('profiles')
+                .select('id, username')
 
-            setFollowers(followingUserIds.map(follow => follow.following_user_id));
+            if (usernameError) throw usernameError;
+            const usernamesMap = usernameArray.reduce((map, item) => {
+                map[item.id] = item.username;
+                return map;
+            }, {});
+
+            setFollowers(followingUserIds.map(follow => usernamesMap[follow.following_user_id]));
         } catch (error) {
             console.error("Error fetching data:", error);
         }
