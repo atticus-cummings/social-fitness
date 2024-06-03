@@ -20,16 +20,12 @@ export default function App() {
   const sessionTemp = document.cookie;
   //setSession(sessionTemp)
 
-  console.log("LOGIN DETAILS:", document.cookie)
   useEffect(() => {
     if (localStorage.getItem('sessionData')){
       setSession(JSON.parse(localStorage.getItem('sessionData')))
-      console.log(localStorage.getItem('sessionData'))
-      console.log(session)
     }
-  })
+  }, [])
   if (!session) {
-    console.log("HERE")
     return (<Login supabase={supabase} setSession={setSession}/>)
   }
   else{

@@ -25,7 +25,7 @@ export const ProfilePage = ( {session, supabase} ) => {
 
   useEffect(() => {
     if (session && session.user) {
-      setCurrentEmail(session.user.email);
+      setCurrentEmail(session.email);
       setProfileUrl(session.user.user_metadata.avatar_url || '');
       // Fetch and set the current username
       getUserName();
@@ -64,7 +64,6 @@ export const ProfilePage = ( {session, supabase} ) => {
       .from('profiles')
       .update({ username: username })
       .match({ id: userId });
-    console.log("USERNAME:", username)
     if (error) {
       setMessage(`Failed to update username: ${error.message}`);
     } else {
@@ -171,7 +170,6 @@ export const ProfilePage = ( {session, supabase} ) => {
             .from('followers')
             .select('user_id')
             .eq('user_id', userId);
-        console.log("following users", followingUserIdsData)
         if (followingError) throw followingError;
 
         const followingUserIds = followingUserIdsData.map(user => user.user_id);
@@ -184,7 +182,6 @@ export const ProfilePage = ( {session, supabase} ) => {
         // Fetch file metadata
         /* #####################    Fetch User's Liked Post list  ##################### */
             const combinedData = await FetchPostData(session,supabase,followingUserIds)
-            console.log("Combined Data:", combinedData);
             setShowProfile(true);
             setProfileData(combinedData);
     } catch (error) {
