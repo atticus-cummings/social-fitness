@@ -12,7 +12,7 @@ import { v4 as uuidv4 } from 'uuid';
 export default function Home({supabase, session}) {
 
     //get the current user id
-    const userId = session.user.id
+    const userId = session.id
     console.log("USER ID:", userId)
 
 
@@ -87,6 +87,7 @@ export default function Home({supabase, session}) {
             .insert({ id: file_id, user_id: userId})
             .throwOnError()
         setSelectedFile(null)
+        console.log("here")
         //mutate();
     }
   //  console.log("DATA HERE", data)
@@ -94,6 +95,7 @@ export default function Home({supabase, session}) {
         <div>
             <Header/>
             <Taskbar/>
+
             <Feed session={session} supabase={supabase} />
 
         </div>

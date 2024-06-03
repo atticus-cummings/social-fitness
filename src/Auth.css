@@ -1,0 +1,15 @@
+#switch-to-login{
+    display: flex;
+    justify-content: center;
+}
+
+#switch-to-register{
+    display: flex;
+    justify-content: center;
+}
+
+#login{
+    display: inline-block;
+    justify-content: center;
+    vertical-align: middle;
+}
