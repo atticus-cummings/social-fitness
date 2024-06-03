@@ -1,45 +1,49 @@
 import { FormikHelpers, useFormik } from 'formik';
+import './Auth.css'
+//import Cookies from 'js-cookie';
+import React, { useState } from 'react';
 
-export default function Login(){
+export default function Login({supabase}){
+  
     const intialValues = {
         email: '',
         password: '',
       };
-    
+      
       const onSubmit = async (
         values,
         { resetForm, setFieldError },
-      ) => {        
-        fetch('http://localhost:3030/register', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ email: values.email, password: values.password })
-        })
-        .then(response => {
-            if (response.ok) {
-                return response.text(); // or response.json() if server responds with JSON
-            }
-            throw new Error('Failed to register');
-        })
-        .then(data => {
-            console.log(data); // Handle the success response
-            alert('Registration successful');
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Registration failed');
-        });
-        console.log(values.email + values.password)
+      ) => {     
+        const {data, error} = await supabase
+          .from('profiles')
+          .select('*')
+          .match({email: values.email, password: values.password})
+          .single()
+      console.log("SESSION NULL DEBUG:", data)
+      console.log("EMAIL:", values.email)
+      console.log("pass:", values.password)
+
+      if(error)
+        console.error(error)
+      if (data === null ){
+        alert("Failure to Login");
+      }
+      else{
+        console.log("session:", data)
+        document.cookie = JSON.stringify(data);
+        console.log("DOCUMENT COOKIE:", document.cookie);
+      }
       };
+    
+    //step 1- check email and password
+
     
       const formik = useFormik({
         initialValues: intialValues,
         onSubmit,
       });
     return(
-        <div className="w-1/2" >
+        <div className="w-1/2" id="login">
         <div className="justify-center" >
         <form onSubmit={formik.handleSubmit}>
         <div className="col-span-6 sm:col-span-4">
@@ -94,7 +98,9 @@ export default function Login(){
           >
             Log In
           </button>
+        <div id='switch-to-register'>
           <a href="/register">Click here to register</a>
+        </div>
         </div>
         <div className="relative mt-8">
           <div

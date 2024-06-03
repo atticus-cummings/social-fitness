@@ -5,7 +5,7 @@ import "./feed.css"
 
 export default function Feed({ supabase, session }) {
     //get the current user id
-    const userId = session.user.id
+    const userId = session.id
     console.log("USER ID:", userId)
 
     //on certain events (not all), the homepage feed will update in real time 

@@ -1,6 +1,8 @@
 import { FormikHelpers, useFormik } from 'formik';
+import './Auth.css'
 
 export default function Register(){
+  
     const intialValues = {
         email: '',
         password: '',
@@ -42,7 +44,7 @@ export default function Register(){
         onSubmit,
       });
     return(
-        <div className="w-1/2" >
+        <div className="w-1/2" id="register">
         <div className="justify-center" >
         <form onSubmit={formik.handleSubmit}>
         <div className="col-span-6 sm:col-span-4">
@@ -140,7 +142,9 @@ export default function Register(){
             Register
           </button>
         </div>
-        <a href="/login">Click here to Login</a>
+        <div id='switch-to-login'>
+          <a href="/login">Click here to Login</a>
+        </div>
         <div className="relative mt-8">
           <div
             className="absolute inset-0 flex items-center"
