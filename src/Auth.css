@@ -1,2 +1,19 @@
 /*comment*/
 
+#switch-to-login {
+    display: flex;
+    justify-content: center;
+}
+
+#switch-to-register {
+    display: flex;
+    justify-content: center;
+}
+
+#login {
+    display: inline;
+}
+
+#register {
+    display: inline;
+}

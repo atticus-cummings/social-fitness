@@ -1,7 +1,8 @@
 import { FormikHelpers, useFormik } from 'formik';
 import './Auth.css'
+import {Header} from "./components/header";
 
-export default function Register(){
+export default function Register({supabase}){
   
     const intialValues = {
         email: '',
@@ -13,7 +14,8 @@ export default function Register(){
       const onSubmit = async (
         values,
         { resetForm, setFieldError },
-      ) => {        
+      ) => {       
+        window.globalVar++; 
         fetch('http://localhost:3030/register', {
             method: 'POST',
             headers: {
@@ -44,6 +46,8 @@ export default function Register(){
         onSubmit,
       });
     return(
+      <div>
+        <div><Header/></div>
         <div className="w-1/2" id="register">
         <div className="justify-center" >
         <form onSubmit={formik.handleSubmit}>
@@ -159,5 +163,6 @@ export default function Register(){
       </form>
       </div>
       </div>
+    </div>
     )
 }

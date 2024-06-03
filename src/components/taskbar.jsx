@@ -21,6 +21,9 @@ export const Taskbar = () => {
                     <li className="navItem">
                     <Link to ="/webpages/upload">Upload</Link>
                     </li>
+                    <li className="navItem">
+                    <Link to ="/login">Logout</Link>
+                    </li>
                 </ul>
     </nav>;
 };

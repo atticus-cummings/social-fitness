@@ -1,20 +1,24 @@
 import { FormikHelpers, useFormik } from 'formik';
 import './Auth.css'
-//import Cookies from 'js-cookie';
 import React, { useState } from 'react';
-import { doc } from 'prettier';
-import Home from './Home'
-export default function Login({supabase, setSession}){
+import {Header} from "./components/header";
+
+export default function Login({supabase, setSession, session}){
   
     const intialValues = {
         email: '',
         password: '',
       };
 
+
       const onSubmit = async (
         values,
         { resetForm, setFieldError },
-      ) => {     
+      ) => {   
+        window.globalVar++; 
+        if (session){
+          setSession(null)
+        }  
         const {data, error} = await supabase
           .from('profiles')
           .select('*')
@@ -47,6 +51,7 @@ export default function Login({supabase, setSession}){
       });
     return(
       <div>
+          <div><Header/><div/>
           <div className="w-1/2" id="login">
           <div className="justify-center" >
           <form onSubmit={formik.handleSubmit}>
@@ -121,5 +126,6 @@ export default function Login({supabase, setSession}){
         </div>
         </div> 
       </div>
+    </div>
     )
 }
