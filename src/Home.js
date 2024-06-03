@@ -12,7 +12,10 @@ import { v4 as uuidv4 } from 'uuid';
 export default function Home({supabase, session}) {
 
     //get the current user id
-    const userId = session.id
+    let userId;
+    if (session){
+        userId = session.id
+    }
     console.log("USER ID:", userId)
 
 

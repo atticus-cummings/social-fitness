@@ -4,13 +4,12 @@ import './Auth.css'
 import React, { useState } from 'react';
 import { doc } from 'prettier';
 import Home from './Home'
-export default function Login({supabase}){
+export default function Login({supabase, setSession}){
   
     const intialValues = {
         email: '',
         password: '',
       };
-      let notNullSession = false;
 
       const onSubmit = async (
         values,
@@ -32,10 +31,10 @@ export default function Login({supabase}){
       }
       else{
         console.log("session:", data)
-        document.cookie = JSON.stringify(data);
         console.log("DOCUMENT COOKIE:", document.cookie);
-        notNullSession = true;
-        console.log(notNullSession)
+        setSession(data)
+        localStorage.setItem('sessionData', JSON.stringify(data))
+        //document.cookie = JSON.stringify(session);
       }
       };
     
@@ -48,9 +47,6 @@ export default function Login({supabase}){
       });
     return(
       <div>
-        {(document.cookie && JSON.parse(document.cookie)) ? 
-          <Home supabase={supabase} session={JSON.parse(document.cookie)} />
-        :
           <div className="w-1/2" id="login">
           <div className="justify-center" >
           <form onSubmit={formik.handleSubmit}>
@@ -124,7 +120,6 @@ export default function Login({supabase}){
         </form>
         </div>
         </div> 
-        }
       </div>
     )
 }
