@@ -9,7 +9,7 @@ import DisplayLikes from "./displayLikes";
 import DisplayComments from "./displayComments";
 import DisplayRPE from "./displayRPE";
 
-export default function TextPostDisplay({ supabase, session, item, index }) {
+export default function TextPostDisplay({ supabase, session, item, index, size }) {
     const [comment, setComment] = useState('');
     const userId = session.user.id
 
@@ -20,7 +20,7 @@ export default function TextPostDisplay({ supabase, session, item, index }) {
 
 
     return (
-        <div className='post' key={index}>
+        <div className='post' key={index} style={{width:size}}>
             <div className='postHeader'>
                 <div className="username">User: {item.username} <TimeAgo timestamp={item.timestamp} /></div>
                 

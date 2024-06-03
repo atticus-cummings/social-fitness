@@ -36,7 +36,6 @@
         const { data: usernameArray, error: usernameError } = await supabase
             .from('profiles')
             .select('id, username, liked_post_id')
-            .in('id', postUserIds);
 
         if (usernameError) throw usernameError;
 

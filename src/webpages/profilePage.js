@@ -149,6 +149,7 @@ export const ProfilePage = ( {session, supabase} ) => {
   };
 
   async function fetchData() {
+    await fetchFitnessStats();
     const { data: file_name, error: fileError } = await supabase
       .from('avatars')
       .select('file_name') 
@@ -160,7 +161,7 @@ export const ProfilePage = ( {session, supabase} ) => {
         .createSignedUrl(`/avatars/${file_name[0].file_name}`, 60) 
         setProfileUrl(data.signedUrl)
     }
-    fetchFitnessStats();
+
   }
 
   async function fetchFitnessStats() {
@@ -237,16 +238,15 @@ export const ProfilePage = ( {session, supabase} ) => {
       </div>
       {message && <p>{message}</p>}
       <FitnessStatsInput session={session} supabase={supabase}/>
-
+      <div className="profilePostPage">
       {profileData === null ? <>You have no data to show!</> : profileData?.map((item, index) => (
-                <div>
-                    <>posts</>
-                    {item.post_type === 1 && <DefaultPostDisplay session={session} supabase={supabase} item={item} index={index} />}
-                    {item.post_type === 2 && <TextPostDisplay session={session} supabase={supabase} item={item} index={index} />}
+                <div className="profilePost">
+                    {item.post_type === 1 && <DefaultPostDisplay session={session} supabase={supabase} item={item} index={index} size={'600px'} />}
+                    {item.post_type === 2 && <TextPostDisplay session={session} supabase={supabase} item={item} index={index} size={'600px'} />}
                 </div>
             ))}
       <Taskbar></Taskbar>
-      
+      </div>
     </div>
   );
 }

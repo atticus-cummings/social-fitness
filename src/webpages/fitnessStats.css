@@ -19,11 +19,8 @@
 
     font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
     bottom: 60px; 
-    position:fixed;
     width: 200px;
     border: none;
-    left: 75%;
-    transform: translateX(-25%);
     background-color: lightgreen;
     color: rgb(0, 0, 0);
     border-radius: 5px; 

@@ -56,8 +56,8 @@ export default function Feed({ supabase, session }) {
         <div className='socialFeed'>
             {data === null ? <>You have no data to show!</> : data?.map((item, index) => (
                 <div>
-                    {item.post_type === 1 && <DefaultPostDisplay session={session} supabase={supabase} item={item} index={index} />}
-                    {item.post_type === 2 && <TextPostDisplay session={session} supabase={supabase} item={item} index={index} />}
+                    {item.post_type === 1 && <DefaultPostDisplay session={session} supabase={supabase} item={item} index={index} size={'700px'} />}
+                    {item.post_type === 2 && <TextPostDisplay session={session} supabase={supabase} item={item} index={index} size={'700px'} />}
                 </div>
             ))}
         </div>

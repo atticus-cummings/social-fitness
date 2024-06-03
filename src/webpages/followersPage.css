@@ -27,3 +27,19 @@
     display: flex;
     justify-content: center;
 }
+.followersHeadContent{
+    display:inline-flex;
+}
+.searchPage{
+    position:absolute;
+    border: none;
+    left: 50%;
+    transform: translateX(-50%);
+
+}
+.followerList{
+    background-color: var(--green3);
+
+    padding:20px;
+
+}

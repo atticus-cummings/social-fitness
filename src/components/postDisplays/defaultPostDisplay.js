@@ -9,10 +9,10 @@ import TimeAgo from "./displayTimestamp";
 import DisplayLikes from "./displayLikes";
 import DisplayComments from "./displayComments";
 import DisplayRPE from "./displayRPE";
-export default function DefaultPostDisplay({ session,supabase, item, index }) {
+export default function DefaultPostDisplay({ session,supabase, item, index, size}) {
     
     return (
-        <div className='post' key={index}>
+        <div className='post' key={index} style={{width:size}}>
             <div className="postHeader">
             <div className="username">User: {item.username} <TimeAgo timestamp={item.timestamp} /></div>
                 <DisplayRPE className="rpe" item ={item}/>
