@@ -3,7 +3,7 @@ import useSWR from 'swr';
 import './fitnessStats.css'
 
 export default function FitnessStats({ supabase, session }) {
-    const userId = session.user.id;
+    const userId = session.id;
     const [userData, setUserData] = useState(0);
     const [deadlift, setDeadlift] = useState(0);
     const [bench, setBench] = useState(0);

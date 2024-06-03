@@ -24,7 +24,7 @@ function UserForm({ session, supabase }) {
     const { data, error } = await supabase
       .from('profiles')
       .update({ username: username })
-      .match({ id: session.user.id });  // Use session.user.id to identify the user
+      .match({ id: session.id });  // Use session.user.id to identify the user
 
     if (error) {
       setMessage(`Failed to update username: ${error.message}`);

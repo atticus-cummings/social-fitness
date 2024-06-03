@@ -6,7 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 
 export default function TextPost({ supabase, session }) {
-    const userId = session.user.id;
+    const userId = session.id;
     console.log("USER ID:", userId);
 
     const [selectedFile, setSelectedFile] = useState(null);

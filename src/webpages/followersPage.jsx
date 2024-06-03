@@ -7,7 +7,7 @@ import DefaultPostDisplay from "../components/postDisplays/defaultPostDisplay";
 import TextPostDisplay from "../components/postDisplays/textPostDisplay";
 
 export default function Followers({ supabase, session }) {
-    const userId = session.user.id;
+    const userId = session.id;
 
     const [followers, setFollowers] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
@@ -140,15 +140,15 @@ export default function Followers({ supabase, session }) {
             setFitnessStats(stats);
 
             const { data: followingUserIdsData, error: followingError } = await supabase //this puts it in the format necessary for the FetchPostData function.
-            //--is a bit of a pain. Might want to change later 
+                //--is a bit of a pain. Might want to change later 
                 .from('followers')
                 .select('user_id')
                 .eq('user_id', searchedUserID);
             console.log("following users", followingUserIdsData)
             if (followingError) throw followingError;
-    
+
             const followingUserIds = followingUserIdsData.map(user => user.user_id);
-            followingUserIds.push(userId);
+            //followingUserIds.push(userId);
 
             /*              From feed.js                */
             // Fetch all the UUIDs of users the current user is following
@@ -157,10 +157,10 @@ export default function Followers({ supabase, session }) {
             // Fetch file metadata
             /* #####################    Fetch User's Liked Post list  ##################### */
             console.log("searched userid", searchedUserID);
-                const combinedData = await FetchPostData(session,supabase,followingUserIds)
-                console.log("Combined Data:", combinedData);
-                setShowProfile(true);
-                setProfileData(combinedData);
+            const combinedData = await FetchPostData(session, supabase, followingUserIds)
+            console.log("Combined Data:", combinedData);
+            setShowProfile(true);
+            setProfileData(combinedData);
         } catch (error) {
             console.error('Error fetching data:', error);
             return null;
@@ -194,54 +194,52 @@ export default function Followers({ supabase, session }) {
 
     return (
         <>
-            {followers.length === 0 ? (
-                <>
-                    <h1>YOU HAVE NO FOLLOWERS, LOSER</h1>
-                </>
-            ) : (
-                <>
-                    <h1>FOLLOWERS</h1>
-                    <div>
-                        {followers.map((elem, index) => (
-                            <div key={index}>{username[elem]}</div>
-                        ))}
-                    </div>
-                </>
-            )}
-            <div id="search-container">
-                <form onSubmit={handleSubmit}>
-                    <div id="search">
-                        <input
-                            id="searchbar"
-                            type="search"
-                            placeholder="&#x1F50D; Enter username"
-                            value={searchQuery}
-                            onChange={handleInputChange}
-                        />
-                        <button id="myBtn" type="submit">Submit</button>
-                    </div>
-                </form>
-            </div>
-            <div id="search-result">
-                <div id="user-info">
-                    <p> </p>
-                    <img src={ppUrl} alt="" width="100" />
-                    <div id="caption">
-                        {searchedUserID.length === 0 ? <>No Data</> : searchedUserName}
-                    </div>
-                    {searchedUserID.length > 0 && (
-                        <>
-                            <button onClick={toggleFollow}>
-                                {isFollowing ? 'Unfollow' : 'Follow'}
-                            </button>
-                            {isFollowing && (
-                                <button onClick={fetchFitnessStats}>
-                                    View Profile
-                                </button>
-                            )}
-                        </>
-                    )}
+            <h1>FOLLOWERS</h1>
+            <div className='followersHeadContent'>
+                <div className='followerList'>
+                    Following:
+                    {followers.length > 0 && followers.map((elem, index) => (
+                        <div key={index}><li>{username[elem]}</li></div>
+                    ))}
                 </div>
+                <div className='searchPage'>
+                    <div id="search-container">
+                        <form onSubmit={handleSubmit}>
+                            <div id="search">
+                                <input
+                                    id="searchbar"
+                                    type="search"
+                                    placeholder="&#x1F50D; Enter username"
+                                    value={searchQuery}
+                                    onChange={handleInputChange}
+                                />
+                                <button id="myBtn" type="submit">Submit</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div id="search-result">
+                        <div id="user-info">
+                            <p> </p>
+                            <img src={ppUrl} alt="" width="100" />
+                            <div id="caption">
+                                {searchedUserID.length === 0 ? <>No Data</> : searchedUserName}
+                            </div>
+                            {searchedUserID.length > 0 && (
+                                <>
+                                    <button onClick={toggleFollow}>
+                                        {isFollowing ? 'Unfollow' : 'Follow'}
+                                    </button>
+                                    {isFollowing && (
+                                        <button onClick={fetchFitnessStats}>
+                                            View Profile
+                                        </button>
+                                    )}
+                                </>
+                            )}
+                        </div>
+                    </div>
+                </div>
+
             </div>
             {showProfile && fitnessStats && (
                 <div id="profile">
@@ -255,12 +253,11 @@ export default function Followers({ supabase, session }) {
                     <p>Height: {fitnessStats.height[fitnessStats.height.length - 1]}</p>
                     <h2>Recent Posts by {searchedUserName}</h2>
                     {profileData === null ? <>You have no data to show!</> : profileData?.map((item, index) => (
-                <div>
-                    <>posts</>
-                    {item.post_type === 1 && <DefaultPostDisplay session={session} supabase={supabase} item={item} index={index} />}
-                    {item.post_type === 2 && <TextPostDisplay session={session} supabase={supabase} item={item} index={index} />}
-                </div>
-            ))}
+                        <div>
+                            {item.post_type === 1 && <DefaultPostDisplay session={session} supabase={supabase} item={item} index={index} size={'500px'}/>}
+                            {item.post_type === 2 && <TextPostDisplay session={session} supabase={supabase} item={item} index={index} size={'500px'} />}
+                        </div>
+                    ))}
                 </div>
             )}
             <Taskbar />

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 export default function WorkoutPost({ supabase, session }) {
-    const userId = session.user.id;
+    const userId = session.id;
     const [userData, setUserData] = useState(null);
     const [index, setIndex] = useState(0);
 
