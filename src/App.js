@@ -21,7 +21,7 @@ export default function App() {
   const sessionTemp = document.cookie;
   //setSession(sessionTemp)
 
-  // console.log("LOGIN DETAILS:", document.cookie)
+  console.log("LOGIN DETAILS:", document.cookie)
   // useEffect(() => {
   //   try{
   //     setSession(JSON.parse(document.cookie))
@@ -38,7 +38,7 @@ export default function App() {
   // //   //   data: { subscription },
   // //   // } = supabase.auth.onAuthStateChange((_event, session) => {
   // //   //   setSession(session)
-  // //   // })
+    // })
 
   // //   // return () => subscription.unsubscribe()
   // })
