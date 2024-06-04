@@ -1,12 +1,166 @@
-.profileLayout{
-    display: grid;
-    grid-template-columns: 1fr 1fr; 
-    height: 100vh;
-}
-.profilePostPage{
+/* Overall container */
+.profile-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background: #f8f9fa;
+    font-family: Arial, sans-serif;
+  }
+  
+  /* Title section */
+  .h1{
+    width: 100%;
+  }
+ 
+
+  /* Layout for sections */
+  .profile-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap; /* Allows wrapping of items */
+    width: 100%;
+    max-width: 1200px;
+  }
+  
+  .profile-info-section, .profile-update-image, .FitnessStatsInput {
+    background-color: var(--green3);
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin: 10px;
+    flex: 1 1 30%; /* Flexible basis set to ensure equal distribution */
+    display: flex;
+    flex-direction: column;
+    min-height: 300px; /* Ensures a minimum height for smaller content areas */
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 800px) {
+    .profile-content {
+      justify-content: center; /* Center items when they stack */
+    }
+  
+    .profile-info-section, .profile-update-image, .FitnessStatsTypes {
+      flex-basis: 100%; /* Each section takes full width */
+      max-width: 100%; /* Ensures no overflow */
+    }
+  }
+  
+  /* Input and button styling */
+  .input-group, .form-update {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+  }
+  
+  .input-field {
+    flex-grow: 1;
+    padding: 8px;
+    border: 2px solid #ced4da;
+    border-radius: 4px;
+    font-size: 16px;
+  }
+  
+  .btn-update {
+    padding: 8px 16px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .btn-update:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Image preview section adjustments */
+  .image-preview {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .image-preview img {
+    max-width: 100%; /* Adjusts to container width */
+    height: auto;
+    border-radius: 4px;
+  }
+  
+  .input-file {
+    margin-top: 10px;
+  }
+  
+  /* General messages */
+  .profile-message {
+    color: #dc3545;
+    font-size: 16px;
+    margin-top: 10px;
+  }
+  
+  /* Post display section */
+  .profile-posts {
+    width: 100%;
+    max-width: 600px;
+  }
+  .profilePostPage{
     display: flex;
     flex-wrap:wrap;
 
     margin: 20px; 
 }
-.profilePost{}
+  .profile-post {
+    background: #fff;
+    border-radius: 8100px;
+    margin-bottom: 20px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .fitnessCategory{
+    margin:5px;
+
+}
+
+.fitnessInput{
+    width: 100%;
+    background-color: var(--green3);
+    text-align-last: left;
+    
+}
+
+.statsPage {
+
+    background-color: var(--green3);
+    border-width: 3px;
+    border-color:black;
+  
+
+    
+    text-align: center;
+  }
+
+  .submitFitnessStats {
+    font-size: 30px;
+    
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    border: none;
+    background-color: lightgreen;
+    color: rgb(0, 0, 0);
+    border-radius: 5px; 
+
+}
+.submitFitnessStats:hover{
+    color: seagreen; 
+    transform-origin: center;
+
+}
+  
+ .submitFitnessStats{
+    text-align: center;
+    width: 100%;
+ }
