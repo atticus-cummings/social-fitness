@@ -7,6 +7,7 @@ import useSWR from 'swr';
 import FetchPostData from "../fetchPostData";
 import DefaultPostDisplay from "../components/postDisplays/defaultPostDisplay";
 import TextPostDisplay from "../components/postDisplays/textPostDisplay";
+import StatPostDisplay from "../components/postDisplays/statPostDisplay";
 
 export const ProfilePage = ( {session, supabase} ) => {
   const [email, setEmail] = useState('');
@@ -258,6 +259,7 @@ export const ProfilePage = ( {session, supabase} ) => {
                 <div className="profilePost">
                     {item.post_type === 1 && <DefaultPostDisplay session={session} supabase={supabase} item={item} index={index} size={'600px'} />}
                     {item.post_type === 2 && <TextPostDisplay session={session} supabase={supabase} item={item} index={index} size={'600px'} />}
+                    {item.post_type === 3 && <StatPostDisplay session={session} supabase={supabase} item={item} index={index} size={'600px'} />}
                 </div>
             ))}
       <Taskbar></Taskbar>

@@ -5,6 +5,7 @@ import "./followersPage.css"
 import FetchPostData from "../fetchPostData";
 import DefaultPostDisplay from "../components/postDisplays/defaultPostDisplay";
 import TextPostDisplay from "../components/postDisplays/textPostDisplay";
+import StatPostDisplay from "../components/postDisplays/statPostDisplay";
 
 export default function Followers({ supabase, session }) {
     const userId = session.id;
@@ -256,6 +257,7 @@ export default function Followers({ supabase, session }) {
                         <div>
                             {item.post_type === 1 && <DefaultPostDisplay session={session} supabase={supabase} item={item} index={index} size={'500px'}/>}
                             {item.post_type === 2 && <TextPostDisplay session={session} supabase={supabase} item={item} index={index} size={'500px'} />}
+                            {item.post_type === 3 && <StatPostDisplay session={session} supabase={supabase} item={item} index={index} size={'500px'} />}
                         </div>
                     ))}
                 </div>

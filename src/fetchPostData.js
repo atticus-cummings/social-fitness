@@ -68,6 +68,8 @@
             .from('media')
             .createSignedUrls(fileIds, 60);
 
+            
+
         if (urlError) throw urlError;
 
         // Format url data into map 
