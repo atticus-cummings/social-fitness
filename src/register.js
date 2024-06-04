@@ -14,31 +14,15 @@ export default function Register({supabase}){
       const onSubmit = async (
         values,
         { resetForm, setFieldError },
-      ) => {       
-        window.globalVar++; 
-        fetch('http://localhost:3030/register', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ email: values.email, password: values.password,
-                 first_name: values.first_name, last_name: values.last_name})
-        })
-        .then(response => {
-            if (response.ok) {
-                return response.text(); // or response.json() if server responds with JSON
-            }
-            throw new Error('Failed to register');
-        })
-        .then(data => {
-            console.log(data); // Handle the success response
-            alert('Registration successful');
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Registration failed');
-        });
-        console.log(values.email + values.password)
+      ) => { 
+        const { data, error } = await supabase
+          .from('profiles')
+          .insert({email: values.email, password: values.password, first_name: values.first_name, last_name: values.last_name})
+        if (error)
+          alert("Registration Failed")
+        else{
+          alert("Successful Registration")
+        }
       };
     
       const formik = useFormik({

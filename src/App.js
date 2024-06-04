@@ -17,9 +17,9 @@ const supabase = createClient('https://lrklhdizqhzzuqntsdnn.supabase.co', 'eyJhb
 
 
 export default function App() {
-  window.globalVar = 0;
+  localStorage.setItem('clickCount', 0)
   const [session, setSession] = useState(null)
-  const sessionTemp = document.cookie;
+  //const sessionTemp = document.cookie;
   //setSession(sessionTemp)
 
   useEffect(() => {
@@ -29,7 +29,8 @@ export default function App() {
   }, [])
   if (!session) {
     //return <Register supabase={supabase}/>
-    return ((window.globalVar%2===0) ? (<Login supabase={supabase} setSession={setSession} session={session}/>) : <Register supabase={supabase}/>)
+    const temp = localStorage.getItem('clickCount')
+    return (false ? (<Login supabase={supabase} setSession={setSession} session={session}/>) : <Register supabase={supabase}/>)
   }
   else{
     return (

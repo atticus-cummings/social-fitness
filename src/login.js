@@ -15,18 +15,20 @@ export default function Login({supabase, setSession, session}){
         values,
         { resetForm, setFieldError },
       ) => {   
-        window.globalVar++; 
+        const temp = localStorage.getItem('clickCount')
+        localStorage.setItem('clickCount', temp++)   
         if (session){
           setSession(null)
+          console.log("SESSION SET FROM SESSION TO NULL:", session)
         }  
         const {data, error} = await supabase
           .from('profiles')
           .select('*')
           .match({email: values.email, password: values.password})
           .single()
-      console.log("SESSION NULL DEBUG:", data)
-      console.log("EMAIL:", values.email)
-      console.log("pass:", values.password)
+      // console.log("SESSION NULL DEBUG:", data)
+      // console.log("EMAIL:", values.email)
+      // console.log("pass:", values.password)
 
       if(error)
         console.error(error)
