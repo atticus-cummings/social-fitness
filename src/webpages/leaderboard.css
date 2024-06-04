@@ -26,6 +26,14 @@
 }
 .date{
     position:absolute;
-    left:550px;
+    left:600px;
     font-size: 15px;
+}
+
+.displayValue{
+    position:absolute;
+    left: 400px;
+    margin:0px;
+    height:100%;
+    font-style: italic;
 }
