@@ -4,10 +4,10 @@ import useSWR from 'swr';
 import "./post.css";
 import TimeAgo from "./displayTimestamp"
 
-export default function DisplayLikes({session, supabase, item, index}) {
+export default function DisplayLikes({ session, supabase, item, index }) {
     const [comment, setComment] = useState('');
     const userId = session.id
-   
+
     //Set comment value
     const handleCommentInput = (event) => {
         setComment(event.target.value);
@@ -25,11 +25,18 @@ export default function DisplayLikes({session, supabase, item, index}) {
 
     };
 
-    return(
+    return (
         <div>
             {item.comments === null ? (<>Be the first to comment!</>) : (item.comments.map((commentItem, commentIndex) => (
                 <div className="comment" key={commentIndex}>
-                    <div>{commentItem[1]}: {commentItem[0]} <TimeAgo timestamp={commentItem[2]} /></div>
+                    <div>
+                        <div className='commentHeader'>
+                            <img src={commentItem[3]} className='commentpfp' />
+                            {commentItem[1]}:&nbsp; 
+                            {commentItem[0]}
+                        </div>
+                        <TimeAgo timestamp={commentItem[2]} />
+                    </div>
 
                 </div>
             ))
