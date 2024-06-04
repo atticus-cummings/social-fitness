@@ -24,11 +24,12 @@ export const ProfilePage = ( {session, supabase} ) => {
   const userId = session.id;
 
   useEffect(() => {
+    console.log("Session data: ", session);
     if (session && session.user) {
       setCurrentEmail(session.email);
       setProfileUrl(session.user.user_metadata.avatar_url || '');
       // Fetch and set the current username
-      getUserName();
+
     }
   }, [session]);
 
@@ -72,7 +73,6 @@ export const ProfilePage = ( {session, supabase} ) => {
     }
     setLoading(false);
   };
-
   async function getUserName() {
     try {
       const { data, error } = await supabase
@@ -85,12 +85,31 @@ export const ProfilePage = ( {session, supabase} ) => {
         setCurrentUsername('No username set');
       } else {
         setCurrentUsername(data.username || 'No username set');
+        console.log("Username set to state: ", data.username);
       }
     } catch (error) {
-      console.error('Error fetching username:', error.message);
+      console.error('Unexpected error fetching username:', error.message);
       setCurrentUsername('No username set');
     }
   }
+  async function getEmail() {
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('email')
+        .eq('id', userId)
+        .single();
+      if (error) {
+        setCurrentUsername('No username set');
+      } else {
+        setCurrentEmail(data.email || 'No username set');
+
+      }
+    } catch (error) {
+      setCurrentUsername('No username set');
+    }
+  }
+  
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -148,6 +167,8 @@ export const ProfilePage = ( {session, supabase} ) => {
   };
 
   async function fetchData() {
+    await getEmail();
+    await getUserName();
     await fetchFitnessStats();
     const { data: file_name, error: fileError } = await supabase
       .from('avatars')
