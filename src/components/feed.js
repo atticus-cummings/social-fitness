@@ -5,6 +5,7 @@ import "./feed.css"
 import FetchPostData from "../fetchPostData";
 import DefaultPostDisplay from "./postDisplays/defaultPostDisplay";
 import TextPostDisplay from "./postDisplays/textPostDisplay";
+import StatPostDisplay from "./postDisplays/statPostDisplay";
 
 
 
@@ -58,6 +59,7 @@ export default function Feed({ supabase, session }) {
                 <div>
                     {item.post_type === 1 && <DefaultPostDisplay session={session} supabase={supabase} item={item} index={index} size={'700px'} />}
                     {item.post_type === 2 && <TextPostDisplay session={session} supabase={supabase} item={item} index={index} size={'700px'} />}
+                    {item.post_type === 3 && <StatPostDisplay session={session} supabase={supabase} item={item} index={index} size={'700px'} />}
                 </div>
             ))}
         </div>

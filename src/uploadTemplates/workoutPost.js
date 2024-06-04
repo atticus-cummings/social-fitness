@@ -111,9 +111,6 @@ export default function WorkoutPost({ supabase, session }) {
     setSelectedFile(null);
     setCaption('');
 }
-
-
-
     useEffect(() => {
         async function fetchData() {
             try {
@@ -123,7 +120,6 @@ export default function WorkoutPost({ supabase, session }) {
                     .eq('user_id', userId)
 
                 console.log('existing stats:', userImport);
-
                 if (!userImport || userImport.length === 0) {
                     console.log("null?");
                     await supabase
@@ -152,13 +148,6 @@ export default function WorkoutPost({ supabase, session }) {
             }
         }
     }, [userData]);
-
-/*
-        const js = document.querySelector('#payment');
-        const bt = document.querySelector('#bt');
-*/
-
-
 
     return (
         <div>

@@ -20,7 +20,7 @@
 
         const { data: postMetadata, error: postMetadataError } = await supabase
             .from('posts')
-            .select('post_id, file_id, user_id, caption_text, like_count, created_at, title_text, post_type, rpe_value')
+            .select()
             .in('user_id', postUserIds);
 
         if (postMetadataError) throw postMetadataError;
@@ -72,6 +72,7 @@
 
         // Format url data into map 
         const urlMap = Object.fromEntries(urlData.map(item => [item.path, item.signedUrl]));
+        console.log("urlmap",urlMap);
 
         // Combine and Send Data
         const combinedData = sortedMetadata.map((item, index) => ({
@@ -85,10 +86,13 @@
             rpe: item.rpe_value,
             post_type: item.post_type,
             likes: item.like_count,
+            stat_value:  item.stat_value,
+            stat_name: item.stat_name,
             liked: likedPosts.includes(item.post_id),
             comments: commentsMap[item.post_id] || [],
             likedPosts: likedPosts || [],
         }));
+        console.log("combined Data", combinedData);
 
         return combinedData;
 
