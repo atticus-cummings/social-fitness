@@ -1,21 +1,21 @@
 
- export default async function FetchPostData(session, supabase, postUserIds) {
+export default async function FetchPostData(session, supabase, postUserIds) {
     try {
         const userId = session.id
         // Fetch Post Metadata
         const { data: likedPostsArray, error: likedPostsError } = await supabase
-        .from('profiles')
-        .select('liked_post_id')
-        .eq('id', userId);
+            .from('profiles')
+            .select('liked_post_id')
+            .eq('id', userId);
 
-    if (likedPostsError) throw likedPostsError;
+        if (likedPostsError) throw likedPostsError;
 
-    const likedPosts = likedPostsArray.reduce((acc, item) => {
-        if (item.liked_post_id) {
-            return acc.concat(item.liked_post_id);
-        }
-        return acc;
-    }, []);
+        const likedPosts = likedPostsArray.reduce((acc, item) => {
+            if (item.liked_post_id) {
+                return acc.concat(item.liked_post_id);
+            }
+            return acc;
+        }, []);
 
 
         const { data: postMetadata, error: postMetadataError } = await supabase
@@ -68,19 +68,50 @@
             .from('media')
             .createSignedUrls(fileIds, 60);
 
-            
-
         if (urlError) throw urlError;
 
+        const { data: pfpArray, error: ppFileError } = await supabase
+            .from('avatars')
+            .select('user_id, file_name')
+            .throwOnError();
+        console.log("pfparray",pfpArray)
+        const pfpMap = new Map();
+
+        if (pfpArray) {
+             pfpArray.forEach(async item => { //(item.user_id, item.file_name)
+                const { data: signedUrl, error: signedUrlError } = await supabase
+                    .storage
+                    .from('media')
+                    .createSignedUrl(`/avatars/${item.file_name}`, 60);
+                if (signedUrlError) {
+                    console.error("Error creating signed URL:", signedUrlError);
+                } else {
+                    pfpMap[item.user_id] = signedUrl.signedUrl;
+                }
+                console.log("signedurl",signedUrl);
+            })
+        }
+        console.log("pfpMap",pfpMap);
+        const { data: defaultpfpUrl, error: signedUrlError } = await supabase
+            .storage
+            .from('media')
+            .createSignedUrl(`/avatars/default.png`, 60);
+
+        if (signedUrlError) {
+            console.error("Error creating signed URL:", signedUrlError);
+        }
+        const defaultpfp = defaultpfpUrl.signedUrl;
+        
         // Format url data into map 
         const urlMap = Object.fromEntries(urlData.map(item => [item.path, item.signedUrl]));
-        console.log("urlmap",urlMap);
+        console.log("urlmap", urlMap);
 
         // Combine and Send Data
         const combinedData = sortedMetadata.map((item, index) => ({
             user_id: item.user_id,
             post_id: item.post_id,
             signedUrl: urlMap[item.file_id],
+            userpfp: pfpMap[item.user_id] || defaultpfp,
             username: usernamesMap[item.user_id] || '',
             caption: item.caption_text,
             timestamp: item.created_at,
@@ -88,7 +119,7 @@
             rpe: item.rpe_value,
             post_type: item.post_type,
             likes: item.like_count,
-            stat_value:  item.stat_value,
+            stat_value: item.stat_value,
             stat_name: item.stat_name,
             liked: likedPosts.includes(item.post_id),
             comments: commentsMap[item.post_id] || [],
