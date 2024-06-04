@@ -13,11 +13,7 @@ export default function LeaderBoard({ supabase, session }) {
         height: { user: '', value: 0 }
 
     });
-    const [usernames, setUsernames] = useState([]);
 
-    async function fetchUsernames() {
-
-    }
 
 
     useEffect(() => {
@@ -111,7 +107,6 @@ export default function LeaderBoard({ supabase, session }) {
 
                 setLeaderboard(latestValues);
                 //  setUsernames(fetchUsernames());
-                console.log("usernames", usernames);
 
             } catch (error) {
                 console.error('Error fetching leaderboard data:', error);

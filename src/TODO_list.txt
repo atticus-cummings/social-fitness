@@ -1,0 +1,10 @@
+TODO list:
+- Display profile picture on posts
+- CSS for profile section
+- Make workout post template
+- Make workout post Display
+- Allow sign out ?finished?
+- Functional register page
+- public/private page 
+- Fix login bugs? 
+
