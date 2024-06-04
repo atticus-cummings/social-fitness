@@ -162,7 +162,7 @@ export const ProfilePage = ( {session, supabase} ) => {
     await supabase.auth.refreshSession();
 
   
-  };
+  }; 
 
   async function fetchData() {
     await getEmail();
@@ -171,6 +171,7 @@ export const ProfilePage = ( {session, supabase} ) => {
     const { data: file_name, error: fileError } = await supabase
       .from('avatars')
       .select('file_name') 
+      .eq('user_id', userId)
       .throwOnError()
     if (file_name){
       const { data, error } = await supabase
@@ -209,49 +210,64 @@ export const ProfilePage = ( {session, supabase} ) => {
     }
 }
 
-  return (
-    <div className="profile">
-      <h2>Update Profile</h2>
-      <p>Current Email: {currentEmail}</p>
-      <div>
-        <input
-          type="email"
-          value={email}
-          onChange={handleEmailChange}
-          placeholder="Enter new email"
-        />
-        <button onClick={updateEmail}>Update Email</button>
-      </div>
-      <h2>Update Username</h2>
-      <p>Current Username: {currentUsername}</p>
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="username">Username:</label>
-        <input
-          type="text"
-          id="username"
-          value={username}
-          onChange={handleUsernameChange}
-          disabled={loading}
-        />
-        <button type="submit" disabled={loading || !username.trim()}>
-          Update Username
-        </button>
-      </form>
-      {profileUrl && (
-        <div>
-          <img src={profileUrl} alt="Profile" style={{ width: '100px', height: '100px' }} />
-          <p>Profile image uploaded successfully!</p>
-        </div>
-      )}
-      <div>
-        <input type="file" onChange={handleFileChange} />
-        {previewUrl && (
-          <div>
-            <img src={previewUrl} alt="Preview" style={{ width: '100px', height: '100px' }} />
-            <p>Preview image selected!</p>
+return (
+
+  <div className="top-cont">
+    <h1>PROFILE</h1>
+  <div className="profile-container">
+  
+      
+ 
+  <div className="profile-content">
+      <div className="profile-info-section">
+          <div className="profile-update-email">
+              <p className="profile-info">Current Email: {currentEmail}</p>
+              <div className="input-group">
+                  <input
+                      type="email"
+                      value={email}
+                      className="input-field"
+                      onChange={handleEmailChange}
+                      placeholder="Enter new email"
+                  />
+                  <button className="btn-update" onClick={updateEmail}>Update</button>
+              </div>
           </div>
-        )}
+
+          <div className="profile-update-username">
+            <br></br>
+              <p>Current Username: {currentUsername}</p>
+              <form className="form-update" onSubmit={handleSubmit}>
+                  <input
+                      type="text"
+                      id="username"
+                      value={username}
+                      className="input-field"
+                      onChange={handleUsernameChange}
+                      placeholder="Enter new username"
+                  />
+                  <button type="submit" className="btn-update" >
+                      Update
+                  </button>
+              </form>
+          </div>
       </div>
+
+      <div className="profile-update-image">
+          {profileUrl && (
+              <div className="image-preview">
+                  <img src={profileUrl} alt="Profile" />
+              </div>
+          )}
+          <input type="file" onChange={handleFileChange} className="input-file"/>
+          {previewUrl && (
+              <div className="image-preview">
+                  <img src={previewUrl} alt="Preview" />
+                  <p>Preview image selected!</p>
+              </div>
+          )}
+      </div>
+  </div>
       {message && <p>{message}</p>}
       <FitnessStatsInput session={session} supabase={supabase}/>
       <div className="profilePostPage">
@@ -265,26 +281,8 @@ export const ProfilePage = ( {session, supabase} ) => {
       <Taskbar></Taskbar>
       </div>
     </div>
+
+    </div>
   );
 }
 
-
-
-
-/*export const ProfilePage = ( {session, supabase} ) => {
-    return(
-        <>
-        <div>
-            <h1>PROFILE PAGE</h1>
-        </div>
-        <div className="profileLayout">
-        <Profile session={session} supabase={supabase}/>
-
-        <FitnessStatsInput session={session} supabase={supabase}/>
-        </div>
-        <Taskbar></Taskbar>
-
-        </>
-
-    )
-}*/
