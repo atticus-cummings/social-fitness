@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import useSWR from 'swr';
-import './fitnessStats.css'
+import './profile.css'
 
 export default function FitnessStats({ supabase, session }) {
     const userId = session.id;
