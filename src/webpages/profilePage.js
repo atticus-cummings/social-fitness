@@ -134,10 +134,10 @@ export const ProfilePage = ( {session, supabase} ) => {
     const filePath = `avatars/${fileName}`;
 
     setMessage('Uploading image...');
-    let { error: uploadError, data: uploadData } = await supabase
-      .storage
+    
+    let { error: uploadError, data: uploadData } = await supabase.storage
       .from('media')
-      .upload(filePath, file, { upsert: true, });
+      .update(filePath, file);
 
     if (uploadError) {
       setMessage('Failed to upload image: ' + uploadError.message);
@@ -160,10 +160,7 @@ export const ProfilePage = ( {session, supabase} ) => {
     });
     await supabase.auth.refreshSession();
 
-    const {data, error: fileNameError} = await supabase
-      .from('avatars')
-      .upsert({user_id: userId, file_name: fileName})
-      .throwOnError()
+  
   };
 
   async function fetchData() {
