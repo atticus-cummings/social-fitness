@@ -41,7 +41,6 @@ export default function TextPost({ supabase, session }) {
             .insert({ post_id: post_id, user_id: userId, post_type:2, caption_text: caption, title_text:title, rpe_value:rpeValue})
             .throwOnError();
 
-        setSelectedFile(null);
         setCaption('');
         setTitle('')
     }
