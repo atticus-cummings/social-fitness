@@ -4,7 +4,7 @@
     flex-direction: column;
     align-items: center;
     padding: 20px;
-    background: #f8f9fa;
+    background-color: var(--color3);
     font-family: Arial, sans-serif;
   }
   
@@ -24,10 +24,11 @@
     max-width: 1200px;
   }
   
-  .profile-info-section, .profile-update-image, .FitnessStatsInput {
-    background-color: var(--green3);
+  .profile-info-section, .profile-update-image, .fitnessStats {
+   background-color: white;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+   
     padding: 20px;
     margin: 10px;
     flex: 1 1 30%; /* Flexible basis set to ensure equal distribution */
@@ -42,7 +43,7 @@
       justify-content: center; /* Center items when they stack */
     }
   
-    .profile-info-section, .profile-update-image, .FitnessStatsTypes {
+    .profile-info-section, .profile-update-image {
       flex-basis: 100%; /* Each section takes full width */
       max-width: 100%; /* Ensures no overflow */
     }
@@ -87,12 +88,16 @@
   
   .image-preview img {
     max-width: 100%; /* Adjusts to container width */
+    
     height: auto;
+
+    
     border-radius: 4px;
   }
   
   .input-file {
     margin-top: 10px;
+    text-align: center;
   }
   
   /* General messages */
@@ -106,10 +111,12 @@
   .profile-posts {
     width: 100%;
     max-width: 600px;
+    align-items: center;
   }
   .profilePostPage{
     display: flex;
     flex-wrap:wrap;
+
 
     margin: 20px; 
 }
@@ -121,46 +128,7 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
   
-  .fitnessCategory{
-    margin:5px;
-
-}
-
-.fitnessInput{
-    width: 100%;
-    background-color: var(--green3);
-    text-align-last: left;
-    
-}
-
-.statsPage {
-
-    background-color: var(--green3);
-    border-width: 3px;
-    border-color:black;
   
 
-    
-    text-align: center;
-  }
-
-  .submitFitnessStats {
-    font-size: 30px;
-    
-    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
-    border: none;
-    background-color: lightgreen;
-    color: rgb(0, 0, 0);
-    border-radius: 5px; 
-
-}
-.submitFitnessStats:hover{
-    color: seagreen; 
-    transform-origin: center;
-
-}
   
- .submitFitnessStats{
-    text-align: center;
-    width: 100%;
- }
+  
