@@ -6,14 +6,20 @@
 .statsPage {
 
     
-    height: 100vh; /* Optional: to make the container full height */
-    background-color: lightcyan;
+    background-color: var(--color3);
     border-width: 3px;
     border-color:black;
     justify-content: center;
+    background-color: var(--green3);
 
   }
+.fitnessInput{
+    text-align:left;
+    width: 25%;
 
+    border: 2px;
+    
+}
   .submitFitnessStats {
     font-size: 30px;
 
@@ -31,4 +37,3 @@
     transform-origin: center;
 }
   
- 
