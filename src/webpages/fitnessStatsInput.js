@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import useSWR from 'swr';
-import './profile.css'
+import './fitnessStats.css'
 
 export default function FitnessStats({ supabase, session }) {
     const userId = session.id;
@@ -120,31 +120,31 @@ export default function FitnessStats({ supabase, session }) {
             {!gotData ? <>No Data</> :
                 <div>
                     <div className="fitnessCategory">
-                        Deadlift
+                        Deadlift<br></br> 
                         <input className="fitnessInput" type="number" id="deadlift" name="deadlift" value={deadlift} onChange={(event) => {setDeadlift(event.target.value); setSubmitted(false)}} />
                     </div >
                     <div className="fitnessCategory">
-                        Bench
+                        Bench<br></br> 
                         <input className="fitnessInput" type="number" id="bench" name="bench" value={bench} onChange={(event) => {setBench(event.target.value); setSubmitted(false)}} />
                     </div>
                     <div className="fitnessCategory">
-                        miletime
+                        miletime<br></br> 
                         <input className="fitnessInput" type="text" id="mileTime" name="mileTime" value={mileTime} onChange={(event) => {setMileTime(event.target.value); setSubmitted(false)}} />
                     </div>
                     <div className="fitnessCategory">
-                        Pushups
+                        Pushups<br></br> 
                         <input className="fitnessInput" type="number" id="pushups" name="pushups" value={pushups} onChange={(event) => {setPushups(event.target.value); setSubmitted(false)}} />
                     </div>
                     <div className="fitnessCategory">
-                        Pullups
+                        Pullups<br></br> 
                         <input className="fitnessInput" type="number" id="pullups" name="pullups" value={pullups} onChange={(event) => {setPullups(event.target.value); setSubmitted(false)}} />
                     </div>
                     <div className="fitnessCategory">
-                        Weight
+                        Weight<br></br> 
                         <input className="fitnessInput" type="number" id="weight" name="weight" value={weight} onChange={(event) => {setWeight(event.target.value); setSubmitted(false)}} />
                     </div>
                     <div className="fitnessCategory">
-                        Height
+                        Height<br></br> 
                         <input className="fitnessInput" type="text" id="height" name="height" value={height} onChange={(event) => {setHeight(event.target.value); setSubmitted(false)}} />
                     </div>
                     <div className="submitFitnessStats">
