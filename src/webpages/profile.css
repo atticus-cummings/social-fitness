@@ -4,8 +4,12 @@
     flex-direction: column;
     align-items: center;
     padding: 20px;
-    background-color: var(--color3);
+  
     font-family: Arial, sans-serif;
+  }
+
+  .top-cont {
+    background-color: var(--color3);;
   }
   
   /* Title section */
@@ -25,7 +29,7 @@
   }
   
   .profile-info-section, .profile-update-image, .fitnessStats {
-   background-color: white;
+   background-color: var(--green3);
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
    
@@ -92,7 +96,7 @@
     height: auto;
 
     
-    border-radius: 4px;
+
   }
   
   .input-file {
@@ -108,7 +112,7 @@
   }
   
   /* Post display section */
-  .profile-posts {
+  .profilePost {
     width: 100%;
     max-width: 600px;
     align-items: center;
@@ -116,17 +120,12 @@
   .profilePostPage{
     display: flex;
     flex-wrap:wrap;
+    justify-content: center;
 
 
     margin: 20px; 
 }
-  .profile-post {
-    background: #fff;
-    border-radius: 8100px;
-    margin-bottom: 20px;
-    padding: 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
+
   
   
 
