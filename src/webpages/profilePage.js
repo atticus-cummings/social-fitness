@@ -234,8 +234,27 @@ return (
               </div>
           </div>
 
-          <div className="profile-update-username">
-            <br></br>
+</div>
+
+      <div className="profile-update-image">
+          {profileUrl && (
+              <div className="image-preview">
+                  <img src={profileUrl} alt="Profile" />
+              </div>
+          )}
+          <input type="file" onChange={handleFileChange} className="input-file"/>
+          {previewUrl && (
+              <div className="image-preview">
+                  <img src={previewUrl} alt="Preview" />
+                  <p>Preview image selected!</p>
+              </div>
+          )}
+      </div>
+
+      <div className="profile-info-section">
+
+      <div className="profile-update-username">
+           
               <p>Current Username: {currentUsername}</p>
               <form className="form-update" onSubmit={handleSubmit}>
                   <input
@@ -252,24 +271,12 @@ return (
               </form>
           </div>
       </div>
-
-      <div className="profile-update-image">
-          {profileUrl && (
-              <div className="image-preview">
-                  <img src={profileUrl} alt="Profile" />
-              </div>
-          )}
-          <input type="file" onChange={handleFileChange} className="input-file"/>
-          {previewUrl && (
-              <div className="image-preview">
-                  <img src={previewUrl} alt="Preview" />
-                  <p>Preview image selected!</p>
-              </div>
-          )}
       </div>
+      
   </div>
+          
       {message && <p>{message}</p>}
-      <FitnessStatsInput session={session} supabase={supabase}/>
+      <center><FitnessStatsInput session={session} supabase={supabase}/></center>
       <div className="profilePostPage">
       {profileData === null ? <>You have no data to show!</> : profileData?.map((item, index) => (
                 <div className="profilePost">
@@ -282,7 +289,7 @@ return (
       </div>
     </div>
 
-    </div>
+ 
   );
 }
 
