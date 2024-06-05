@@ -51,7 +51,7 @@ export const ProfilePage = ( {session, supabase} ) => {
       email: email
     });
     if (error) {
-      setMessage('Failed to update email: ' + error.message);
+      // setMessage('Failed to update email: ' + error.message);
     } else {
       setMessage('Email updated successfully. Please check your inbox to verify your new email.');
       setCurrentEmail(email);
@@ -60,16 +60,16 @@ export const ProfilePage = ( {session, supabase} ) => {
 
   const updateUsername = async () => {
     setLoading(true);
-    setMessage('');
+    // setMessage('');
 
     const { data, error } = await supabase
       .from('profiles')
       .update({ username: username })
       .match({ id: userId });
     if (error) {
-      setMessage(`Failed to update username: ${error.message}`);
+      // setMessage(`Failed to update username: ${error.message}`);
     } else {
-      setMessage('Username updated successfully!');
+      // setMessage('Username updated successfully!');
       setCurrentUsername(username);
     }
     setLoading(false);
@@ -117,7 +117,7 @@ export const ProfilePage = ( {session, supabase} ) => {
     if (session) {
       updateUsername();
     } else {
-      setMessage('No user is logged in.');
+      // setMessage('No user is logged in.');
     }
   };
 
@@ -134,14 +134,14 @@ export const ProfilePage = ( {session, supabase} ) => {
     const fileName = `${userId}.${fileExt}`;
     const filePath = `avatars/${fileName}`;
 
-    setMessage('Uploading image...');
+    // setMessage('Uploading image...');
     
     let { error: uploadError, data: uploadData } = await supabase.storage
       .from('media')
       .update(filePath, file);
 
     if (uploadError) {
-      setMessage('Failed to upload image: ' + uploadError.message);
+      // setMessage('Failed to upload image: ' + uploadError.message);
       console.error(uploadError)
       return;
     }
@@ -149,12 +149,12 @@ export const ProfilePage = ( {session, supabase} ) => {
     const { publicURL, error: urlError } = await supabase.storage.from('media').getPublicUrl(filePath);
 
     if (urlError) {
-      setMessage('Failed to get image URL: ' + urlError.message);
+      // setMessage('Failed to get image URL: ' + urlError.message);
       return;
     }
 
     setProfileUrl(publicURL);
-    setMessage('Profile image updated successfully.');
+    // setMessage('Profile image updated successfully.');
 
     await supabase.auth.updateUser({
       data: { avatar_url: publicURL }
