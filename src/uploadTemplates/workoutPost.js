@@ -8,7 +8,8 @@ export default function WorkoutPost({ supabase, session }) {
     const userId = session.id;
     const [userData, setUserData] = useState(null);
     const [index, setIndex] = useState(0);
-
+    const [uploading,setUploading] = useState(false);
+    const [uploaded, setUploaded]= useState(false);
     const statOptions = ['bench','deadlift','mile_time','pullups','pushups','weight','height'];
     const [selectedFile, setSelectedFile] = useState(null);
     const [caption, setCaption] = useState('Write a caption...');
@@ -45,6 +46,9 @@ export default function WorkoutPost({ supabase, session }) {
     };
 
     const handleSubmit = async () => {
+        if(uploading === true){
+            return;
+        }
             await uploadPost(selectedFile, caption);
 
     };
@@ -90,15 +94,12 @@ export default function WorkoutPost({ supabase, session }) {
             .from('posts')
             .insert({ post_id: post_id, file_id: file_id, user_id: userId, post_type:3, caption_text: caption, rpe_value:rpeValue,  stat_value:statVals, stat_name:statNames })
             .throwOnError();
-        setSelectedFile(null);
-        setCaption('');
     } else{
         await supabase
             .from('posts')
             .insert({ post_id: post_id, user_id: userId, post_type:3, caption_text: caption, rpe_value:rpeValue, stat_value:statVals, stat_name:statNames })
             .throwOnError();
-        setSelectedFile(null);
-        setCaption('');
+
     }
     for (const stat of statOptions) {
         const checkbox = document.getElementById(stat);
@@ -110,6 +111,8 @@ export default function WorkoutPost({ supabase, session }) {
     setPreviewUrl(null);
     setSelectedFile(null);
     setCaption('');
+    setUploading(false);
+    setUploaded(true);
 }
     useEffect(() => {
         async function fetchData() {
@@ -171,6 +174,8 @@ export default function WorkoutPost({ supabase, session }) {
             <input type="range" id="rpe" name="rpe" min="0" max="11" onChange={handleRpeInput} />
             <label for="rpe">RPE Value: {rpeValue}</label>
         </div>
+        <br />
+        <div className="uploadStatus">{uploading ? <>uploading...</>: <>{uploaded ? <>Uploaded!</> : <></>}</> }</div>
         <br />
         <div className="imagePreview">
             {previewUrl && <img src={previewUrl} alt="Image Preview" style={{ maxHeight:"200px", marginTop: '10px' }} />}

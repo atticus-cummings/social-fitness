@@ -105,3 +105,8 @@ h1{
     display:inline-flex; 
     margin:2px;
 }
+.uploadStatus{
+    position:absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}

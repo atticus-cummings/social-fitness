@@ -8,7 +8,8 @@ import { v4 as uuidv4 } from 'uuid';
 export default function TextPost({ supabase, session }) {
     const userId = session.id;
     console.log("USER ID:", userId);
-
+    const [uploading,setUploading] = useState(false);
+    const [uploaded, setUploaded]= useState(false);
     const [selectedFile, setSelectedFile] = useState(null);
     const [caption, setCaption] = useState('Write your post...');
     const [title, setTitle] = useState('Choose a title... ');
@@ -29,6 +30,9 @@ export default function TextPost({ supabase, session }) {
     };
 
     const handleSubmit = async () => {
+        if(uploading === true){
+            return;
+        }
         if (caption || title) {
             await uploadPost(title, caption);
         }
@@ -42,12 +46,15 @@ export default function TextPost({ supabase, session }) {
             .throwOnError();
 
         setCaption('');
-        setTitle('')
+        setTitle('');
+        setUploading(false);
+        setUploaded(true);
     }
 
 
     return(
         <div className="inside">
+            
         <div >
             <input
                 className="textPostTitleInput"
@@ -58,10 +65,14 @@ export default function TextPost({ supabase, session }) {
                 onChange={handleTitleInput}
             />
         </div>
+        <div className="uploadStatus">{uploading ? <>uploading...</>: <>{uploaded ? <>Uploaded!</> : <></>}</> }</div>
+        <br></br>
         <div className="rpeInput">
             <input type="range" id="rpe" name="rpe" min="0" max="11" onChange={handleRpeInput} />
             <label for="rpe">RPE Value: {rpeValue}</label>
         </div>
+
+        <br />
         <div >
             <textarea className="textPostTextInput"
                 type="text"

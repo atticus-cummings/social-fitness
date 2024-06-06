@@ -41,7 +41,7 @@ export default function StatPostDisplay({ session, supabase, item, index, size }
             </div>
                 <DisplayRPE className="rpe" item={item} />
             </div>
-            <div className='fitnessStats'>
+            <div className='fitnessStatsDisplay'>
                 {statsData.map((stat, idx) => (
                     <div className='statItem' key={idx}>
                         <p>{stat.statDisplay}&nbsp;{stat.statVal}&nbsp;{stat.statUnit}</p>

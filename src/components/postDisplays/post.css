@@ -159,3 +159,28 @@
     display:inline-flex;
 
   }
+
+  .fitnessCategory{
+    margin:5px;
+    border-radius: 2px;
+    border-color: black;
+  
+  }
+  
+
+  .fitnessStatsDisplay{
+    display:flex;
+    flex-wrap: wrap;
+    padding:5px;
+    background-color: var(--green3);
+    margin:5px;
+    border-radius: 5px;
+  }
+
+
+  .statItem {
+    width: 25%; 
+    padding: 5px;
+    box-sizing: border-box;
+    
+  }

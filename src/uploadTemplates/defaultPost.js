@@ -8,8 +8,9 @@ import { v4 as uuidv4 } from 'uuid';
 export default function DefaultPost({ supabase, session }) {
     const userId = session.id;
     console.log("USER ID:", userId);
-
     const [selectedFile, setSelectedFile] = useState(null);
+    const [uploading,setUploading] = useState(false);
+    const [uploaded, setUploaded]= useState(false);
     const [caption, setCaption] = useState('Write a caption...');
     //const { data, mutate } = useSWR(`image-${userId}`, async () => await fetchData());
     const [errorMessage, setErrorMessage] = useState('');
@@ -44,8 +45,12 @@ export default function DefaultPost({ supabase, session }) {
     };
 
     const handleSubmit = async () => {
+        if(uploading === true){
+            return;
+        }
         if (selectedFile) {
-            await uploadPost(selectedFile, caption);
+            setUploading(true);
+            await uploadPost(selectedFile, caption,);
         }
     };
 
@@ -76,6 +81,8 @@ export default function DefaultPost({ supabase, session }) {
 
         setSelectedFile(null);
         setCaption('');
+        setUploading(false);
+        setUploaded(true);
     }
 
 
@@ -100,6 +107,8 @@ export default function DefaultPost({ supabase, session }) {
             <input type="range" id="rpe" name="rpe" min="0" max="11" onChange={handleRpeInput} />
             <label for="rpe">RPE Value: {rpeValue}</label>
         </div>
+        <br/>
+        <div className="uploadStatus">{uploading ? <>uploading...</>: <>{uploaded ? <>Uploaded!</> : <></>}</> }</div>
         <br />
         <div className="imagePreview">
             {previewUrl && <img src={previewUrl} alt="Image Preview" style={{ maxHeight:"200px", marginTop: '10px' }} />}
