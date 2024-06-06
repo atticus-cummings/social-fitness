@@ -11,7 +11,6 @@ export default function LeaderBoard({ supabase, session }) {
         pullups: { user: '', value: 0 },
         weight: { user: '', value: 0 },
         height: { user: '', value: 0 }
-
     });
 
 

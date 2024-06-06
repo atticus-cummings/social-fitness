@@ -2,21 +2,22 @@ import { FormikHelpers, useFormik } from 'formik';
 import './Auth.css'
 import React, { useState } from 'react';
 import {Header} from "./components/header";
+import {Link} from "react-router-dom"
 
-export default function Login({supabase, setSession, session}){
-  
+
+export default function Login({supabase, setSession, session, setHomepageView}){
     const intialValues = {
         email: '',
         password: '',
       };
 
-
+      const switchTab = () => {
+        setHomepageView('fuck')
+      };
       const onSubmit = async (
         values,
         { resetForm, setFieldError },
       ) => {   
-        const temp = localStorage.getItem('clickCount')
-        localStorage.setItem('clickCount', temp++)   
         if (session){
           setSession(null)
           console.log("SESSION SET FROM SESSION TO NULL:", session)
@@ -26,9 +27,7 @@ export default function Login({supabase, setSession, session}){
           .select('*')
           .match({email: values.email, password: values.password})
           .single()
-      // console.log("SESSION NULL DEBUG:", data)
-      // console.log("EMAIL:", values.email)
-      // console.log("pass:", values.password)
+
 
       if(error)
         console.error(error)
@@ -36,8 +35,6 @@ export default function Login({supabase, setSession, session}){
         alert("Failure to Login");
       }
       else{
-        console.log("session:", data)
-        console.log("DOCUMENT COOKIE:", document.cookie);
         setSession(data)
         localStorage.setItem('sessionData', JSON.stringify(data))
         //document.cookie = JSON.stringify(session);
@@ -110,7 +107,7 @@ export default function Login({supabase, setSession, session}){
               Log In
             </button>
           <div id='switch-to-register'>
-            <a href="/register">Click here to register</a>
+            <button onClick={switchTab}>Click Here to Register</button>
           </div>
           </div>
           <div className="relative mt-8">

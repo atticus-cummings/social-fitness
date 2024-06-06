@@ -1,16 +1,19 @@
 import { FormikHelpers, useFormik } from 'formik';
 import './Auth.css'
 import {Header} from "./components/header";
+import {Link} from "react-router-dom"
 
-export default function Register({supabase}){
-  
+export default function Register({supabase, session, setSession , setHomepageView}){
     const intialValues = {
         email: '',
         password: '',
         first_name: '',
         last_name: '',
       };
-    
+      const switchTab = () => {
+        //setShowLogin(true);
+        setHomepageView('login')
+      };
       const onSubmit = async (
         values,
         { resetForm, setFieldError },
@@ -18,16 +21,23 @@ export default function Register({supabase}){
         const { data, error } = await supabase
           .from('profiles')
           .insert({email: values.email, password: values.password, first_name: values.first_name, last_name: values.last_name})
+          .select('*')
+          .single()
         if (error)
           alert("Registration Failed")
         else{
-          alert("Successful Registration")
+          //alert("Successful Registration")
+
+          setSession(data)
+          console.log("SESSION:", data)
+          localStorage.setItem('sessionData', JSON.stringify(data))
         }
       };
     
       const formik = useFormik({
         initialValues: intialValues,
         onSubmit,
+
       });
     return(
       <div>
@@ -131,7 +141,7 @@ export default function Register({supabase}){
           </button>
         </div>
         <div id='switch-to-login'>
-          <a href="/login">Click here to Login</a>
+          <button onClick={switchTab}>Click Here to Login</button>
         </div>
         <div className="relative mt-8">
           <div

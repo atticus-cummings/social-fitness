@@ -30,3 +30,8 @@ nav{
     color: seagreen; /* Change link color on hover */
     transform: scale(1.1);
 }
+
+#navItem{
+    /*display: flex;*/
+    vertical-align: center;
+}
