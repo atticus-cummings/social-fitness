@@ -50,10 +50,10 @@ export default function LeaderBoard({ supabase, session }) {
 
                 fitnessStats.forEach(stat => {
                     const userId = stat.user_id;
-
+                    if(stat.update_timestamp){
                     const date = new Date(stat.update_timestamp[stat.update_timestamp.length - 1]);
                     const formattedDate = (date.toLocaleDateString('en-CA')).replace(/-/g, '/');
-
+                    
                     if (stat.deadlift && stat.deadlift.length > 0) {
                         const deadliftValue = stat.deadlift[stat.deadlift.length - 1];
                         if (deadliftValue > latestValues.deadlift.value) {
@@ -102,6 +102,7 @@ export default function LeaderBoard({ supabase, session }) {
                             latestValues.height = { user: usernamesMap[userId], value: heightValue, date: formattedDate };
                         }
                     }
+                }
                 });
 
                 setLeaderboard(latestValues);

@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from 'react'
-import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 import { createClient } from '@supabase/supabase-js'
 import Home from './Home'
 import {ProfilePage} from './webpages/profilePage';

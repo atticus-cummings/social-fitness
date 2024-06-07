@@ -95,15 +95,22 @@
   /* Image preview section adjustments */
   .image-preview {
     flex-grow: 1;
-    display: flex;
     justify-content: center;
     align-items: center;
+    margin: 5px;
+    overflow: hidden; 
+    width: 200px;
+    height: 200px; 
+    border-radius: 50%;
+
   }
   
   .image-preview img {
-    max-width: 100%; /* Adjusts to container width */
-    
-    height: auto;
+    max-width: 90%; 
+    align-items:center;
+    object-fit: cover;
+    margin:5px;
+    border-radius: 50%;
 
     
 

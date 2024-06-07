@@ -314,7 +314,9 @@ return (
           {previewUrl && (
               <div className="image-preview">
                   <img src={previewUrl} alt="Preview" />
+                  <div>
                   <p>Preview image selected!</p>
+                  </div>
               </div>
           )}
       </div>

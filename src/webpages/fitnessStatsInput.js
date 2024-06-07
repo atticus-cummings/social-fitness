@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback } from "react";
-import useSWR from 'swr';
 import './fitnessStats.css'
 
 export default function FitnessStats({ supabase, session }) {
@@ -13,7 +12,6 @@ export default function FitnessStats({ supabase, session }) {
     const [weight, setWeight] = useState(0);
     const [height, setHeight] = useState(0);
     const [lastIndex, setLastIndex] = useState(-1);
-    const [gotData, setGotData] = useState(false);
     const [submitted, setSubmitted] = useState(false);
 
     const fetchData = useCallback(async () => {
@@ -51,7 +49,6 @@ export default function FitnessStats({ supabase, session }) {
                     if (stats.pushups && stats.pushups[index] !== null) setPushups(stats.pushups[index]);
                     if (stats.weight && stats.weight[index] !== null) setWeight(stats.weight[index]);
                     if (stats.height && stats.height[index] !== null) setHeight(stats.height[index]);
-                    setGotData(true);
                 } else {
                     console.log('User stats arrays are empty or not properly defined.');
                 }
