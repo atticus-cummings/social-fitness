@@ -111,7 +111,7 @@ export const ProfilePage = ( {session, supabase} ) => {
     if (error) {
       // setMessage('Failed to update email: ' + error.message);
     } else {
-      setMessage('Email updated successfully. Please check your inbox to verify your new email.');
+     // setMessage('Email updated successfully. Please check your inbox to verify your new email.');
       setCurrentEmail(email);
     }
   };
@@ -207,7 +207,7 @@ export const ProfilePage = ( {session, supabase} ) => {
     const { publicURL, error: urlError } = await supabase.storage.from('media').getPublicUrl(filePath);
 
     if (urlError) {
-      setMessage('Failed to get image URL: ' + urlError.message);
+     // setMessage('Failed to get image URL: ' + urlError.message);
       return;
     }
 
@@ -309,18 +309,11 @@ return (
       <div className="profile-update-image">
           {profileUrl && (
               <div className="image-preview">
-                  <img src={profileUrl} alt="Profile" />
+                  <img className="pfp-profile-view" src={profileUrl} alt="Profile" />
               </div>
           )}
           <input type="file" onChange={handleFileChange} className="input-file"/>
-          {previewUrl && (
-              <div className="image-preview">
-                  <img src={previewUrl} alt="Preview" />
-                  <div>
-                  <p>Preview image selected!</p>
-                  </div>
-              </div>
-          )}
+          {message && <p>{message}</p>}
       </div>
 
       <div className="profile-info-section">
@@ -347,7 +340,7 @@ return (
       
   </div>
           
-      {message && <p>{message}</p>}
+
       <center><FitnessStatsInput session={session} supabase={supabase}/></center>
       <div className="profilePostPage">
       {profileData === null ? <>You have no data to show!</> : profileData?.map((item, index) => (

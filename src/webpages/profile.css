@@ -106,7 +106,6 @@
   }
   
   .image-preview img {
-    max-width: 90%; 
     align-items:center;
     object-fit: cover;
     margin:5px;
