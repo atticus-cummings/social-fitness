@@ -1,4 +1,4 @@
-import React, { useState, useEfect} from 'react';
+import React, { useState, useEfect } from 'react';
 import useSWR from 'swr';
 import 'react-photo-view/dist/react-photo-view.css';
 import "./feed.css"
@@ -35,17 +35,30 @@ export default function Feed({ supabase, session }) {
                 .eq('user_id', userId);
             console.log("following users", followingUserIdsData)
             if (followingError) throw followingError;
-    
+
             const followingUserIds = followingUserIdsData.map(user => user.following_user_id);
-            followingUserIds.push(userId); // Include the current user
-    
+            followingUserIds.push(userId);
+            const { data: publicUsersData, error: publicError } = await supabase
+                .from('public_account')
+                .select('user_id');
+
+            if (publicError) throw publicError;
+            console.log("public users", publicUsersData);
+
+
+            publicUsersData.forEach(pubUser => {
+                if (!followingUserIds.includes(pubUser.user_id)) {
+                    followingUserIds.push(pubUser.user_id);
+                }
+            });
+
             // Fetch User's Liked Post list
 
-            
+
             // Call the helper function
             const combinedData = await FetchPostData(session, supabase, followingUserIds);
             return combinedData;
-    
+
         } catch (error) {
             console.error('Error fetching data:', error);
             return null;

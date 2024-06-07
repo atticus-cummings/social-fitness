@@ -54,7 +54,9 @@ export default function Login({supabase, setSession, session, setHomepageView}){
           <div><Header/><div/>
           <div className="loginPage">
           <form  onSubmit={formik.handleSubmit}>
+  
             <div className="loginPage">
+              <div>
               <input
                 id="email"
                 name="email"
@@ -67,6 +69,8 @@ export default function Login({supabase, setSession, session, setHomepageView}){
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
               />
+              </div>
+              <div>
               {formik.touched.email && formik.errors.email ? (
                 <div >
                   {formik.errors.email}
@@ -84,6 +88,7 @@ export default function Login({supabase, setSession, session, setHomepageView}){
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
               />
+              </div>
               </div>
               {formik.touched.password && formik.errors.password ? (
                 <div className="mt-2 text-sm text-red-600">
