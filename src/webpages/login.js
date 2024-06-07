@@ -1,8 +1,6 @@
 import { FormikHelpers, useFormik } from 'formik';
-import './Auth.css'
 import React, { useState } from 'react';
-import {Header} from "./components/header";
-import {Link} from "react-router-dom"
+import {Header} from "../components/header";
 import './login.css';
 
 
@@ -55,7 +53,7 @@ export default function Login({supabase, setSession, session, setHomepageView}){
           <div className="loginPage">
           <form  onSubmit={formik.handleSubmit}>
   
-            <div className="loginPage">
+            <div >
               <div>
               <input
                 id="email"

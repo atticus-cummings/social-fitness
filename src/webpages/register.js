@@ -1,8 +1,7 @@
 import { FormikHelpers, useFormik } from 'formik';
-import './Auth.css'
-import {Header} from "./components/header";
-import {Link} from "react-router-dom"
 
+import {Header} from "../components/header";
+import './login.css';
 export default function Register({supabase, session, setSession , setHomepageView}){
     const intialValues = {
         email: '',
@@ -42,11 +41,11 @@ export default function Register({supabase, session, setSession , setHomepageVie
     return(
       <div>
         <div><Header/></div>
-        <div className="w-1/2" id="register">
-        <div className="justify-center" >
+        <div className="loginPage">
+
         <form onSubmit={formik.handleSubmit}>
-        <div className="col-span-6 sm:col-span-4">
-          <div className="mt-2 flex flex-col">
+<div>
+
             <input
               id="first_name"
               name="first_name"
@@ -60,14 +59,13 @@ export default function Register({supabase, session, setSession , setHomepageVie
               onBlur={formik.handleBlur}
             />
             {formik.touched.first_name && formik.errors.first_name ? (
-              <div className="mt-2 text-sm text-red-600">
+              <div >
                 {formik.errors.first_name}
               </div>
             ) : null}
+
           </div>
-          </div>
-          <div className="col-span-6 sm:col-span-4">
-          <div className="mt-2 flex flex-col">
+
             <input
               id="last_name"
               name="last_name"
@@ -85,10 +83,9 @@ export default function Register({supabase, session, setSession , setHomepageVie
                 {formik.errors.last_name}
               </div>
             ) : null}
-          </div>
-        </div>
-        <div className="col-span-6 sm:col-span-4">
-          <div className="mt-2 flex flex-col">
+
+        <div>
+
             <input
               id="email"
               name="email"
@@ -106,10 +103,10 @@ export default function Register({supabase, session, setSession , setHomepageVie
                 {formik.errors.email}
               </div>
             ) : null}
-          </div>
+
         </div>
-        <div className="col-span-6 mt-4 sm:col-span-4">
-          <div className="mt-2 flex flex-col">
+        <div >
+
             <input
               id="password"
               name="password"
@@ -123,17 +120,15 @@ export default function Register({supabase, session, setSession , setHomepageVie
               onBlur={formik.handleBlur}
             />
             {formik.touched.password && formik.errors.password ? (
-              <div className="mt-2 text-sm text-red-600">
+              <div >
                 {formik.errors.password}
               </div>
             ) : null}
-          </div>
-        </div>
 
-        <div className="mt-4">
+        </div>
+        <div >
           <button
             type="submit"
-            
             size="large"
             className="w-full"
           >
@@ -143,20 +138,8 @@ export default function Register({supabase, session, setSession , setHomepageVie
         <div id='switch-to-login'>
           <button onClick={switchTab}>Click Here to Login</button>
         </div>
-        <div className="relative mt-8">
-          <div
-            className="absolute inset-0 flex items-center"
-            aria-hidden="true"
-          >
-            <div className="w-full border-t border-slate-300" />
-          </div>
-          <div className="relative flex justify-center text-center">
-
-          </div>
-        </div>
       </form>
-      </div>
-      </div>
+</div>
     </div>
     )
 }
