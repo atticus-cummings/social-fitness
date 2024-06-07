@@ -3,6 +3,8 @@ import { Taskbar } from "../components/taskbar";
 import "./leaderboard.css";
 
 export default function LeaderBoard({ supabase, session }) {
+
+    const userId = session.id;
     const [leaderboard, setLeaderboard] = useState({
         deadlift: { user: '', value: 0 },
         bench: { user: '', value: 0 },
@@ -19,14 +21,24 @@ export default function LeaderBoard({ supabase, session }) {
 
         async function fetchLeaderboard() {
             try {
+                const { data: followingUserIdsData, error: followingError } = await supabase
+                    .from('followers')
+                    .select('following_user_id')
+                    .eq('user_id', userId);
+                console.log("following users", followingUserIdsData)
+                if (followingError) throw followingError;
+            
+                const followingUserIds = followingUserIdsData.map(user => user.following_user_id);
+                followingUserIds.push(userId);
+
                 const { data: fitnessStats, error } = await supabase
                     .from('fitness_stats')
-                    .select('user_id, deadlift, bench, mile_time, pushups, pullups, weight, height, update_timestamp');
-
+                    .select('user_id, deadlift, bench, mile_time, pushups, pullups, weight, height, update_timestamp')
+                    .in('user_id', followingUserIds);
                 if (error) {
                     throw error;
                 }
-
+                console.log("fitnessStats",fitnessStats)
                 const latestValues = {
                     deadlift: { user: '', value: 0 ,date:'' },
                     bench: { user: '', value: 0, date:'' },

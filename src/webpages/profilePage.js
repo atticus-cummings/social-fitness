@@ -214,10 +214,6 @@ export const ProfilePage = ( {session, supabase} ) => {
     setProfileUrl(publicURL);
     setMessage('Profile image updated successfully.');
 
-    await supabase.auth.updateUser({
-      data: { avatar_url: publicURL }
-    });
-    await supabase.auth.refreshSession();
 
     const {data, error: fileNameError} = await supabase
       .from('avatars')
