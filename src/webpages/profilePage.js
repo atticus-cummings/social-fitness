@@ -306,17 +306,6 @@ return (
         </div>
       </div>
 
-      
-      <div className="profile-update-image">
-          {profileUrl && (
-              <div className="image-preview">
-                  <img className="pfp-profile-view" src={profileUrl} alt="Profile" />
-              </div>
-          )}
-          <input type="file" onChange={handleFileChange} className="input-file"/>
-          {message && <p>{message}</p>}
-      </div>
-
       <div className="profile-info-section">
 
       <div className="profile-update-username">
@@ -344,12 +333,7 @@ return (
               </div>
           )}
           <input type="file" onChange={handleFileChange} className="input-file"/>
-          {previewUrl && (
-              <div className="image-preview">
-                  <img src={previewUrl} alt="Preview" />
-                  <p>Preview image selected!</p>
-              </div>
-          )}
+          {message && <p>{message}</p>}
       </div>
       </div>
       
