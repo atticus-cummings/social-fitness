@@ -19,6 +19,7 @@ export const ProfilePage = ( {session, supabase} ) => {
   const [currentUsername, setCurrentUsername] = useState('');
   const [loading, setLoading] = useState(false);
   const [isPublic, setIsPublic] = useState(false);
+  const [showPublic, setShowPublic] = useState(false);
   
   const [showProfile, setShowProfile] = useState(false);
   const [profileData, setProfileData] = useState(null);
@@ -31,6 +32,7 @@ export const ProfilePage = ( {session, supabase} ) => {
       setCurrentEmail(session.email);
       setProfileUrl(session.user.user_metadata.avatar_url || '');
       fetchPublicStatus();
+      fetchShowPublicStatus();
       // Fetch and set the current username
 
     }
@@ -65,6 +67,53 @@ export const ProfilePage = ( {session, supabase} ) => {
       setIsPublic(false);
     }
   };
+
+
+  const fetchShowPublicStatus = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('see_public')
+        .eq('id', userId)
+      if (data && data.see_public) {
+        setShowPublic(true);
+      } else {
+        setShowPublic(false);
+      }
+    } catch (error) {
+      setShowPublic(false);
+    }
+  };
+
+  const handleShowPublicChange = (event) => {
+    console.log("public status change");
+    event.preventDefault();
+    if (session) {
+      setShowPublicChange();
+    } else {
+      // setMessage('No user is logged in.');
+    }
+  };
+  
+  const setShowPublicChange = async () => {
+    const newShowPublic = !showPublic;
+    console.log("public post display change");
+      if (userId) {
+        const { error } = await supabase
+          .from('profiles')
+          .update({see_public: newShowPublic })
+          .eq('id', userId);
+      
+      if (error) {
+        setMessage('Set show public ' + error.message);
+      } else {
+        setShowPublic(newShowPublic);
+      }
+    }
+    console.log("public show set to:", showPublic);
+  };
+
+
 
   const handlePublicStatusChange = (event) => {
     console.log("public status change");
@@ -102,6 +151,7 @@ export const ProfilePage = ( {session, supabase} ) => {
     }
     console.log("public stat set to:", isPublic);
   };
+
 
 
   const updateEmail = async () => {
@@ -224,6 +274,9 @@ export const ProfilePage = ( {session, supabase} ) => {
     await getEmail();
     await getUserName();
     await fetchFitnessStats();
+
+
+
     const { data: file_name, error: fileError } = await supabase
       .from('avatars')
       .select('file_name') 
@@ -297,6 +350,14 @@ return (
           <label className="switch">
             <button  className="public-button"    onClick={handlePublicStatusChange}
             >Click to set {isPublic ? "private" : "public" }</button>
+            <span className="slider round"></span>
+          </label>
+        </div>
+        <div className="profile-public-status">
+          <p>Currently {!showPublic ? "not displaying public accounts" : "displaying public accounts"}</p>
+          <label className="switch">
+            <button  className="public-button"    onClick={handleShowPublicChange}
+            >Click to set: {!showPublic ? "show public accounts": "don't show public accounts"  }</button>
             <span className="slider round"></span>
           </label>
         </div>

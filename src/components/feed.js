@@ -38,19 +38,27 @@ export default function Feed({ supabase, session }) {
 
             const followingUserIds = followingUserIdsData.map(user => user.following_user_id);
             followingUserIds.push(userId);
+
+            const {data: showPublicData} = await supabase
+                .from('profiles')
+                .select('see_public')
+                .eq('id', userId);
+            console.log("showpublic", showPublicData);
+            const showPublic = showPublicData[0]?.see_public;
+
             const { data: publicUsersData, error: publicError } = await supabase
                 .from('public_account')
                 .select('user_id');
-
             if (publicError) throw publicError;
             console.log("public users", publicUsersData);
-
-
+            if(showPublic){
             publicUsersData.forEach(pubUser => {
                 if (!followingUserIds.includes(pubUser.user_id)) {
                     followingUserIds.push(pubUser.user_id);
                 }
-            });
+            }
+        );
+        }
 
             // Fetch User's Liked Post list
 
