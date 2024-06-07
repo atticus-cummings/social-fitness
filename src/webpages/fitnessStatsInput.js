@@ -117,7 +117,6 @@ export default function FitnessStats({ supabase, session }) {
     return (
         <div className="statsPage">
             <button onClick={() => fetchData()}>Click here to refresh!</button>
-            {!gotData ? <>No Data</> :
                 <div>
                     <div className="fitnessCategory">
                         Deadlift<br></br> 
@@ -151,7 +150,6 @@ export default function FitnessStats({ supabase, session }) {
                         <button onClick={() => handleSubmit(userData)}>Post</button>
                     </div>
                 </div>
-                }
             {submitted ? <>Data Saved!</> : <>Unsaved Data.</>}
             
 

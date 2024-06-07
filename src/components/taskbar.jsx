@@ -26,8 +26,8 @@ export const Taskbar = () => {
                     <li className="navItem">
                     <Link to ="/webpages/upload">Upload</Link>
                     </li>
-                    <li>
-                        <button id="navItem" className="navItem" onClick={handleLogout}>Logout</button>
+                    <li className="navItem">
+                    <button onClick={handleLogout}>Logout</button>
                     </li>
 
                 </ul>

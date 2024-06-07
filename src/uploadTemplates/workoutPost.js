@@ -195,8 +195,8 @@ export default function WorkoutPost({ supabase, session }) {
         </div>
     </div>
 
-            <div>
-                <div> Include your  Latest Workout stats: </div>
+            <div className="postStatsCheckbox">
+                <div> Include your workout stats: </div>
                 {userData !== null ? (
                     <div>
                         {index !== -1 && (

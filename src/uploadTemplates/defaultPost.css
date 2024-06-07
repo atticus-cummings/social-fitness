@@ -110,3 +110,10 @@ h1{
     left: 50%;
     transform: translateX(-50%);
 }
+
+
+.postStatsCheckbox{
+    position:fixed;
+    margin:10px;
+    bottom:230px;
+}

@@ -18,7 +18,8 @@ export const ProfilePage = ( {session, supabase} ) => {
   const [username, setUsername] = useState('');
   const [currentUsername, setCurrentUsername] = useState('');
   const [loading, setLoading] = useState(false);
-
+  const [isPublic, setIsPublic] = useState(false);
+  
   const [showProfile, setShowProfile] = useState(false);
   const [profileData, setProfileData] = useState(null);
 
@@ -29,6 +30,7 @@ export const ProfilePage = ( {session, supabase} ) => {
     if (session && session.user) {
       setCurrentEmail(session.email);
       setProfileUrl(session.user.user_metadata.avatar_url || '');
+      fetchPublicStatus();
       // Fetch and set the current username
 
     }
@@ -45,6 +47,53 @@ export const ProfilePage = ( {session, supabase} ) => {
   const handleUsernameChange = (event) => {
     setUsername(event.target.value);
   };
+
+  
+  const fetchPublicStatus = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('public_account')
+        .select('user_id')
+        .eq('user_id', userId)
+        .single();
+      if (data) {
+        setIsPublic(true);
+      } else {
+        setIsPublic(false);
+      }
+    } catch (error) {
+      setIsPublic(false);
+    }
+  };
+
+  
+  const handlePublicStatusChange = async () => {
+    console.log("public status change");
+    if (isPublic) {
+      const { error } = await supabase
+        .from('public_account')
+        .delete()
+        .eq('user_id', userId);
+      if (error) {
+        setMessage('Failed to set private: ' + error.message);
+      } else {
+
+        setIsPublic(false);
+      }
+    } else {
+      const { error } = await supabase
+        .from('public_account')
+        .insert({ user_id: userId });
+      if (error) {
+        setMessage('Failed to set public: ' + error.message);
+      } else {
+        setIsPublic(true);
+
+      }
+    }
+    console.log("public stat set to:", isPublic);
+  };
+
 
   const updateEmail = async () => {
     const { user, error } = await supabase.auth.updateUser({
@@ -67,7 +116,7 @@ export const ProfilePage = ( {session, supabase} ) => {
       .update({ username: username })
       .match({ id: userId });
     if (error) {
-      // setMessage(`Failed to update username: ${error.message}`);
+      
     } else {
       // setMessage('Username updated successfully!');
       setCurrentUsername(username);
@@ -235,6 +284,19 @@ return (
           </div>
 
 </div>
+<div className="profile-info-section">
+        <div className="profile-public-status">
+          <p>Account Status: {isPublic ? "Public" : "Private"}</p>
+          <label className="switch">
+            <input
+              type="checkbox"
+              checked={isPublic}
+              onChange={handlePublicStatusChange}
+            />
+            <span className="slider round"></span>
+          </label>
+        </div>
+      </div>
 
       <div className="profile-update-image">
           {profileUrl && (

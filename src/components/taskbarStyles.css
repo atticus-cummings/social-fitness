@@ -12,16 +12,15 @@ nav{
 }
 .navList{
     width: 100%;
-    margin:10;
     background-color: lightgreen;
     justify-content:space-around;
+    align-items: center;
     display:flex;
 }
 .navItem{
     font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
     font-size: 30px;
-    font:bolder;
-    padding: 10px;
+    margin:auto;
     width: 95%;
     display:contents;
 }
