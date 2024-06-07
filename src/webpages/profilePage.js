@@ -66,8 +66,17 @@ export const ProfilePage = ( {session, supabase} ) => {
     }
   };
 
+  const handlePublicStatusChange = (event) => {
+    console.log("public status change");
+    event.preventDefault();
+    if (session) {
+      setPublicStatusChange();
+    } else {
+      // setMessage('No user is logged in.');
+    }
+  };
   
-  const handlePublicStatusChange = async () => {
+  const setPublicStatusChange = async () => {
     console.log("public status change");
     if (isPublic) {
       const { error } = await supabase
@@ -288,11 +297,8 @@ return (
         <div className="profile-public-status">
           <p>Account Status: {isPublic ? "Public" : "Private"}</p>
           <label className="switch">
-            <input
-              type="checkbox"
-              checked={isPublic}
-              onChange={handlePublicStatusChange}
-            />
+            <button  className="public-button"    onClick={handlePublicStatusChange}
+            >Click to set {isPublic ? "private" : "public" }</button>
             <span className="slider round"></span>
           </label>
         </div>

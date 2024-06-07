@@ -27,7 +27,17 @@
     width: 100%;
     max-width: 1200px;
   }
-  
+  .profile-public-status{
+    margin:5px;
+  }
+  .public-button{
+    background-color: var(--color2);
+    margin:5px;
+    padding:5px;
+    border-radius: 5px;
+  }
+
+
   .profile-info-section, .profile-update-image, .fitnessStats {
    background-color: var(--green3);
     border-radius: 8px;
@@ -35,21 +45,21 @@
    
     padding: 20px;
     margin: 10px;
-    flex: 1 1 30%; /* Flexible basis set to ensure equal distribution */
+    flex: 1 1 30%; 
     display: flex;
     flex-direction: column;
-    min-height: 300px; /* Ensures a minimum height for smaller content areas */
+    min-height: 150px; 
   }
   
   /* Responsive adjustments */
   @media (max-width: 800px) {
     .profile-content {
-      justify-content: center; /* Center items when they stack */
+      justify-content: center; 
     }
   
     .profile-info-section, .profile-update-image {
-      flex-basis: 100%; /* Each section takes full width */
-      max-width: 100%; /* Ensures no overflow */
+      flex-basis: 100%; 
+      max-width: 100%; 
     }
   }
   
