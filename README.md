@@ -1,7 +1,7 @@
 ![image](https://github.com/atticus-cummings/social-fitness/assets/167959057/e715509e-8431-4c7e-8ef7-4a1e399b9cc3)
 # Social Fitness - CS 35L Project
 
-Developed by Manav Ganger, Atticus Cummings, Nick Brown, and Shreyas Tulsi, Spring 2024.
+Developed by Manav Ganger, Atticus Cummings, and Shreyas Tulsi, Spring 2024.
 
 ## Available Scripts
 
