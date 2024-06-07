@@ -306,20 +306,7 @@ return (
         </div>
       </div>
 
-      <div className="profile-update-image">
-          {profileUrl && (
-              <div className="image-preview">
-                  <img src={profileUrl} alt="Profile" />
-              </div>
-          )}
-          <input type="file" onChange={handleFileChange} className="input-file"/>
-          {previewUrl && (
-              <div className="image-preview">
-                  <img src={previewUrl} alt="Preview" />
-                  <p>Preview image selected!</p>
-              </div>
-          )}
-      </div>
+      
 
       <div className="profile-info-section">
 
@@ -340,6 +327,20 @@ return (
                   </button>
               </form>
           </div>
+      </div>
+      <div className="profile-update-image">
+          {profileUrl && (
+              <div className="image-preview">
+                  <img src={profileUrl} alt="Profile" />
+              </div>
+          )}
+          <input type="file" onChange={handleFileChange} className="input-file"/>
+          {previewUrl && (
+              <div className="image-preview">
+                  <img src={previewUrl} alt="Preview" />
+                  <p>Preview image selected!</p>
+              </div>
+          )}
       </div>
       </div>
       
@@ -362,4 +363,3 @@ return (
  
   );
 }
-
