@@ -192,14 +192,14 @@ export const ProfilePage = ( {session, supabase} ) => {
     const fileName = `${userId}.${fileExt}`;
     const filePath = `avatars/${fileName}`;
 
-    // setMessage('Uploading image...');
-    
-    let { error: uploadError, data: uploadData } = await supabase.storage
+    setMessage('Uploading image...');
+    let { error: uploadError, data: uploadData } = await supabase
+      .storage
       .from('media')
-      .update(filePath, file);
+      .upload(filePath, file, { upsert: true, });
 
     if (uploadError) {
-      // setMessage('Failed to upload image: ' + uploadError.message);
+      setMessage('Failed to upload image: ' + uploadError.message);
       console.error(uploadError)
       return;
     }
@@ -207,21 +207,23 @@ export const ProfilePage = ( {session, supabase} ) => {
     const { publicURL, error: urlError } = await supabase.storage.from('media').getPublicUrl(filePath);
 
     if (urlError) {
-      // setMessage('Failed to get image URL: ' + urlError.message);
+      setMessage('Failed to get image URL: ' + urlError.message);
       return;
     }
 
     setProfileUrl(publicURL);
-    // setMessage('Profile image updated successfully.');
+    setMessage('Profile image updated successfully.');
 
     await supabase.auth.updateUser({
       data: { avatar_url: publicURL }
     });
     await supabase.auth.refreshSession();
 
-  
-  }; 
-
+    const {data, error: fileNameError} = await supabase
+      .from('avatars')
+      .upsert({user_id: userId, file_name: fileName})
+      .throwOnError()
+  };
   async function fetchData() {
     await getEmail();
     await getUserName();
