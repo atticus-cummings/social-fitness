@@ -18,7 +18,7 @@ Developed by Manav Ganger, Atticus Cummings, and Shreyas Tulsi, Spring 2024.
 ### Installation
 
 1. Clone the repository and enter it:
-   git clonne https://github.com/atticus-cummings/social-fitness.git
+   ``git clone https://github.com/atticus-cummings/social-fitness.git``
 2. Install necessary dependancies by running:
    ``npm install``
    ``npm install formik``
