@@ -34,9 +34,6 @@ Developed by Manav Ganger, Atticus Cummings, and Shreyas Tulsi, Spring 2024.
 1. If this is your first time running the application, use the registration page to create an account; otherwise, simply log in using your existing credentials.
 2. On the home page, you will be greeted with a feed of user posts demonstrating their fitness progress, stats, and achievements. Feel free to upload your own stats using the profile page, and then post those stats using the upload page, as well as various other post options such as posting with a picture of your workout. If you want to see how you compare with other individuals, check out the leaderboard section. To view specific people's profiles, go to the followers page, where you can search for individuals using their username/name, and follow their profiles to view all of their photos and stats.
 
-### Contact Info
-
-shreyastulsi786@gmail.com
    
 
 
