@@ -1,71 +1,42 @@
 ![image](https://github.com/atticus-cummings/social-fitness/assets/167959057/e715509e-8431-4c7e-8ef7-4a1e399b9cc3)
 # Social Fitness - CS 35L Project
 
+## Mission Statement 
+
+One of the best feelings is feeling physically fit. Unfortunately, due to lack of motivation and many other reasons, many individuals never accomplish such a feeling. Our goal with this project was to change just that. This is a platform where users can share their fitness goals in numerous ways, such as tracking their personal stats (max bench press, mile time, weight, etc.), sharing photos at the gym, and much more. Furthermore, to inspire the competitive drive in individuals, we have a continually updating leaderboard that allows users to see how they rank among their peers. Using this social platform, we create a community where individuals are motivated by one another's pursuits and are inspired to do more in their fitness journeys.
+
+
 Developed by Manav Ganger, Atticus Cummings, and Shreyas Tulsi, Spring 2024.
 
-## Available Scripts
+## Preqrequisites 
 
-In the project directory, you can run:
+- Node.js (>= v18.0.0). Install Node [here](https://nodejs.org/en/download).
+- npm (>= v8.3.0)
 
-### `npm start`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### Installation
 
-### `npm test`
+1. Clone the repository and enter it:
+   ``git clone https://github.com/atticus-cummings/social-fitness.git``
+2. Install necessary dependancies by running:
+   ``npm install``
+   ``npm install formik``
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Running
 
-### `npm run build`
+1. Run ``npm start`` for a development build of the project running locally.
+2. This will launch frontend website to be displayed on ``localhost:3000``
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Using The Application
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+1. If this is your first time running the application, use the registration page to create an account; otherwise, simply log in using your existing credentials.
+2. On the home page, you will be greeted with a feed of user posts demonstrating their fitness progress, stats, and achievements. Feel free to upload your own stats using the profile page, and then post those stats using the upload page, as well as various other post options such as posting with a picture of your workout. If you want to see how you compare with other individuals, check out the leaderboard section. To view specific people's profiles, go to the followers page, where you can search for individuals using their username/name, and follow their profiles to view all of their photos and stats.
 
-### `npm run eject`
+   
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+   
+   
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
