@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import './fitnessStats.css'
 
 export default function FitnessStats({ supabase, session }) {
-    const userId = session.id;
+    const userId = session.user_id;
     const [userData, setUserData] = useState(0);
     const [deadlift, setDeadlift] = useState(0);
     const [bench, setBench] = useState(0);

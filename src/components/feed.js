@@ -11,7 +11,7 @@ import StatPostDisplay from "./postDisplays/statPostDisplay";
 
 export default function Feed({ supabase, session }) {
     const [comment, setComment] = useState('');
-    const userId = session.id
+    const userId = session.user_id
     //get the current user id
 
     console.log("USER ID:", userId)

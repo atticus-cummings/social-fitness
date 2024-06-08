@@ -10,7 +10,7 @@ import TextPost from "../uploadTemplates/textPost";
 import Home from "../Home";
 
 export default function Upload({ supabase, session }) {
-    const userId = session.id;
+    const userId = session.user_id;
     const [selectedTemplate, setSelectedTemplate] = useState('image');
     console.log("USER ID:", userId);
 

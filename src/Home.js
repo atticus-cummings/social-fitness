@@ -10,7 +10,7 @@ export default function Home({supabase, session}) {
     //get the current user id
     let userId;
     if (session){
-        userId = session.id
+        userId = session.user_id
     }
     console.log("USER ID:", userId)
 

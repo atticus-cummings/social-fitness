@@ -8,7 +8,7 @@ import TextPostDisplay from "../components/postDisplays/textPostDisplay";
 import StatPostDisplay from "../components/postDisplays/statPostDisplay";
 
 export default function Followers({ supabase, session }) {
-    const userId = session.id;
+    const userId = session.user_id;
 
     const [followers, setFollowers] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');

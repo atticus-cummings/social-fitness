@@ -6,7 +6,7 @@ import TimeAgo from "./displayTimestamp"
 
 export default function DisplayLikes({ session, supabase, item, index }) {
     const [comment, setComment] = useState('');
-    const userId = session.id
+    const userId = session.user_id
 
     //Set comment value
     const handleCommentInput = (event) => {

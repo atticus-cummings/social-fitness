@@ -4,7 +4,7 @@ import useSWR from 'swr';
 import "./post.css";
 
 export default function DisplayLikes({session, supabase, item, index}) {
-    const userId = session.id;
+    const userId = session.user_id;
     const handleLike = async (likeCount, postId, liked, likedPostsArray) => {
         let updatedLikedArray;
         if (liked) {

@@ -4,7 +4,7 @@ import "./leaderboard.css";
 
 export default function LeaderBoard({ supabase, session }) {
 
-    const userId = session.id;
+    const userId = session.user_id;
     const [leaderboard, setLeaderboard] = useState({
         deadlift: { user: '', value: 0 },
         bench: { user: '', value: 0 },

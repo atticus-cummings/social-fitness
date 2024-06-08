@@ -11,13 +11,11 @@ import DisplayRPE from "./displayRPE";
 
 export default function TextPostDisplay({ supabase, session, item, index, size }) {
     const [comment, setComment] = useState('');
-    const userId = session.id
-
+    const userId = session.user_id
 
     //TODO: modify so it can only be liked once. 
     //TODO: Make it so new like-count displays (semi-optional)
     //Set comment value
-
 
     return (
         <div className='post' key={index} style={{width:size}}>

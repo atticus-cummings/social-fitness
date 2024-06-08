@@ -1,7 +1,7 @@
 
 export default async function FetchPostData(session, supabase, postUserIds) {
     try {
-        const userId = session.id
+        const userId = session.user_id
         // Fetch Post Metadata
         const { data: likedPostsArray, error: likedPostsError } = await supabase
             .from('profiles')

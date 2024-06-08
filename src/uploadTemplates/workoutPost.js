@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 
 export default function WorkoutPost({ supabase, session }) {
-    const userId = session.id;
+    const userId = session.user_id;
     const [userData, setUserData] = useState(null);
     const [index, setIndex] = useState(0);
     const [uploading,setUploading] = useState(false);

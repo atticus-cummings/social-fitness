@@ -24,7 +24,7 @@ export const ProfilePage = ({ session, supabase }) => {
   const [showProfile, setShowProfile] = useState(false);
   const [profileData, setProfileData] = useState(null);
 
-  const userId = session.id;
+  const userId = session.user_id;
 
   useEffect(() => {
     console.log("Session data: ", session);
