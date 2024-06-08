@@ -13,7 +13,7 @@ export default function FitnessStats({ supabase, session }) {
     const [height, setHeight] = useState(0);
     const [lastIndex, setLastIndex] = useState(-1);
     const [submitted, setSubmitted] = useState(false);
-
+    const [entries, setEntries] = useState(0);
     const fetchData = useCallback(async () => {
         try {
             // Fetch user stats
@@ -76,11 +76,12 @@ export default function FitnessStats({ supabase, session }) {
         let heightArray;
         let timestampArray;
         let timestamp = new Date();
-
+        const entries = 1;
         //I never thought formatting a date would give me so much trouble--this is infuriating 
         //I've tried everything to get it to input into the supabase date format. I just ended up making the timestamp log a string input. 
         console.log("index", lastIndex);
         console.log("userData", userData);
+
         if (lastIndex < 0) {
             deadliftArray = [deadlift];
             benchArray = [bench];
@@ -99,12 +100,13 @@ export default function FitnessStats({ supabase, session }) {
             weightArray = [...userData.weight, weight];
             heightArray = [...userData.height, height];
             timestampArray = [...userData.update_timestamp, timestamp.toISOString()];
+            entries = userData.num_entries + 1;
         }
         console.log("timestamp", timestampArray);
         console.log("deadlift", deadliftArray);
         await supabase
             .from('fitness_stats')
-            .update({ num_entries: (userData.num_entries + 1), update_timestamp: timestampArray, deadlift: deadliftArray, bench: benchArray, pushups: pushupsArray, mile_time: mileTimeArray, pullups: pullupsArray, weight: weightArray, height: heightArray })
+            .update({ num_entries: entries, update_timestamp: timestampArray, deadlift: deadliftArray, bench: benchArray, pushups: pushupsArray, mile_time: mileTimeArray, pullups: pullupsArray, weight: weightArray, height: heightArray })
             .eq('user_id', userId)
             .throwOnError();
         console.log("submitted?");
