@@ -51,11 +51,11 @@ export default function LeaderBoard({ supabase, session }) {
 
                 const { data: usernameArray, error: usernameError } = await supabase
                     .from('profiles')
-                    .select('id, username')
+                    .select('user_id, username')
 
                 if (usernameError) throw usernameError;
                 const usernamesMap = usernameArray.reduce((map, item) => {
-                    map[item.id] = item.username;
+                    map[item.user_id] = item.username;
                     return map;
                 }, {});
                 console.log(usernamesMap);

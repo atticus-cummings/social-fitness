@@ -42,7 +42,7 @@ export default function Feed({ supabase, session }) {
             const {data: showPublicData} = await supabase
                 .from('profiles')
                 .select('see_public')
-                .eq('id', userId);
+                .eq('user_id', userId);
             console.log("showpublic", showPublicData);
             const showPublic = showPublicData[0]?.see_public;
 

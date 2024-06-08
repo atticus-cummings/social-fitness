@@ -9,7 +9,7 @@ export default function DisplayLikes({session, supabase, item, index}) {
         let updatedLikedArray;
         if (liked) {
             likeCount = likeCount - 1;
-            updatedLikedArray = likedPostsArray.filter(id => id !== postId);
+            updatedLikedArray = likedPostsArray.filter(user_id => user_id !== postId);
             console.log("Liked!");
         }
         else if (!liked) {
@@ -24,7 +24,7 @@ export default function DisplayLikes({session, supabase, item, index}) {
         await supabase
             .from('profiles')
             .update({ liked_post_id: updatedLikedArray })
-            .eq('id', userId)
+            .eq('user_id', userId)
     }
 
     return(

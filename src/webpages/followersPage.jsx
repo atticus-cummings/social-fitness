@@ -34,11 +34,11 @@ export default function Followers({ supabase, session }) {
                 .throwOnError();
             const { data: usernameArray, error: usernameError } = await supabase
                 .from('profiles')
-                .select('id, username')
+                .select('user_id, username')
 
             if (usernameError) throw usernameError;
             const usernamesMap = usernameArray.reduce((map, item) => {
-                map[item.id] = item.username;
+                map[item.user_id] = item.username;
                 return map;
             }, {});
             setUsername(usernamesMap);
@@ -52,7 +52,7 @@ export default function Followers({ supabase, session }) {
         try {
             const { data: searchedUser, error: searchError } = await supabase
                 .from('profiles')
-                .select('id')
+                .select('user_id')
                 .eq('username', searchQuery)
                 .throwOnError();
             console.log(searchedUser)
@@ -65,14 +65,14 @@ export default function Followers({ supabase, session }) {
                 setShowProfile(false);
                 setFitnessStats(null);
             } else {
-                setSearchedUserID(searchedUser[0].id);
+                setSearchedUserID(searchedUser[0].user_id);
                 setSearchedUserName(searchQuery);
-                setIsFollowing(followers.includes(searchedUser[0].id));
+                setIsFollowing(followers.includes(searchedUser[0].user_id));
 
                 const { data: ppFile, error: ppFileError } = await supabase
                     .from('avatars')
                     .select('file_name')
-                    .eq('user_id', searchedUser[0].id)
+                    .eq('user_id', searchedUser[0].user_id)
                     .throwOnError();
 
                 if (ppFile.length === 0) {
@@ -138,25 +138,19 @@ export default function Followers({ supabase, session }) {
                 .eq('user_id', searchedUserID)
                 .single();
             if (statsError) throw statsError;
+            if(stats){
             setFitnessStats(stats);
+            }
 
             const { data: followingUserIdsData, error: followingError } = await supabase //this puts it in the format necessary for the FetchPostData function.
                 //--is a bit of a pain. Might want to change later 
-                .from('followers')
+                .from('profiles')
                 .select('user_id')
                 .eq('user_id', searchedUserID);
             console.log("following users", followingUserIdsData)
             if (followingError) throw followingError;
 
             const followingUserIds = followingUserIdsData.map(user => user.user_id);
-            //followingUserIds.push(userId);
-
-            /*              From feed.js                */
-            // Fetch all the UUIDs of users the current user is following
-            /* #####################    Fetch User's Following List  ##################### */
-
-            // Fetch file metadata
-            /* #####################    Fetch User's Liked Post list  ##################### */
             console.log("searched userid", searchedUserID);
             const combinedData = await FetchPostData(session, supabase, followingUserIds)
             console.log("Combined Data:", combinedData);
@@ -242,7 +236,9 @@ export default function Followers({ supabase, session }) {
                 </div>
 
             </div>
-            {showProfile && fitnessStats && (
+            {showProfile &&
+                <div>
+                {fitnessStats && 
                 <div id="profile">
                     <h2>Fitness Stats for {searchedUserName}</h2>
                     <p>Deadlift: {fitnessStats.deadlift[fitnessStats.deadlift.length - 1]}</p>
@@ -253,15 +249,17 @@ export default function Followers({ supabase, session }) {
                     <p>Weight: {fitnessStats.weight[fitnessStats.weight.length - 1]}</p>
                     <p>Height: {fitnessStats.height[fitnessStats.height.length - 1]}</p>
                     <h2>Recent Posts by {searchedUserName}</h2>
+                    </div>}
                     {profileData === null ? <>You have no data to show!</> : profileData?.map((item, index) => (
                         <div>
                             {item.post_type === 1 && <DefaultPostDisplay session={session} supabase={supabase} item={item} index={index} size={'500px'}/>}
                             {item.post_type === 2 && <TextPostDisplay session={session} supabase={supabase} item={item} index={index} size={'500px'} />}
                             {item.post_type === 3 && <StatPostDisplay session={session} supabase={supabase} item={item} index={index} size={'500px'} />}
                         </div>
-                    ))}
+                    ))
+                }
                 </div>
-            )}
+            }
             <Taskbar />
         </>
     );

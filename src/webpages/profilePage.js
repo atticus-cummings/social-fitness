@@ -70,15 +70,11 @@ export const ProfilePage = ({ session, supabase }) => {
 
   const fetchShowPublicStatus = async () => {
     try {
-      const { data, error } = await supabase
+      const { showPublicData, error } = await supabase
         .from('profiles')
         .select('see_public')
-        .eq('id', userId)
-      if (data && data.see_public) {
-        setShowPublic(true);
-      } else {
-        setShowPublic(false);
-      }
+        .eq('user_id', userId)
+        setShowPublic(showPublicData[0]?.see_public);
     } catch (error) {
       setShowPublic(false);
     }
@@ -97,18 +93,13 @@ export const ProfilePage = ({ session, supabase }) => {
   const setShowPublicChange = async () => {
     const newShowPublic = !showPublic;
     console.log("public post display change");
-    if (userId) {
+
       const { error } = await supabase
         .from('profiles')
-        .update({ see_public: newShowPublic })
-        .eq('id', userId);
-
-      if (error) {
-        setMessage('Set show public ' + error.message);
-      } else {
+        .update({see_public: newShowPublic})
+        .eq('user_id', userId);
+      
         setShowPublic(newShowPublic);
-      }
-    }
     console.log("public show set to:", showPublic);
   };
 
@@ -186,7 +177,7 @@ export const ProfilePage = ({ session, supabase }) => {
       const { data, error } = await supabase
         .from('profiles')
         .select('username')
-        .eq('id', userId)
+        .eq('user_id', userId)
         .single();
       if (error) {
         console.error('Error fetching username:', error.message);
@@ -205,7 +196,7 @@ export const ProfilePage = ({ session, supabase }) => {
       const { data, error } = await supabase
         .from('profiles')
         .select('email')
-        .eq('id', userId)
+        .eq('user_id', userId)
         .single();
       if (error) {
         setCurrentUsername('No username set');
@@ -357,10 +348,10 @@ export const ProfilePage = ({ session, supabase }) => {
             }
             {showPublic !== null &&
               <div className="profile-public-status">
-                <p>Currently {!showPublic ? "not displaying public accounts" : "displaying public accounts"}</p>
+                <p>Currently {showPublic ? "not displaying public accounts" : "displaying public accounts"}</p>
                 <label className="switch">
                   <button className="public-button" onClick={handleShowPublicChange}
-                  >Click to set: {!showPublic ? "show public accounts" : "don't show public accounts"}</button>
+                  >Click to set: {showPublic ? "show public accounts" : "don't show public accounts"}</button>
                   <span className="slider round"></span>
                 </label>
               </div>

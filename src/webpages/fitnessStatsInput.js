@@ -76,7 +76,7 @@ export default function FitnessStats({ supabase, session }) {
         let heightArray;
         let timestampArray;
         let timestamp = new Date();
-        const entries = 1;
+        let entries = 1;
         //I never thought formatting a date would give me so much trouble--this is infuriating 
         //I've tried everything to get it to input into the supabase date format. I just ended up making the timestamp log a string input. 
         console.log("index", lastIndex);

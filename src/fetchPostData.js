@@ -6,7 +6,7 @@ export default async function FetchPostData(session, supabase, postUserIds) {
         const { data: likedPostsArray, error: likedPostsError } = await supabase
             .from('profiles')
             .select('liked_post_id')
-            .eq('id', userId);
+            .eq('user_id', userId);
 
         if (likedPostsError) throw likedPostsError;
 
@@ -35,12 +35,12 @@ export default async function FetchPostData(session, supabase, postUserIds) {
         // Fetch Usernames
         const { data: usernameArray, error: usernameError } = await supabase
             .from('profiles')
-            .select('id, username, liked_post_id')
+            .select('user_id, username, liked_post_id')
 
         if (usernameError) throw usernameError;
 
         const usernamesMap = usernameArray.reduce((map, item) => {
-            map[item.id] = item.username;
+            map[item.user_id] = item.username;
             return map;
         }, {});
 
